@@ -110,11 +110,36 @@ const servicesContentSchema = new mongoose.Schema({
   },
   agentVisionDescription: {
     type: String,
-    default: 'Experience the future of visual communication with our AI-powered vision technology'
+    default: 'Fast, affordable production quality films'
   },
-  agentVisionFeatures: {
-    type: [String],
-    default: ['Real-time Visual Processing', 'AI-Enhanced Recognition', 'Smart Analytics', 'Seamless Integration']
+  agentVisionVideoLabels: {
+    launchVideos: {
+      type: String,
+      default: 'Launch Videos'
+    },
+    productionFilms: {
+      type: String,
+      default: 'Production & films'
+    },
+    reelContent: {
+      type: String,
+      default: 'Reel/content generation'
+    },
+    projectWalkthroughs: {
+      type: String,
+      default: 'Project walkthroughs'
+    }
+  },
+  agentVisionStats: {
+    type: [{
+      value: { type: String, required: true },
+      description: { type: String, required: true }
+    }],
+    default: [
+      { value: '10%', description: 'Production\nBudget' },
+      { value: '50X', description: 'Faster time\nto market' },
+      { value: '100%', description: 'Realistic\nfootage' }
+    ]
   },
 
   // Agent XR Section

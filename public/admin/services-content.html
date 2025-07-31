@@ -245,11 +245,41 @@
                                 <textarea id="agentVisionDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                             
-                            <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision Features</label>
-                                <div id="agentVisionFeaturesContainer" class="tag-input"></div>
-                                <input type="text" id="agentVisionFeatureInput" placeholder="Type feature and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Labels</h4>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Launch Videos Label</label>
+                                    <input type="text" id="agentVisionLaunchVideosLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Production & Films Label</label>
+                                    <input type="text" id="agentVisionProductionFilmsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Reel/Content Label</label>
+                                    <input type="text" id="agentVisionReelContentLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Walkthroughs Label</label>
+                                    <input type="text" id="agentVisionProjectWalkthroughsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
                             </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Statistics</h4>
+                            
+                            <div id="agentVisionStatsContainer">
+                                <!-- Statistics will be dynamically added here -->
+                            </div>
+                            
+                            <button type="button" id="addAgentVisionStatBtn" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
+                                Add Agent Vision Statistic
+                            </button>
                         </div>
 
                         <!-- Agent XR Section -->
@@ -383,7 +413,17 @@
                 agentVUATagline: 'Agent Vua can breakeven at the cost of just 5 Agents',
                 agentVisionTitle: 'Agent Vision',
                 agentVisionDescription: 'Fast, affordable production quality films',
-                agentVisionFeatures: ['Real-time Visual Processing', 'AI-Enhanced Recognition', 'Smart Analytics', 'Seamless Integration'],
+                agentVisionVideoLabels: {
+                    launchVideos: 'Launch Videos',
+                    productionFilms: 'Production & films',
+                    reelContent: 'Reel/content generation',
+                    projectWalkthroughs: 'Project walkthroughs'
+                },
+                agentVisionStats: [
+                    { value: '10%', description: 'Production\nBudget' },
+                    { value: '50X', description: 'Faster time\nto market' },
+                    { value: '100%', description: 'Realistic\nfootage' }
+                ],
                 agentXRTitle: 'Agent XR',
                 agentXRDescription: 'Don\'t leave it to their imagination, immerse them in the experience',
                 agentXRServices: ['Virtual Reality', 'Digital twins', 'Mixed reality', 'Realistic renderings'],
@@ -433,7 +473,16 @@
             // Agent Vision
             document.getElementById('agentVisionTitle').value = content.agentVisionTitle || defaults.agentVisionTitle;
             document.getElementById('agentVisionDescription').value = content.agentVisionDescription || defaults.agentVisionDescription;
-            populateTagContainer('agentVisionFeaturesContainer', content.agentVisionFeatures || defaults.agentVisionFeatures);
+            
+            // Agent Vision Video Labels
+            const videoLabels = content.agentVisionVideoLabels || defaults.agentVisionVideoLabels;
+            document.getElementById('agentVisionLaunchVideosLabel').value = videoLabels.launchVideos || defaults.agentVisionVideoLabels.launchVideos;
+            document.getElementById('agentVisionProductionFilmsLabel').value = videoLabels.productionFilms || defaults.agentVisionVideoLabels.productionFilms;
+            document.getElementById('agentVisionReelContentLabel').value = videoLabels.reelContent || defaults.agentVisionVideoLabels.reelContent;
+            document.getElementById('agentVisionProjectWalkthroughsLabel').value = videoLabels.projectWalkthroughs || defaults.agentVisionVideoLabels.projectWalkthroughs;
+            
+            // Agent Vision Statistics
+            populateAgentVisionStats(content.agentVisionStats || defaults.agentVisionStats);
             
             // Agent XR
             document.getElementById('agentXRTitle').value = content.agentXRTitle || defaults.agentXRTitle;
@@ -456,7 +505,6 @@
                 { input: 'brandingServiceInput', container: 'brandingServicesContainer' },
                 { input: 'contentServiceInput', container: 'contentServicesContainer' },
                 { input: 'digitalServiceInput', container: 'digitalServicesContainer' },
-                { input: 'agentVisionFeatureInput', container: 'agentVisionFeaturesContainer' },
                 { input: 'agentVisionVideoOneInput', container: 'agentVisionVideoOneContainer' },
                 { input: 'agentVisionVideoTwoInput', container: 'agentVisionVideoTwoContainer' },
                 { input: 'agentVisionVideoThreeInput', container: 'agentVisionVideoThreeContainer' },
@@ -509,7 +557,50 @@
             return Array.from(tags).map(tag => tag.textContent.trim().replace('×', ''));
         }
 
-        // Statistics functions
+        // Agent Vision Statistics functions
+        function populateAgentVisionStats(stats) {
+            const container = document.getElementById('agentVisionStatsContainer');
+            container.innerHTML = '';
+            
+            if (!Array.isArray(stats)) {
+                stats = [
+                    { value: '10%', description: 'Production\nBudget' },
+                    { value: '50X', description: 'Faster time\nto market' },
+                    { value: '100%', description: 'Realistic\nfootage' }
+                ];
+            }
+            
+            stats.forEach((stat, index) => addAgentVisionStatField(stat.value, stat.description, index));
+        }
+
+        function addAgentVisionStatField(value = '', description = '', index = null) {
+            const container = document.getElementById('agentVisionStatsContainer');
+            const statIndex = index !== null ? index : container.children.length;
+            
+            const statDiv = document.createElement('div');
+            statDiv.className = 'flex gap-2 mb-2 agent-vision-stat-field';
+            statDiv.innerHTML = `
+                <input type="text" placeholder="Value (e.g., 10%)" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 agent-vision-stat-value">
+                <textarea placeholder="Description (use \\n for line breaks)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 agent-vision-stat-description" rows="2">${description}</textarea>
+                <button type="button" onclick="removeAgentVisionStat(this)" class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 text-sm">Remove</button>
+            `;
+            container.appendChild(statDiv);
+        }
+
+        function removeAgentVisionStat(button) {
+            button.parentElement.remove();
+        }
+
+        function getAgentVisionStats() {
+            const container = document.getElementById('agentVisionStatsContainer');
+            const statFields = container.querySelectorAll('.agent-vision-stat-field');
+            return Array.from(statFields).map(field => ({
+                value: field.querySelector('.agent-vision-stat-value').value,
+                description: field.querySelector('.agent-vision-stat-description').value
+            })).filter(stat => stat.value && stat.description);
+        }
+
+        // Agent XR Statistics functions
         function populateStats(stats) {
             const container = document.getElementById('agentXRStatsContainer');
             container.innerHTML = '';
@@ -574,6 +665,7 @@
             document.getElementById('saveBtn').addEventListener('click', saveContent);
             document.getElementById('logoutBtn').addEventListener('click', logout);
             document.getElementById('addStatBtn').addEventListener('click', () => addStatField());
+            document.getElementById('addAgentVisionStatBtn').addEventListener('click', () => addAgentVisionStatField());
         }
 
         // Save content
@@ -599,7 +691,13 @@
                     agentVUATagline: document.getElementById('agentVUATagline').value,
                     agentVisionTitle: document.getElementById('agentVisionTitle').value,
                     agentVisionDescription: document.getElementById('agentVisionDescription').value,
-                    agentVisionFeatures: getTagsFromContainer('agentVisionFeaturesContainer'),
+                    agentVisionVideoLabels: {
+                        launchVideos: document.getElementById('agentVisionLaunchVideosLabel').value,
+                        productionFilms: document.getElementById('agentVisionProductionFilmsLabel').value,
+                        reelContent: document.getElementById('agentVisionReelContentLabel').value,
+                        projectWalkthroughs: document.getElementById('agentVisionProjectWalkthroughsLabel').value
+                    },
+                    agentVisionStats: getAgentVisionStats(),
                     agentXRTitle: document.getElementById('agentXRTitle').value,
                     agentXRDescription: document.getElementById('agentXRDescription').value,
                     agentXRServices: getTagsFromContainer('agentXRServicesContainer'),
