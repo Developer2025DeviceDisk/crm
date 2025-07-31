@@ -37,10 +37,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 const contactRoutes = require('./routes/contact');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const servicesContentRoutes = require('./routes/servicesContent');
 
 app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/services-content', servicesContentRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
