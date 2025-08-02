@@ -78,8 +78,9 @@ jobs:
           aws elasticbeanstalk create-application \
             --application-name ${{ env.APPLICATION_NAME }} \
             --description "Contact Us Backend Application"
+          echo "✅ Application created successfully"
         else
-          echo "Elastic Beanstalk application already exists"
+          echo "✅ Elastic Beanstalk application already exists"
         fi
         
         # Check if environment exists
@@ -87,6 +88,8 @@ jobs:
           --environment-names ${{ env.ENVIRONMENT_NAME }} \
           --query 'Environments[0].Status' \
           --output text 2>/dev/null || echo "NotFound")
+        
+        echo "Current environment status: $ENV_STATUS"
         
         if [ "$ENV_STATUS" = "NotFound" ]; then
           echo "Creating Elastic Beanstalk environment..."
@@ -100,10 +103,46 @@ jobs:
               Namespace=aws:elasticbeanstalk:application:environment,OptionName=NODE_ENV,Value=production \
               Namespace=aws:elasticbeanstalk:application:environment,OptionName=PORT,Value=8080
           
-          echo "Waiting for environment to be ready..."
+          echo "⏳ Waiting for environment to be ready (this may take several minutes)..."
           aws elasticbeanstalk wait environment-ready --environment-names ${{ env.ENVIRONMENT_NAME }}
+          
+          # Verify environment is ready
+          FINAL_STATUS=$(aws elasticbeanstalk describe-environments \
+            --environment-names ${{ env.ENVIRONMENT_NAME }} \
+            --query 'Environments[0].Status' \
+            --output text)
+          
+          if [ "$FINAL_STATUS" = "Ready" ]; then
+            echo "✅ Environment created and ready for deployment"
+          else
+            echo "❌ Environment creation failed. Final status: $FINAL_STATUS"
+            exit 1
+          fi
+        elif [ "$ENV_STATUS" = "Ready" ]; then
+          echo "✅ Elastic Beanstalk environment already exists and is ready"
         else
-          echo "Elastic Beanstalk environment already exists with status: $ENV_STATUS"
+          echo "⚠️ Environment exists but is not ready (status: $ENV_STATUS)"
+          echo "⏳ Waiting for environment to become ready..."
+          aws elasticbeanstalk wait environment-ready --environment-names ${{ env.ENVIRONMENT_NAME }}
+          echo "✅ Environment is now ready"
+        fi
+
+    - name: Verify Environment Before Deployment
+      run: |
+        echo "🔍 Verifying environment exists and is ready..."
+        ENV_STATUS=$(aws elasticbeanstalk describe-environments \
+          --environment-names ${{ env.ENVIRONMENT_NAME }} \
+          --query 'Environments[0].Status' \
+          --output text 2>/dev/null || echo "NotFound")
+        
+        if [ "$ENV_STATUS" = "NotFound" ]; then
+          echo "❌ Environment not found! Deployment cannot proceed."
+          exit 1
+        elif [ "$ENV_STATUS" != "Ready" ]; then
+          echo "❌ Environment is not ready (status: $ENV_STATUS). Deployment cannot proceed."
+          exit 1
+        else
+          echo "✅ Environment verified and ready for deployment"
         fi
 
     - name: Deploy to Elastic Beanstalk
