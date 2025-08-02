@@ -41,6 +41,7 @@ const adminRoutes = require('./routes/admin');
 const servicesContentRoutes = require('./routes/servicesContent');
 const privacyPolicyRoutes = require('./routes/privacyPolicy');
 const aboutContentRoutes = require('./routes/aboutContent');
+const footerContentRoutes = require('./routes/footerContent');
 const imageUploadRoutes = require('./routes/imageUpload');
 const videoUploadRoutes = require('./routes/videoUpload');
 
@@ -50,6 +51,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/services-content', servicesContentRoutes);
 app.use('/api/privacy-policy', privacyPolicyRoutes);
 app.use('/api/about-content', aboutContentRoutes);
+app.use('/api/footer-content', footerContentRoutes);
 app.use('/api/images', imageUploadRoutes);
 app.use('/api/videos', videoUploadRoutes);
 
