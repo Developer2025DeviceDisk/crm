@@ -820,8 +820,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    const videoUrls = result.data.map(video => video.url);
-                    displayVideos(videoUrls);
+                    displayVideos(result.data);
                 }
             } catch (error) {
                 console.error('Error loading videos:', error);
@@ -835,20 +834,68 @@
             
             videos.forEach(video => {
                 const videoItem = document.createElement('div');
-                videoItem.className = 'relative cursor-pointer border-2 border-gray-200 rounded-lg hover:border-green-500 transition-colors';
-                videoItem.onclick = () => selectVideo(video);
+                videoItem.className = 'relative group border-2 border-gray-200 hover:border-green-500 rounded-lg overflow-hidden transition-colors';
+                
+                const fileSizeMB = (video.size / (1024 * 1024)).toFixed(1);
                 
                 videoItem.innerHTML = `
-                    <video src="http://localhost:8000${video}" class="w-full h-24 object-cover rounded-lg" muted></video>
-                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs p-1 rounded-b-lg truncate">
-                        ${video.split('/').pop()}
+                    <div class="cursor-pointer" onclick="selectVideo('${video.url}')">
+                        <video class="w-full h-24 object-cover bg-gray-200" preload="metadata" muted onloadedmetadata="this.currentTime = 0.1">
+                            <source src="http://localhost:8000${video.url}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition-opacity">
+                            <i class="fas fa-play text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+                        </div>
                     </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1">
+                        <div class="truncate">${video.filename}</div>
+                        <div class="text-gray-300">${fileSizeMB} MB</div>
+                    </div>
+                    <button 
+                        onclick="deleteVideo('${video.filename}', event)" 
+                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-opacity duration-200"
+                        title="Delete video"
+                    >
+                        <i class="fas fa-trash text-xs"></i>
+                    </button>
                 `;
                 
+                // After adding to DOM, try to load the video thumbnail
                 videoGrid.appendChild(videoItem);
+                
+                // Force thumbnail generation by seeking to a specific time
+                const videoElement = videoItem.querySelector('video');
+                videoElement.addEventListener('loadedmetadata', function() {
+                    this.currentTime = Math.min(0.5, this.duration * 0.1); // Seek to 10% or 0.5s, whichever is smaller
+                });
             });
         }
 
+        async function deleteVideo(filename, event) {
+            event.stopPropagation();
+            
+            if (!confirm(`Are you sure you want to delete "${filename}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/videos/delete/${filename}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Video deleted successfully!');
+                    loadVideos(); // Reload the video list
+                } else {
+                    alert('Error deleting video: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting video');
+            }
+        }
 
         function selectVideo(videoPath) {
             if (currentVideoInputId) {

@@ -1039,7 +1039,7 @@
                 
                 videoItem.innerHTML = `
                     <div class="cursor-pointer" onclick="selectVideo('${video.url}')">
-                        <video class="w-full h-24 object-cover" preload="metadata">
+                        <video class="w-full h-24 object-cover bg-gray-200" preload="metadata" muted onloadedmetadata="this.currentTime = 0.1">
                             <source src="${video.url}" type="video/mp4">
                         </video>
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center">
@@ -1059,7 +1059,14 @@
                     </button>
                 `;
                 
+                // After adding to DOM, try to load the video thumbnail
                 grid.appendChild(videoItem);
+                
+                // Force thumbnail generation by seeking to a specific time
+                const videoElement = videoItem.querySelector('video');
+                videoElement.addEventListener('loadedmetadata', function() {
+                    this.currentTime = Math.min(0.5, this.duration * 0.1); // Seek to 10% or 0.5s, whichever is smaller
+                });
             });
         }
 
