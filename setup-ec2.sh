@@ -55,3 +55,6 @@ echo "Next steps:"
 echo "1. Clone your repo: git clone <your-repo> ~/app"
 echo "2. Install deps: cd ~/app && npm install"
 echo "3. Start app: pm2 start server.js --name myapp"
+
+#   sudo nginx -t
+#   sudo systemctl reload nginx
