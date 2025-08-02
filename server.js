@@ -38,11 +38,13 @@ const contactRoutes = require('./routes/contact');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const servicesContentRoutes = require('./routes/servicesContent');
+const privacyPolicyRoutes = require('./routes/privacyPolicy');
 
 app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/services-content', servicesContentRoutes);
+app.use('/api/privacy-policy', privacyPolicyRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
