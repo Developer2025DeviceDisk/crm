@@ -29,9 +29,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build CSS
-      run: npm run build-css
-
     - name: Create deployment package
       run: |
         # Create a clean directory for deployment

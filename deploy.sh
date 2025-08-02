@@ -44,13 +44,6 @@ install_deps() {
     echo "✅ Dependencies installed"
 }
 
-# Function to build CSS
-build_css() {
-    echo "🎨 Building CSS..."
-    npm run build-css
-    echo "✅ CSS built"
-}
-
 # Function to create deployment package
 create_package() {
     echo "📦 Creating deployment package..."
@@ -144,7 +137,6 @@ main() {
         "build")
             echo "🔨 Building application..."
             install_deps
-            build_css
             create_package
             echo "✅ Build complete"
             ;;
@@ -161,7 +153,6 @@ main() {
             check_aws_credentials
             check_env_file || exit 1
             install_deps
-            build_css
             create_package
             deploy_infrastructure
             

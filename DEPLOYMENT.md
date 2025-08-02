@@ -68,7 +68,6 @@ aws cloudformation create-stack \
 
 # Create deployment package
 npm install
-npm run build-css
 zip -r application.zip . -x "*.git*" "node_modules/*" ".env*"
 
 # Deploy to Elastic Beanstalk (requires EB CLI)
