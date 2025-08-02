@@ -323,38 +323,57 @@
                             </button>
                         </div>
 
-                        <!-- Video URLs Section -->
+                        <!-- Videos Management -->
                         <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent Vision Video URLs</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Videos Management</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">VR Section Video</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="vrVideo" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/uploads/videos/vr.mp4">
+                                    <button type="button" onclick="openVideoSelector('vrVideo')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select Video
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <video id="vrVideoPreview" src="" class="hidden w-32 h-20 object-cover rounded border" controls></video>
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Collections</h4>
                             
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Video Section One (Project walkthroughs/Reel content)</label>
                                 <div id="agentVisionVideoOneContainer" class="tag-input"></div>
-                                <input type="text" id="agentVisionVideoOneInput" placeholder="Type video URL and press Enter (e.g., /agentVision/1.mp4)" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoOneInput" placeholder="Type video URL and press Enter (e.g., /agentVision/1.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoOneInput', 'agentVisionVideoOneContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Two (Production & films)</label>
                                 <div id="agentVisionVideoTwoContainer" class="tag-input"></div>
-                                <input type="text" id="agentVisionVideoTwoInput" placeholder="Type video URL and press Enter (e.g., /agentVision/2.mp4)" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoTwoInput" placeholder="Type video URL and press Enter (e.g., /agentVision/2.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoTwoInput', 'agentVisionVideoTwoContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Three (Launch Videos)</label>
                                 <div id="agentVisionVideoThreeContainer" class="tag-input"></div>
-                                <input type="text" id="agentVisionVideoThreeInput" placeholder="Type video URL and press Enter (e.g., /agentVision/4.mp4)" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            
-                            <div class="section-divider"></div>
-                            
-                            <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">VR Section Video</label>
-                                <input type="text" id="vrVideo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/agentVision/2.mp4">
-                            </div>
-                            
-                            <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Video</label>
-                                <input type="text" id="heroVideo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/hero.mp4">
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoThreeInput" placeholder="Type video URL and press Enter (e.g., /agentVision/4.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoThreeInput', 'agentVisionVideoThreeContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -445,8 +464,7 @@
                     agentVisionVideoOne: ['/agentVision/1.mp4', '/agentVision/5.mp4'],
                     agentVisionVideoTwo: ['/agentVision/2.mp4', '/agentVision/3.mp4'],
                     agentVisionVideoThree: ['/agentVision/4.mp4', '/agentVision/6.mp4'],
-                    vrVideo: '/agentVision/2.mp4',
-                    heroVideo: '/hero.mp4'
+                    vrVideo: '/agentVision/2.mp4'
                 }
             };
 
@@ -504,7 +522,9 @@
             populateTagContainer('agentVisionVideoTwoContainer', content.videos?.agentVisionVideoTwo || defaults.videos.agentVisionVideoTwo);
             populateTagContainer('agentVisionVideoThreeContainer', content.videos?.agentVisionVideoThree || defaults.videos.agentVisionVideoThree);
             document.getElementById('vrVideo').value = content.videos?.vrVideo || defaults.videos.vrVideo;
-            document.getElementById('heroVideo').value = content.videos?.heroVideo || defaults.videos.heroVideo;
+
+            // Update previews
+            updateAllVideoPreviews();
         }
 
         // Setup tag inputs
@@ -540,10 +560,7 @@
             const container = document.getElementById(containerId);
             const tag = document.createElement('div');
             tag.className = 'tag';
-            tag.innerHTML = `
-                ${text}
-                <button type="button" onclick="removeTag(this)">×</button>
-            `;
+            tag.innerHTML = `${text.trim()}<button type="button" onclick="removeTag(this)">×</button>`;
             container.appendChild(tag);
         }
 
@@ -563,7 +580,7 @@
         function getTagsFromContainer(containerId) {
             const container = document.getElementById(containerId);
             const tags = container.querySelectorAll('.tag');
-            return Array.from(tags).map(tag => tag.textContent.trim().replace('×', ''));
+            return Array.from(tags).map(tag => tag.textContent.trim().replace('×', '').trim());
         }
 
         // Agent Vision Statistics functions
@@ -715,8 +732,7 @@
                         agentVisionVideoOne: getTagsFromContainer('agentVisionVideoOneContainer'),
                         agentVisionVideoTwo: getTagsFromContainer('agentVisionVideoTwoContainer'),
                         agentVisionVideoThree: getTagsFromContainer('agentVisionVideoThreeContainer'),
-                        vrVideo: document.getElementById('vrVideo').value,
-                        heroVideo: document.getElementById('heroVideo').value
+                        vrVideo: document.getElementById('vrVideo').value
                     },
                     lastUpdatedBy: 'Admin',
                     version: new Date().toISOString()
@@ -772,8 +788,165 @@
             }
         }
 
+        // Video Upload Functions
+        let currentVideoInputId = null;
+        let currentCollectionInput = null;
+        let currentCollectionContainer = null;
+
+        function openVideoSelector(inputId) {
+            currentVideoInputId = inputId;
+            loadVideos();
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function openVideoSelectorForCollection(inputId, containerId) {
+            currentCollectionInput = document.getElementById(inputId);
+            currentCollectionContainer = containerId;
+            loadVideos();
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.add('hidden');
+            currentVideoInputId = null;
+            currentCollectionInput = null;
+            currentCollectionContainer = null;
+        }
+
+
+        async function loadVideos() {
+            try {
+                const response = await fetch('/api/videos/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const videoUrls = result.data.map(video => video.url);
+                    displayVideos(videoUrls);
+                }
+            } catch (error) {
+                console.error('Error loading videos:', error);
+            }
+        }
+
+
+        function displayVideos(videos) {
+            const videoGrid = document.getElementById('videoGrid');
+            videoGrid.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'relative cursor-pointer border-2 border-gray-200 rounded-lg hover:border-green-500 transition-colors';
+                videoItem.onclick = () => selectVideo(video);
+                
+                videoItem.innerHTML = `
+                    <video src="http://localhost:8000${video}" class="w-full h-24 object-cover rounded-lg" muted></video>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs p-1 rounded-b-lg truncate">
+                        ${video.split('/').pop()}
+                    </div>
+                `;
+                
+                videoGrid.appendChild(videoItem);
+            });
+        }
+
+
+        function selectVideo(videoPath) {
+            if (currentVideoInputId) {
+                document.getElementById(currentVideoInputId).value = videoPath;
+                updateVideoPreview(currentVideoInputId, videoPath);
+            } else if (currentCollectionInput && currentCollectionContainer) {
+                // Add to collection
+                addTag(currentCollectionContainer, videoPath);
+                currentCollectionInput.value = '';
+            }
+            closeVideoModal();
+        }
+
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('videoFileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a video file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('video', file);
+
+            try {
+                const response = await fetch('/api/videos/upload', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Video uploaded successfully!');
+                    fileInput.value = '';
+                    loadVideos(); // Reload videos
+                } else {
+                    alert('Upload failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed');
+            }
+        }
+
+
+        function updateVideoPreview(inputId, videoPath) {
+            const previewId = inputId + 'Preview';
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                preview.src = `http://localhost:8000${videoPath}`;
+                preview.classList.remove('hidden');
+            }
+        }
+
+        function updateAllVideoPreviews() {
+            const videoInputs = ['vrVideo'];
+            videoInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input && input.value) {
+                    updateVideoPreview(inputId, input.value);
+                }
+            });
+        }
+
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', initializeServicesContent);
     </script>
+
+    <!-- Video Upload Modal -->
+    <div id="videoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold">Select Video</h3>
+                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <input type="file" id="videoFileInput" accept="video/*" class="flex-1 px-3 py-2 border border-gray-300 rounded-md">
+                        <button onclick="uploadVideo()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                            <i class="fas fa-upload mr-2"></i>Upload
+                        </button>
+                    </div>
+                </div>
+                <div class="border-t pt-4">
+                    <h4 class="text-md font-semibold mb-3">Existing Videos</h4>
+                    <div id="videoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                        <!-- Videos will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

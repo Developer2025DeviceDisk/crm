@@ -186,11 +186,6 @@ const servicesContentSchema = new mongoose.Schema({
     vrVideo: {
       type: String,
       default: '/agentVision/2.mp4'
-    },
-    // Other videos can be added here
-    heroVideo: {
-      type: String,
-      default: '/hero.mp4'
     }
   },
 
