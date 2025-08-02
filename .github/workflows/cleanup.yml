@@ -10,6 +10,7 @@ on:
 
 env:
   APPLICATION_NAME: contact-us-backend
+  ENVIRONMENT_NAME: contact-us-backend-dev
 
 jobs:
   cleanup:
@@ -32,35 +33,70 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Delete Failed CloudFormation Stack
+    - name: Delete Elastic Beanstalk Environment and Application
       run: |
-        STACK_NAME="${{ env.APPLICATION_NAME }}-stack"
+        APPLICATION_NAME="${{ env.APPLICATION_NAME }}"
+        ENVIRONMENT_NAME="${{ env.ENVIRONMENT_NAME }}"
         
-        # Check if stack exists
+        # Check if environment exists
+        ENV_STATUS=$(aws elasticbeanstalk describe-environments \
+          --environment-names $ENVIRONMENT_NAME \
+          --query 'Environments[0].Status' \
+          --output text 2>/dev/null || echo "NotFound")
+        
+        if [ "$ENV_STATUS" != "NotFound" ]; then
+          echo "🗑️ Deleting Elastic Beanstalk environment: $ENVIRONMENT_NAME"
+          aws elasticbeanstalk terminate-environment --environment-name $ENVIRONMENT_NAME
+          
+          echo "⏳ Waiting for environment termination to complete..."
+          aws elasticbeanstalk wait environment-terminated --environment-names $ENVIRONMENT_NAME
+          
+          echo "✅ Environment deleted successfully!"
+        else
+          echo "📝 Environment $ENVIRONMENT_NAME does not exist."
+        fi
+        
+        # Check if application exists
+        if aws elasticbeanstalk describe-applications --application-names $APPLICATION_NAME 2>/dev/null | grep -q $APPLICATION_NAME; then
+          echo "�️ Deleting Elastic Beanstalk application: $APPLICATION_NAME"
+          aws elasticbeanstalk delete-application --application-name $APPLICATION_NAME
+          echo "✅ Application deleted successfully!"
+        else
+          echo "📝 Application $APPLICATION_NAME does not exist."
+        fi
+        
+        # Also clean up any CloudFormation stack if it exists
+        STACK_NAME="${{ env.APPLICATION_NAME }}-stack"
         STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "DOES_NOT_EXIST")
         
-        if [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
-          echo "📝 Stack $STACK_NAME does not exist."
-        else
-          echo "📝 Current stack status: $STACK_STATUS"
-          echo "🗑️ Deleting stack: $STACK_NAME"
-          
+        if [ "$STACK_STATUS" != "DOES_NOT_EXIST" ]; then
+          echo "🗑️ Also deleting CloudFormation stack: $STACK_NAME"
           aws cloudformation delete-stack --stack-name $STACK_NAME
-          
           echo "⏳ Waiting for stack deletion to complete..."
           aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
-          
-          echo "✅ Stack deleted successfully!"
+          echo "✅ CloudFormation stack deleted successfully!"
         fi
 
     - name: Verify Deletion
       run: |
-        STACK_NAME="${{ env.APPLICATION_NAME }}-stack"
-        STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+        APPLICATION_NAME="${{ env.APPLICATION_NAME }}"
+        ENVIRONMENT_NAME="${{ env.ENVIRONMENT_NAME }}"
         
-        if [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
-          echo "✅ Confirmed: Stack has been successfully deleted"
+        # Check environment
+        ENV_STATUS=$(aws elasticbeanstalk describe-environments \
+          --environment-names $ENVIRONMENT_NAME \
+          --query 'Environments[0].Status' \
+          --output text 2>/dev/null || echo "NotFound")
+        
+        if [ "$ENV_STATUS" = "NotFound" ]; then
+          echo "✅ Confirmed: Environment has been successfully deleted"
         else
-          echo "❌ Warning: Stack still exists with status: $STACK_STATUS"
-          exit 1
+          echo "❌ Warning: Environment still exists with status: $ENV_STATUS"
+        fi
+        
+        # Check application
+        if aws elasticbeanstalk describe-applications --application-names $APPLICATION_NAME 2>/dev/null | grep -q $APPLICATION_NAME; then
+          echo "❌ Warning: Application still exists"
+        else
+          echo "✅ Confirmed: Application has been successfully deleted"
         fi
