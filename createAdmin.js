@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./models/User');
-require('dotenv').config();
+const config = require('./env');
 
 async function createAdmin() {
   try {
@@ -10,7 +10,7 @@ async function createAdmin() {
     mongoose.connection.on('error', (err) => console.error('MongoDB connection error:', err));
 
     // Connect with timeout settings
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(config.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000, // 5 seconds timeout

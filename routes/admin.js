@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
 
+// Health check endpoint (no auth required)
+router.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // Middleware to check authentication
 const isAuthenticated = (req, res, next) => {
     if (!req.session.user) {

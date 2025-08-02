@@ -1,4 +1,5 @@
-require('dotenv').config();
+// Use custom environment configuration
+const config = require('./env');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -19,14 +20,14 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
 
 // MongoDB Atlas connection
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -65,7 +66,7 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 8000;
+const PORT = config.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

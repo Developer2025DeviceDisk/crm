@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+const config = require('../env');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.ALERT_FROM,
-    pass: process.env.EMAIL_PASSWORD,
+    user: config.ALERT_FROM,
+    pass: config.EMAIL_PASSWORD,
   },
 });
 
@@ -65,7 +65,7 @@ module.exports = {
       `;
 
       await transporter.sendMail({
-        from: `"Contact Form" <${process.env.ALERT_FROM}>`,
+        from: `"Contact Form" <${config.ALERT_FROM}>`,
         to: 'reachus@vvworx.com', // Your recipient email
         // to: 'shahbazthedeveloper@gmail.com', // Your recipient email
         subject: `Voix & Vision Worx: Contact Form Submission - ${formattedDateTime}`,
