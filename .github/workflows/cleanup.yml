@@ -1,0 +1,66 @@
+name: Cleanup Failed CloudFormation Stack
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_deletion:
+        description: 'Type "DELETE" to confirm stack deletion'
+        required: true
+        default: ''
+
+env:
+  APPLICATION_NAME: contact-us-backend
+
+jobs:
+  cleanup:
+    name: Delete Failed Stack
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Validate confirmation
+      run: |
+        if [ "${{ github.event.inputs.confirm_deletion }}" != "DELETE" ]; then
+          echo "❌ Confirmation failed. You must type 'DELETE' to proceed."
+          exit 1
+        fi
+        echo "✅ Confirmation received"
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Delete Failed CloudFormation Stack
+      run: |
+        STACK_NAME="${{ env.APPLICATION_NAME }}-stack"
+        
+        # Check if stack exists
+        STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+        
+        if [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
+          echo "📝 Stack $STACK_NAME does not exist."
+        else
+          echo "📝 Current stack status: $STACK_STATUS"
+          echo "🗑️ Deleting stack: $STACK_NAME"
+          
+          aws cloudformation delete-stack --stack-name $STACK_NAME
+          
+          echo "⏳ Waiting for stack deletion to complete..."
+          aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
+          
+          echo "✅ Stack deleted successfully!"
+        fi
+
+    - name: Verify Deletion
+      run: |
+        STACK_NAME="${{ env.APPLICATION_NAME }}-stack"
+        STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+        
+        if [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
+          echo "✅ Confirmed: Stack has been successfully deleted"
+        else
+          echo "❌ Warning: Stack still exists with status: $STACK_STATUS"
+          exit 1
+        fi

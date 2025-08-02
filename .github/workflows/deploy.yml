@@ -73,19 +73,28 @@ jobs:
     - name: Deploy CloudFormation Stack (if needed)
       run: |
         # Check if stack exists
-        if ! aws cloudformation describe-stacks --stack-name ${{ env.APPLICATION_NAME }}-stack 2>/dev/null; then
+        STACK_STATUS=$(aws cloudformation describe-stacks --stack-name ${{ env.APPLICATION_NAME }}-stack --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+        
+        if [ "$STACK_STATUS" = "ROLLBACK_COMPLETE" ] || [ "$STACK_STATUS" = "CREATE_FAILED" ] || [ "$STACK_STATUS" = "DELETE_FAILED" ]; then
+          echo "Stack is in failed state ($STACK_STATUS). Deleting failed stack..."
+          aws cloudformation delete-stack --stack-name ${{ env.APPLICATION_NAME }}-stack
+          echo "Waiting for stack deletion to complete..."
+          aws cloudformation wait stack-delete-complete --stack-name ${{ env.APPLICATION_NAME }}-stack
+          STACK_STATUS="DOES_NOT_EXIST"
+        fi
+        
+        if [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
           echo "Creating CloudFormation stack..."
           aws cloudformation create-stack \
             --stack-name ${{ env.APPLICATION_NAME }}-stack \
-            --template-body file://cloudformation/eb-app.yaml \
+            --template-body file://cloudformation/eb-app-minimal.yaml \
             --parameters ParameterKey=ApplicationName,ParameterValue=${{ env.APPLICATION_NAME }} \
-                        ParameterKey=EnvironmentName,ParameterValue=${{ env.ENVIRONMENT_NAME }} \
-            --capabilities CAPABILITY_IAM
+                        ParameterKey=EnvironmentName,ParameterValue=${{ env.ENVIRONMENT_NAME }}
           
           echo "Waiting for stack creation to complete..."
           aws cloudformation wait stack-create-complete --stack-name ${{ env.APPLICATION_NAME }}-stack
         else
-          echo "CloudFormation stack already exists"
+          echo "CloudFormation stack already exists and is in good state ($STACK_STATUS)"
         fi
 
     - name: Deploy to Elastic Beanstalk

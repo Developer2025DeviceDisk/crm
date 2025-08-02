@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Simple CloudFormation template for Node.js backend deployment on Elastic Beanstalk'
+Description: 'Minimal CloudFormation template for Node.js backend deployment on Elastic Beanstalk'
 
 Parameters:
   ApplicationName:
@@ -11,11 +11,6 @@ Parameters:
     Type: String
     Default: 'contact-us-backend-dev'
     Description: 'Name of the Elastic Beanstalk environment'
-  
-  SolutionStackName:
-    Type: String
-    Default: '64bit Amazon Linux 2023 v6.1.7 running Node.js 20'
-    Description: 'Platform version for Elastic Beanstalk'
 
 Resources:
   # Elastic Beanstalk Application
@@ -31,23 +26,14 @@ Resources:
     Properties:
       ApplicationName: !Ref ElasticBeanstalkApplication
       EnvironmentName: !Ref EnvironmentName
-      SolutionStackName: !Ref SolutionStackName
+      SolutionStackName: '64bit Amazon Linux 2023 v6.1.7 running Node.js 20'
       OptionSettings:
         - Namespace: aws:autoscaling:launchconfiguration
           OptionName: InstanceType
           Value: t3.micro
-        - Namespace: aws:autoscaling:asg
-          OptionName: MinSize
-          Value: '1'
-        - Namespace: aws:autoscaling:asg
-          OptionName: MaxSize
-          Value: '1'
         - Namespace: aws:elasticbeanstalk:environment
           OptionName: EnvironmentType
           Value: SingleInstance
-        - Namespace: aws:elasticbeanstalk:environment:process:default
-          OptionName: HealthCheckPath
-          Value: '/api/admin/health'
         - Namespace: aws:elasticbeanstalk:application:environment
           OptionName: NODE_ENV
           Value: 'production'
