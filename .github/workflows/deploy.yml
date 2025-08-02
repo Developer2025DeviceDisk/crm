@@ -1,0 +1,118 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  APPLICATION_NAME: contact-us-backend
+  ENVIRONMENT_NAME: contact-us-backend-dev
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: './package-lock.json'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build CSS
+      run: npm run build-css
+
+    - name: Create deployment package
+      run: |
+        # Create a clean directory for deployment
+        mkdir -p deploy-package
+        
+        # Copy necessary files
+        cp -r models deploy-package/
+        cp -r routes deploy-package/
+        cp -r middlewares deploy-package/
+        cp -r services deploy-package/
+        cp -r public deploy-package/
+        cp server.js deploy-package/
+        cp package.json deploy-package/
+        cp package-lock.json deploy-package/
+        
+        # Create .ebextensions directory for configuration
+        mkdir -p deploy-package/.ebextensions
+        
+        # Create environment configuration
+        cat > deploy-package/.ebextensions/environment.config << EOF
+        option_settings:
+          aws:elasticbeanstalk:application:environment:
+            NODE_ENV: production
+            PORT: 8080
+          aws:elasticbeanstalk:container:nodejs:
+            NodeCommand: "npm start"
+          aws:elasticbeanstalk:container:nodejs:staticfiles:
+            /public: public
+        EOF
+        
+        # Create a zip file
+        cd deploy-package
+        zip -r ../application.zip . -x "*.git*" "node_modules/*" ".env*"
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Deploy CloudFormation Stack (if needed)
+      run: |
+        # Check if stack exists
+        if ! aws cloudformation describe-stacks --stack-name ${{ env.APPLICATION_NAME }}-stack 2>/dev/null; then
+          echo "Creating CloudFormation stack..."
+          aws cloudformation create-stack \
+            --stack-name ${{ env.APPLICATION_NAME }}-stack \
+            --template-body file://cloudformation/eb-app.yaml \
+            --parameters ParameterKey=ApplicationName,ParameterValue=${{ env.APPLICATION_NAME }} \
+                        ParameterKey=EnvironmentName,ParameterValue=${{ env.ENVIRONMENT_NAME }} \
+            --capabilities CAPABILITY_IAM
+          
+          echo "Waiting for stack creation to complete..."
+          aws cloudformation wait stack-create-complete --stack-name ${{ env.APPLICATION_NAME }}-stack
+        else
+          echo "CloudFormation stack already exists"
+        fi
+
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v22
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: ${{ env.APPLICATION_NAME }}
+        environment_name: ${{ env.ENVIRONMENT_NAME }}
+        region: ${{ secrets.AWS_REGION }}
+        version_label: ${{ github.sha }}
+        deployment_package: ./application.zip
+        wait_for_environment_recovery: 300
+
+    - name: Get Application URL
+      run: |
+        APP_URL=$(aws elasticbeanstalk describe-environments \
+          --environment-names ${{ env.ENVIRONMENT_NAME }} \
+          --query 'Environments[0].CNAME' \
+          --output text)
+        echo "Application deployed at: http://$APP_URL"
+        echo "APPLICATION_URL=http://$APP_URL" >> $GITHUB_ENV
+
+    - name: Health Check
+      run: |
+        sleep 60  # Wait for deployment to stabilize
+        curl -f ${{ env.APPLICATION_URL }}/api/admin/health || echo "Health check endpoint not available yet"

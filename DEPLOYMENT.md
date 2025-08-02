@@ -42,7 +42,7 @@ Since we're using hardcoded values in the `env.js` file, no additional environme
 
 ### 4. Deployment Process
 
-The deployment happens automatically when you push to the `main` or `develop` branches:
+The deployment happens automatically when you push to the `main` or `develop` branches. The GitHub Actions workflow is located in `.github/workflows/deploy.yml` within this backend directory.
 
 1. **Push to GitHub**: Commit and push your changes
 2. **GitHub Action Triggers**: The workflow runs automatically
@@ -79,8 +79,8 @@ eb deploy
 ## Configuration Files
 
 - `cloudformation/eb-app.yaml`: Infrastructure as Code template
-- `.github/workflows/deploy.yml`: GitHub Actions workflow
-- `.ebextensions/environment.config`: Elastic Beanstalk configuration
+- `.github/workflows/deploy.yml`: GitHub Actions workflow (located in this directory)
+- `.ebextensions/environment.config`: Elastic Beanstalk configuration (auto-generated during deployment)
 
 ## Monitoring
 
