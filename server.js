@@ -56,6 +56,15 @@ app.use('/api/videos', videoUploadRoutes);
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Redirect root to dashboard (with auth check)
 app.get('/', (req, res) => {
   if (req.session.user) {  // Check if user is logged in
