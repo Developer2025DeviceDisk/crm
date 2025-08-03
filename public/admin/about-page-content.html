@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Page Content Manager - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar-mobile {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+        .btn-action {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+        .btn-action i {
+            margin-right: 0.5rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .team-member-card, .director-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: #f9fafb;
+        }
+        .foundation-item {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+        <p class="text-gray-600">Loading about page content...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+        <div class="flex h-screen">
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
+                </div>
+                <nav class="mt-4">
+                    <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+                        <i class="fas fa-envelope"></i> Contacts
+                    </a>
+                    <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Home Content
+                    </a>
+                    <a href="/admin/about-page-content.html" class="btn-action bg-gray-600">
+                        <i class="fas fa-user-circle"></i> About Page Content
+                    </a>
+                    <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Services Content
+                    </a>
+                    <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Privacy Policy
+                    </a>
+                    <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-grip-horizontal"></i> Footer Content
+                    </a>
+                    <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto md:ml-0">
+                <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">About Page Content Management</h2>
+                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Changes
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Success/Error Messages -->
+                <div id="messageContainer" class="hidden mx-4 mt-4 p-4 rounded-lg"></div>
+
+                <main class="p-4">
+                    <form id="aboutPageForm" class="space-y-6">
+                        <!-- Header Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Header Section</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Title Line 1</label>
+                                    <input type="text" id="headerTitleLine1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Voice In">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Title Line 2</label>
+                                    <input type="text" id="headerTitleLine2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="The Future Of">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Title Line 3</label>
+                                    <input type="text" id="headerTitleLine3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Marketing.">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Gradient</label>
+                                    <input type="text" id="headerBackgroundGradient" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="from-[#6210FF] to-[#BE2FF4]">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image Path</label>
+                                    <input type="text" id="headerHeroImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Marketingwoman.png">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Decorative Image Path</label>
+                                    <input type="text" id="headerDecorativeImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Markofinnovation.png">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Us Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">About Us Section</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Main Text Line 1</label>
+                                    <input type="text" id="aboutMainTextLine1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="'Vua' is the Voice that will lead the dialogue">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Main Text Line 2</label>
+                                    <input type="text" id="aboutMainTextLine2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="for a future-forward world of Marketing.">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+                                    <input type="text" id="aboutTextColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="#6210FF">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                    <input type="text" id="aboutBackgroundColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="#EEF0FF">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Who Are We Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Who Are We Section</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
+                                    <input type="text" id="whoAreWeTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Who Are We?">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
+                                    <input type="text" id="whoAreWeBackgroundImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Whoarewe.png">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Decorative Arc Image</label>
+                                    <input type="text" id="whoAreWeDecorativeArc" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Layer_1.png">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Astronaut Image</label>
+                                    <input type="text" id="whoAreWeAstronaut" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/astro.png">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Paragraph 1</label>
+                                <textarea id="whoAreWeParagraph1" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="We are a future-focused Marketing agency..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Highlight Text</label>
+                                <textarea id="whoAreWeHighlightText" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our 360-degree service portfolio..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Paragraph 1 Continuation</label>
+                                <textarea id="whoAreWeParagraph1Continuation" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="empowers brands to lead..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Paragraph 2</label>
+                                <textarea id="whoAreWeParagraph2" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="VUA is more than a brand..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Foundation Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Foundation Section (Fixed 4 Items)</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
+                                    <input type="text" id="foundationTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our Foundation">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                    <input type="text" id="foundationBackgroundColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="#6310FF">
+                                </div>
+                            </div>
+                            <div id="foundationItems">
+                                <!-- Foundation items will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Director Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Director Section (Fixed 2 Directors)</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
+                                    <input type="text" id="directorSectionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Director">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                    <input type="text" id="directorBackgroundColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="#EEF0FF">
+                                </div>
+                            </div>
+                            <div id="directorItems">
+                                <!-- Director items will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Team Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Team Section</h3>
+                            
+                            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
+                                    <input type="text" id="teamSectionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our Team">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                    <input type="text" id="teamBackgroundColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="black">
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Title Gradient</label>
+                                    <input type="text" id="teamTitleGradient" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="from-[#6210FF] to-[#BE2FF4]">
+                                </div>
+                            </div>
+                            <div id="teamMembers">
+                                <!-- Team members will be populated by JavaScript -->
+                            </div>
+                            <button type="button" onclick="addTeamMember()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors mt-4">
+                                <i class="fas fa-plus mr-2"></i>Add Team Member
+                            </button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentContent = null;
+
+        // Load current content on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            await setupMobileMenu();
+            await setupLogout();
+            await loadCurrentContent();
+        });
+
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const sidebar = document.getElementById('sidebar');
+
+            mobileMenuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnMenuButton = mobileMenuButton.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnMenuButton && sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        function setupLogout() {
+            document.getElementById('logoutBtn').addEventListener('click', async function() {
+                try {
+                    const response = await fetch('/api/auth/logout', { method: 'POST' });
+                    if (response.ok) {
+                        window.location.href = '/login.html';
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            });
+        }
+
+        async function loadCurrentContent() {
+            showLoading(true);
+            try {
+                const response = await fetch('/api/about-page-content/active');
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    currentContent = result.data;
+                    populateForm(currentContent);
+                } else {
+                    console.log('Using default about content');
+                }
+            } catch (error) {
+                console.error('Error loading content:', error);
+                showMessage('Error loading content: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function populateForm(content) {
+            // Header Section
+            if (content.headerSection) {
+                document.getElementById('headerTitleLine1').value = content.headerSection.titleLine1 || '';
+                document.getElementById('headerTitleLine2').value = content.headerSection.titleLine2 || '';
+                document.getElementById('headerTitleLine3').value = content.headerSection.titleLine3 || '';
+                document.getElementById('headerBackgroundGradient').value = content.headerSection.backgroundGradient || '';
+                document.getElementById('headerHeroImage').value = content.headerSection.heroImage || '';
+                document.getElementById('headerDecorativeImage').value = content.headerSection.decorativeImage || '';
+            }
+
+            // About Us Section
+            if (content.aboutUsSection) {
+                document.getElementById('aboutMainTextLine1').value = content.aboutUsSection.mainTextLine1 || '';
+                document.getElementById('aboutMainTextLine2').value = content.aboutUsSection.mainTextLine2 || '';
+                document.getElementById('aboutTextColor').value = content.aboutUsSection.textColor || '';
+                document.getElementById('aboutBackgroundColor').value = content.aboutUsSection.backgroundColor || '';
+            }
+
+            // Who Are We Section
+            if (content.whoAreWeSection) {
+                document.getElementById('whoAreWeTitle').value = content.whoAreWeSection.title || '';
+                document.getElementById('whoAreWeBackgroundImage').value = content.whoAreWeSection.backgroundImage || '';
+                document.getElementById('whoAreWeDecorativeArc').value = content.whoAreWeSection.leftImages?.decorativeArc || '';
+                document.getElementById('whoAreWeAstronaut').value = content.whoAreWeSection.leftImages?.astronaut || '';
+                document.getElementById('whoAreWeParagraph1').value = content.whoAreWeSection.content?.paragraph1 || '';
+                document.getElementById('whoAreWeHighlightText').value = content.whoAreWeSection.content?.highlightText || '';
+                document.getElementById('whoAreWeParagraph1Continuation').value = content.whoAreWeSection.content?.paragraph1Continuation || '';
+                document.getElementById('whoAreWeParagraph2').value = content.whoAreWeSection.content?.paragraph2 || '';
+            }
+
+            // Foundation Section
+            if (content.foundationSection) {
+                document.getElementById('foundationTitle').value = content.foundationSection.title || '';
+                document.getElementById('foundationBackgroundColor').value = content.foundationSection.backgroundColor || '';
+                populateFoundationItems(content.foundationSection.foundations || []);
+            }
+
+            // Director Section
+            if (content.directorSection) {
+                document.getElementById('directorSectionTitle').value = content.directorSection.sectionTitle || '';
+                document.getElementById('directorBackgroundColor').value = content.directorSection.backgroundColor || '';
+                populateDirectorItems(content.directorSection.directors || []);
+            }
+
+            // Team Section
+            if (content.teamSection) {
+                document.getElementById('teamSectionTitle').value = content.teamSection.sectionTitle || '';
+                document.getElementById('teamBackgroundColor').value = content.teamSection.backgroundColor || '';
+                document.getElementById('teamTitleGradient').value = content.teamSection.titleGradient || '';
+                populateTeamMembers(content.teamSection.teamMembers || []);
+            }
+        }
+
+        function populateFoundationItems(foundations) {
+            const container = document.getElementById('foundationItems');
+            container.innerHTML = '';
+
+            // Ensure exactly 4 foundation items
+            const items = foundations.length >= 4 ? foundations.slice(0, 4) : 
+                [...foundations, ...Array(4 - foundations.length).fill({ title: '', description: '', order: 0 })];
+
+            items.forEach((foundation, index) => {
+                const foundationDiv = document.createElement('div');
+                foundationDiv.className = 'foundation-item';
+                foundationDiv.innerHTML = `
+                    <h4 class="font-semibold mb-2 text-gray-700">Foundation Item ${index + 1}</h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <input type="text" class="foundation-title w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${foundation.title || ''}" placeholder="Foundation title">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <input type="text" class="foundation-description w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${foundation.description || ''}" placeholder="Foundation description">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(foundationDiv);
+            });
+        }
+
+        function populateDirectorItems(directors) {
+            const container = document.getElementById('directorItems');
+            container.innerHTML = '';
+
+            // Ensure exactly 2 director items
+            const items = directors.length >= 2 ? directors.slice(0, 2) : 
+                [...directors, ...Array(2 - directors.length).fill({ name: '', role: '', image: '', description: '', order: 0 })];
+
+            items.forEach((director, index) => {
+                const directorDiv = document.createElement('div');
+                directorDiv.className = 'director-card';
+                directorDiv.innerHTML = `
+                    <h4 class="font-semibold mb-2 text-gray-700">Director ${index + 1}</h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <input type="text" class="director-name w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${director.name || ''}" placeholder="Director name">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <input type="text" class="director-role w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${director.role || ''}" placeholder="Director role">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
+                            <input type="text" class="director-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${director.image || ''}" placeholder="/director-image.png">
+                        </div>
+                    </div>
+                    <div class="input-group mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea class="director-description w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Director description and experience">${director.description || ''}</textarea>
+                    </div>
+                `;
+                container.appendChild(directorDiv);
+            });
+        }
+
+        function populateTeamMembers(teamMembers) {
+            const container = document.getElementById('teamMembers');
+            container.innerHTML = '';
+
+            teamMembers.forEach((member, index) => {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'team-member-card';
+                memberDiv.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-semibold text-gray-700">Team Member ${index + 1}</h4>
+                        <button type="button" onclick="removeTeamMember(this)" class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-colors">
+                            <i class="fas fa-trash mr-1"></i>Remove
+                        </button>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <input type="text" class="team-name w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.name || ''}" placeholder="Team member name">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <input type="text" class="team-role w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.role || ''}" placeholder="Team member role">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
+                            <input type="text" class="team-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.image || ''}" placeholder="/team-member.png">
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 mt-2">
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Order</label>
+                            <input type="number" class="team-order w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.order || index + 1}" min="1">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Active</label>
+                            <select class="team-active w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="true" ${member.isActive ? 'selected' : ''}>Active</option>
+                                <option value="false" ${!member.isActive ? 'selected' : ''}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(memberDiv);
+            });
+        }
+
+        function addTeamMember() {
+            const container = document.getElementById('teamMembers');
+            const memberCount = container.children.length;
+            
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'team-member-card';
+            memberDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-semibold text-gray-700">Team Member ${memberCount + 1}</h4>
+                    <button type="button" onclick="removeTeamMember(this)" class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-colors">
+                        <i class="fas fa-trash mr-1"></i>Remove
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" class="team-name w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Team member name">
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                        <input type="text" class="team-role w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Team member role">
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
+                        <input type="text" class="team-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/team-member.png">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Order</label>
+                        <input type="number" class="team-order w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${memberCount + 1}" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Active</label>
+                        <select class="team-active w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="true" selected>Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(memberDiv);
+        }
+
+        function removeTeamMember(button) {
+            button.closest('.team-member-card').remove();
+            updateTeamMemberNumbers();
+        }
+
+        function updateTeamMemberNumbers() {
+            const teamMembers = document.querySelectorAll('.team-member-card');
+            teamMembers.forEach((member, index) => {
+                const header = member.querySelector('h4');
+                header.textContent = `Team Member ${index + 1}`;
+                
+                const orderInput = member.querySelector('.team-order');
+                if (!orderInput.value) {
+                    orderInput.value = index + 1;
+                }
+            });
+        }
+
+        function getFoundationItems() {
+            const foundationItems = [];
+            const foundationElements = document.querySelectorAll('.foundation-item');
+            
+            foundationElements.forEach((element, index) => {
+                const title = element.querySelector('.foundation-title').value;
+                const description = element.querySelector('.foundation-description').value;
+                
+                if (title && description) {
+                    foundationItems.push({
+                        title: title,
+                        description: description,
+                        order: index + 1
+                    });
+                }
+            });
+            
+            return foundationItems;
+        }
+
+        function getDirectorItems() {
+            const directorItems = [];
+            const directorElements = document.querySelectorAll('.director-card');
+            
+            directorElements.forEach((element, index) => {
+                const name = element.querySelector('.director-name').value;
+                const role = element.querySelector('.director-role').value;
+                const image = element.querySelector('.director-image').value;
+                const description = element.querySelector('.director-description').value;
+                
+                if (name && image && description) {
+                    directorItems.push({
+                        name: name,
+                        role: role,
+                        image: image,
+                        description: description,
+                        order: index + 1
+                    });
+                }
+            });
+            
+            return directorItems;
+        }
+
+        function getTeamMembers() {
+            const teamMembers = [];
+            const teamElements = document.querySelectorAll('.team-member-card');
+            
+            teamElements.forEach((element, index) => {
+                const name = element.querySelector('.team-name').value;
+                const role = element.querySelector('.team-role').value;
+                const image = element.querySelector('.team-image').value;
+                const order = parseInt(element.querySelector('.team-order').value) || index + 1;
+                const isActive = element.querySelector('.team-active').value === 'true';
+                
+                if (name && role && image) {
+                    teamMembers.push({
+                        name: name,
+                        role: role,
+                        image: image,
+                        order: order,
+                        isActive: isActive
+                    });
+                }
+            });
+            
+            return teamMembers;
+        }
+
+        // Save button event listener
+        document.getElementById('saveBtn').addEventListener('click', saveContent);
+
+        async function saveContent() {
+            showLoading(true);
+            try {
+                const contentData = {
+                    headerSection: {
+                        titleLine1: document.getElementById('headerTitleLine1').value,
+                        titleLine2: document.getElementById('headerTitleLine2').value,
+                        titleLine3: document.getElementById('headerTitleLine3').value,
+                        backgroundGradient: document.getElementById('headerBackgroundGradient').value,
+                        heroImage: document.getElementById('headerHeroImage').value,
+                        decorativeImage: document.getElementById('headerDecorativeImage').value
+                    },
+                    aboutUsSection: {
+                        mainTextLine1: document.getElementById('aboutMainTextLine1').value,
+                        mainTextLine2: document.getElementById('aboutMainTextLine2').value,
+                        textColor: document.getElementById('aboutTextColor').value,
+                        backgroundColor: document.getElementById('aboutBackgroundColor').value
+                    },
+                    whoAreWeSection: {
+                        title: document.getElementById('whoAreWeTitle').value,
+                        backgroundImage: document.getElementById('whoAreWeBackgroundImage').value,
+                        leftImages: {
+                            decorativeArc: document.getElementById('whoAreWeDecorativeArc').value,
+                            astronaut: document.getElementById('whoAreWeAstronaut').value
+                        },
+                        content: {
+                            paragraph1: document.getElementById('whoAreWeParagraph1').value,
+                            highlightText: document.getElementById('whoAreWeHighlightText').value,
+                            paragraph1Continuation: document.getElementById('whoAreWeParagraph1Continuation').value,
+                            paragraph2: document.getElementById('whoAreWeParagraph2').value
+                        }
+                    },
+                    foundationSection: {
+                        title: document.getElementById('foundationTitle').value,
+                        backgroundColor: document.getElementById('foundationBackgroundColor').value,
+                        foundations: getFoundationItems()
+                    },
+                    directorSection: {
+                        sectionTitle: document.getElementById('directorSectionTitle').value,
+                        backgroundColor: document.getElementById('directorBackgroundColor').value,
+                        directors: getDirectorItems()
+                    },
+                    teamSection: {
+                        sectionTitle: document.getElementById('teamSectionTitle').value,
+                        backgroundColor: document.getElementById('teamBackgroundColor').value,
+                        titleGradient: document.getElementById('teamTitleGradient').value,
+                        teamMembers: getTeamMembers()
+                    },
+                    isActive: true,
+                    version: '1.0',
+                    lastUpdatedBy: 'Admin'
+                };
+
+                const response = await fetch('/api/about-page-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contentData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('About page content saved successfully!', 'success');
+                    currentContent = result.data;
+                } else {
+                    showMessage('Error saving content: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error saving content:', error);
+                showMessage('Error saving content: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (show) {
+                overlay.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+            } else {
+                overlay.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.className = `mx-4 mt-4 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`;
+            messageContainer.textContent = message;
+            messageContainer.classList.remove('hidden');
+
+            setTimeout(() => {
+                messageContainer.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
