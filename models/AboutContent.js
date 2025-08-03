@@ -11,9 +11,9 @@ const aboutContentSchema = new mongoose.Schema({
       type: [String],
       validate: {
         validator: function(v) {
-          return v.length === 4;
+          return v.length >= 1 && v.length <= 10;
         },
-        message: 'Hero section must have exactly 4 rotating texts'
+        message: 'Hero section must have between 1 and 10 rotating texts'
       },
       default: ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative']
     },
@@ -22,10 +22,14 @@ const aboutContentSchema = new mongoose.Schema({
       default: '/hero.mp4'
     },
     heroImages: {
-      fullService: { type: String, default: '/fullservice.jpeg' },
-      ai: { type: String, default: '/ai.jpeg' },
-      tech: { type: String, default: '/tech.jpeg' },
-      creative: { type: String, default: '/creative.jpeg' }
+      type: [String],
+      validate: {
+        validator: function(v) {
+          return v.length >= 1 && v.length <= 10;
+        },
+        message: 'Hero section must have between 1 and 10 hero images'
+      },
+      default: ['/fullservice.jpeg', '/ai.jpeg', '/tech.jpeg', '/creative.jpeg']
     }
   },
 
@@ -233,17 +237,21 @@ aboutContentSchema.pre('save', async function (next) {
     );
   }
   
-  // Ensure exactly 4 rotating texts
+  // Validate rotating texts length (1-10)
   if (this.heroSection && this.heroSection.rotatingTexts) {
-    const defaultTexts = ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative'];
-    
-    // Ensure exactly 4 items
-    if (this.heroSection.rotatingTexts.length > 4) {
-      this.heroSection.rotatingTexts = this.heroSection.rotatingTexts.slice(0, 4);
-    } else if (this.heroSection.rotatingTexts.length < 4) {
-      const missingCount = 4 - this.heroSection.rotatingTexts.length;
-      const missingItems = defaultTexts.slice(-missingCount);
-      this.heroSection.rotatingTexts.push(...missingItems);
+    if (this.heroSection.rotatingTexts.length < 1) {
+      this.heroSection.rotatingTexts = ['Full-Service'];
+    } else if (this.heroSection.rotatingTexts.length > 10) {
+      this.heroSection.rotatingTexts = this.heroSection.rotatingTexts.slice(0, 10);
+    }
+  }
+  
+  // Validate hero images length (1-10)
+  if (this.heroSection && this.heroSection.heroImages) {
+    if (this.heroSection.heroImages.length < 1) {
+      this.heroSection.heroImages = ['/fullservice.jpeg'];
+    } else if (this.heroSection.heroImages.length > 10) {
+      this.heroSection.heroImages = this.heroSection.heroImages.slice(0, 10);
     }
   }
 

@@ -198,64 +198,40 @@
                             </div>
 
                             <div class="section-divider"></div>
-                            <h4 class="text-md font-medium text-gray-800 mb-3">Rotating Texts (Fixed: 4 Items)</h4>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Rotating Texts </h4>
+                            <p class="text-sm text-gray-600 mb-3">✨ <strong>Unlimited Animation Support!</strong> All texts will animate in sequence. Images cycle through available hero images.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex gap-2 mb-2">
+                                    <input type="text" id="newRotatingText" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter new rotating text">
+                                    <button type="button" onclick="addRotatingText()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
                             
                             <div id="rotatingTextsContainer" class="space-y-2 mb-4">
-                                <!-- Fixed rotating text inputs will be added here -->
+                                <!-- Dynamic rotating text inputs will be added here -->
                             </div>
 
                             <div class="section-divider"></div>
-                            <h4 class="text-md font-medium text-gray-800 mb-3">Hero Images</h4>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Hero Images </h4>
+                            <p class="text-sm text-gray-600 mb-3">🎨 <strong>Unlimited Images Support!</strong> All images will animate in sequence with rotating texts.</p>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full-Service Image</label>
-                                    <div class="flex gap-2 mb-2">
-                                        <input type="text" id="heroImageFullService" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/fullservice.jpeg">
-                                        <button type="button" onclick="openImageSelector('heroImageFullService')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                                            <i class="fas fa-images mr-1"></i>Select
-                                        </button>
-                                    </div>
-                                    <div id="heroImageFullServicePreview" class="image-preview hidden">
-                                        <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
-                                    </div>
+                            <div class="mb-4">
+                                <div class="flex gap-2 mb-2">
+                                    <input type="text" id="newHeroImage" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter image URL or path">
+                                    <button type="button" onclick="openImageSelector('newHeroImage')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                        <i class="fas fa-images mr-1"></i>Select
+                                    </button>
+                                    <button type="button" onclick="addHeroImage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
                                 </div>
-                                <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">AI Image</label>
-                                    <div class="flex gap-2 mb-2">
-                                        <input type="text" id="heroImageAi" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/ai.jpeg">
-                                        <button type="button" onclick="openImageSelector('heroImageAi')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                                            <i class="fas fa-images mr-1"></i>Select
-                                        </button>
-                                    </div>
-                                    <div id="heroImageAiPreview" class="image-preview hidden">
-                                        <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tech Image</label>
-                                    <div class="flex gap-2 mb-2">
-                                        <input type="text" id="heroImageTech" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/tech.jpeg">
-                                        <button type="button" onclick="openImageSelector('heroImageTech')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                                            <i class="fas fa-images mr-1"></i>Select
-                                        </button>
-                                    </div>
-                                    <div id="heroImageTechPreview" class="image-preview hidden">
-                                        <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Creative Image</label>
-                                    <div class="flex gap-2 mb-2">
-                                        <input type="text" id="heroImageCreative" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/creative.jpeg">
-                                        <button type="button" onclick="openImageSelector('heroImageCreative')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                                            <i class="fas fa-images mr-1"></i>Select
-                                        </button>
-                                    </div>
-                                    <div id="heroImageCreativePreview" class="image-preview hidden">
-                                        <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
-                                    </div>
-                                </div>
+                            </div>
+                            
+                            <div id="heroImagesContainer" class="space-y-2 mb-4">
+                                <!-- Dynamic hero image inputs will be added here -->
                             </div>
                         </div>
 
@@ -427,13 +403,11 @@
             document.getElementById('heroVideoSrc').value = content.heroSection?.backgroundVideo || '/hero.mp4';
             
             // Hero Images
-            document.getElementById('heroImageFullService').value = content.heroSection?.heroImages?.fullService || '/fullservice.jpeg';
-            document.getElementById('heroImageAi').value = content.heroSection?.heroImages?.ai || '/ai.jpeg';
-            document.getElementById('heroImageTech').value = content.heroSection?.heroImages?.tech || '/tech.jpeg';
-            document.getElementById('heroImageCreative').value = content.heroSection?.heroImages?.creative || '/creative.jpeg';
+            // Legacy code - now using dynamic arrays
 
             // Populate rotating texts
-            populateRotatingTexts(content.heroSection?.rotatingTexts || ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative', 'Good Content']);
+            populateRotatingTexts(content.heroSection?.rotatingTexts || ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative']);
+            populateHeroImages(content.heroSection?.heroImages || ['/fullservice.jpeg', '/ai.jpeg', '/tech.jpeg', '/creative.jpeg']);
 
             // Parallax Section
             document.getElementById('parallaxTitle').value = content.parallaxSection?.title || 'Your Voice in the Future of Marketing.';
@@ -463,34 +437,200 @@
             const container = document.getElementById('rotatingTextsContainer');
             container.innerHTML = '';
             
-            // Default rotating texts if none exist
-            const defaultTexts = ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative'];
-            
-            // Ensure exactly 4 rotating texts
-            const textsToUse = texts.length >= 4 
-                ? texts.slice(0, 4) 
-                : [...texts, ...defaultTexts.slice(texts.length)];
+            // Use provided texts or defaults (no limit enforcement here)
+            const textsToUse = texts && texts.length > 0 
+                ? texts 
+                : ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative'];
                 
             textsToUse.forEach((text, index) => {
                 addRotatingTextItem(text, index);
             });
         }
+        
+        function addRotatingText() {
+            const input = document.getElementById('newRotatingText');
+            const text = input.value.trim();
+            
+            if (!text) {
+                showToast('Please enter a rotating text', 'error');
+                return;
+            }
+            
+            const container = document.getElementById('rotatingTextsContainer');
+            const existingItems = container.querySelectorAll('.rotating-text-item').length;
+            
+            if (existingItems >= 10) {
+                showToast('Maximum 10 rotating texts allowed', 'error');
+                return;
+            }
+            
+            addRotatingTextItem(text, existingItems);
+            input.value = '';
+            showToast('Rotating text added successfully', 'success');
+        }
 
         function addRotatingTextItem(text, index) {
             const container = document.getElementById('rotatingTextsContainer');
             const item = document.createElement('div');
-            item.className = 'mb-2 rotating-text-item';
+            item.className = 'mb-2 rotating-text-item border p-3 rounded-md bg-gray-50';
             item.innerHTML = `
-                <label class="block text-sm font-medium text-gray-700 mb-1">Rotating Text ${index + 1}</label>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Rotating Text ${index + 1}</label>
+                    <button type="button" onclick="removeRotatingTextItem(this)" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
                 <input type="text" value="${text}" placeholder="Enter rotating text ${index + 1}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 rotating-text-value" />
             `;
             container.appendChild(item);
+        }
+        
+        function removeRotatingTextItem(button) {
+            const container = document.getElementById('rotatingTextsContainer');
+            const items = container.querySelectorAll('.rotating-text-item');
+            
+            if (items.length <= 1) {
+                showToast('At least one rotating text is required', 'error');
+                return;
+            }
+            
+            button.closest('.rotating-text-item').remove();
+            updateRotatingTextLabels();
+            showToast('Rotating text removed successfully', 'success');
+        }
+        
+        function updateRotatingTextLabels() {
+            const items = document.querySelectorAll('#rotatingTextsContainer .rotating-text-item');
+            items.forEach((item, index) => {
+                const label = item.querySelector('label');
+                const input = item.querySelector('input');
+                label.textContent = `Rotating Text ${index + 1}`;
+                input.placeholder = `Enter rotating text ${index + 1}`;
+            });
         }
 
 
         function getRotatingTexts() {
             const items = document.querySelectorAll('#rotatingTextsContainer .rotating-text-value');
             return Array.from(items).map(input => input.value).filter(text => text.trim() !== '');
+        }
+        
+        // Hero Images Management
+        function populateHeroImages(images) {
+            const container = document.getElementById('heroImagesContainer');
+            container.innerHTML = '';
+            
+            // Use provided images or defaults
+            const imagesToUse = images && images.length > 0 
+                ? images 
+                : ['/fullservice.jpeg', '/ai.jpeg', '/tech.jpeg', '/creative.jpeg'];
+                
+            imagesToUse.forEach((image, index) => {
+                addHeroImageItem(image, index);
+            });
+        }
+        
+        function addHeroImage() {
+            const input = document.getElementById('newHeroImage');
+            const imagePath = input.value.trim();
+            
+            if (!imagePath) {
+                showToast('Please enter an image URL or path', 'error');
+                return;
+            }
+            
+            const container = document.getElementById('heroImagesContainer');
+            const existingItems = container.querySelectorAll('.hero-image-item').length;
+            
+            if (existingItems >= 10) {
+                showToast('Maximum 10 hero images allowed', 'error');
+                return;
+            }
+            
+            addHeroImageItem(imagePath, existingItems);
+            input.value = '';
+            showToast('Hero image added successfully', 'success');
+        }
+        
+        function addHeroImageItem(imagePath, index) {
+            const container = document.getElementById('heroImagesContainer');
+            const item = document.createElement('div');
+            item.className = 'mb-3 hero-image-item border p-3 rounded-md bg-gray-50';
+            item.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Hero Image ${index + 1}</label>
+                    <button type="button" onclick="removeHeroImageItem(this)" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="flex gap-2 mb-2">
+                    <input type="text" value="${imagePath}" placeholder="Enter image URL or path" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 hero-image-value" oninput="updateHeroImagePreview(this)"/>
+                    <button type="button" onclick="openImageSelectorForHeroImage(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                        <i class="fas fa-images mr-1"></i>Select
+                    </button>
+                </div>
+                <div class="hero-image-preview ${imagePath ? '' : 'hidden'}">
+                    <img src="${getImageUrl(imagePath)}" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                </div>
+            `;
+            container.appendChild(item);
+        }
+        
+        function removeHeroImageItem(button) {
+            const container = document.getElementById('heroImagesContainer');
+            const items = container.querySelectorAll('.hero-image-item');
+            
+            if (items.length <= 1) {
+                showToast('At least one hero image is required', 'error');
+                return;
+            }
+            
+            button.closest('.hero-image-item').remove();
+            updateHeroImageLabels();
+            showToast('Hero image removed successfully', 'success');
+        }
+        
+        function updateHeroImageLabels() {
+            const items = document.querySelectorAll('#heroImagesContainer .hero-image-item');
+            items.forEach((item, index) => {
+                const label = item.querySelector('label');
+                const input = item.querySelector('input');
+                label.textContent = `Hero Image ${index + 1}`;
+                input.placeholder = `Enter image URL or path`;
+            });
+        }
+        
+        function updateHeroImagePreview(input) {
+            const item = input.closest('.hero-image-item');
+            const preview = item.querySelector('.hero-image-preview');
+            const img = preview.querySelector('img');
+            const imagePath = input.value.trim();
+            
+            if (imagePath) {
+                img.src = getImageUrl(imagePath);
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+        
+        function openImageSelectorForHeroImage(button) {
+            const input = button.previousElementSibling;
+            // Temporarily store reference to the input for the image selector callback
+            window.currentHeroImageInput = input;
+            openImageSelector('heroImageTemp');
+        }
+        
+        function getHeroImages() {
+            const items = document.querySelectorAll('#heroImagesContainer .hero-image-value');
+            return Array.from(items).map(input => input.value).filter(path => path.trim() !== '');
+        }
+        
+        function getImageUrl(imagePath) {
+            if (!imagePath) return '';
+            if (imagePath.startsWith('http')) return imagePath;
+            if (imagePath.startsWith('/uploads/')) return `http://localhost:8000${imagePath}`;
+            return imagePath;
         }
 
         // Service Cards Management
@@ -746,12 +886,7 @@
                         mainTitle: document.getElementById('heroMainTitle').value,
                         rotatingTexts: getRotatingTexts(),
                         backgroundVideo: document.getElementById('heroVideoSrc').value,
-                        heroImages: {
-                            fullService: document.getElementById('heroImageFullService').value,
-                            ai: document.getElementById('heroImageAi').value,
-                            tech: document.getElementById('heroImageTech').value,
-                            creative: document.getElementById('heroImageCreative').value
-                        }
+                        heroImages: getHeroImages()
                     },
                     parallaxSection: {
                         title: document.getElementById('parallaxTitle').value,
@@ -904,6 +1039,16 @@
                         previewElement.classList.remove('hidden');
                     }
                 }
+                closeImageModal();
+            } else if (currentImageInputId === 'heroImageTemp' && window.currentHeroImageInput) {
+                // Handle hero image selection
+                window.currentHeroImageInput.value = imageUrl;
+                updateHeroImagePreview(window.currentHeroImageInput);
+                window.currentHeroImageInput = null;
+                closeImageModal();
+            } else if (currentImageInputId === 'newHeroImage') {
+                // Handle new hero image input
+                document.getElementById('newHeroImage').value = imageUrl;
                 closeImageModal();
             } else if (currentImageInputId) {
                 // Handle regular image selection
@@ -1153,7 +1298,6 @@
         // Update image previews on page load
         function updateAllImagePreviews() {
             const imageInputs = [
-                'heroImageFullService', 'heroImageAi', 'heroImageTech', 'heroImageCreative',
                 'parallaxBgImage', 'servicesBgImage'
             ];
             
