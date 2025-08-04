@@ -506,7 +506,7 @@
                                 </button>
                             </div>
                             <div class="director-image-preview ${director.image ? '' : 'hidden'}">
-                                <img src="${director.image ? (director.image.startsWith('http') ? director.image : (director.image.startsWith('/uploads/') ? 'http://localhost:8000' + director.image : director.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                                <img src="${director.image ? (director.image.startsWith('http') ? director.image : (director.image.startsWith('/uploads/') ? 'http://15.206.84.81:8000' + director.image : director.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
                             </div>
                         </div>
                     </div>
@@ -564,7 +564,7 @@
                                 </button>
                             </div>
                             <div class="team-image-preview ${member.image ? '' : 'hidden'}">
-                                <img src="${member.image ? (member.image.startsWith('http') ? member.image : (member.image.startsWith('/uploads/') ? 'http://localhost:8000' + member.image : member.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                                <img src="${member.image ? (member.image.startsWith('http') ? member.image : (member.image.startsWith('/uploads/') ? 'http://15.206.84.81:8000' + member.image : member.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
                             </div>
                         </div>
                     </div>
@@ -921,7 +921,7 @@
         function getImageUrl(imagePath) {
             if (!imagePath) return '';
             if (imagePath.startsWith('http')) return imagePath;
-            if (imagePath.startsWith('/uploads/')) return `http://localhost:8000${imagePath}`;
+            if (imagePath.startsWith('/uploads/')) return `http://15.206.84.81:8000${imagePath}`;
             return imagePath;
         }
 

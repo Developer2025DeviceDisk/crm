@@ -901,7 +901,7 @@
                 videoItem.innerHTML = `
                     <div class="cursor-pointer" onclick="selectVideo('${video.url}')">
                         <video class="w-full h-24 object-cover bg-gray-200" preload="metadata" muted onloadedmetadata="this.currentTime = 0.1">
-                            <source src="http://localhost:8000${video.url}" type="video/mp4">
+                            <source src="http://15.206.84.81:8000${video.url}" type="video/mp4">
                         </video>
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition-opacity">
                             <i class="fas fa-play text-white opacity-0 group-hover:opacity-100 text-xl"></i>
@@ -1009,7 +1009,7 @@
             const previewId = inputId + 'Preview';
             const preview = document.getElementById(previewId);
             if (preview) {
-                preview.src = `http://localhost:8000${videoPath}`;
+                preview.src = `http://15.206.84.81:8000${videoPath}`;
                 preview.classList.remove('hidden');
             }
         }
