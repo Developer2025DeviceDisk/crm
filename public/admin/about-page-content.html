@@ -806,6 +806,11 @@
         document.getElementById('saveBtn').addEventListener('click', saveContent);
 
         async function saveContent() {
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+            saveBtn.disabled = true;
+            
             showLoading(true);
             try {
                 const contentData = {
@@ -878,6 +883,8 @@
                 console.error('Error saving content:', error);
                 showMessage('Error saving content: ' + error.message, 'error');
             } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
                 showLoading(false);
             }
         }

@@ -883,6 +883,11 @@
 
         // Save content
         async function saveContent() {
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+            saveBtn.disabled = true;
+            
             try {
                 const contentData = {
                     heroSection: {
@@ -932,6 +937,9 @@
             } catch (error) {
                 console.error('Error saving content:', error);
                 alert('Error saving content');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
             }
         }
 
