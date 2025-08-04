@@ -53,6 +53,12 @@
             margin: 0.5rem 0;
             background: white;
         }
+        .image-preview {
+            margin-top: 0.5rem;
+        }
+        .image-preview.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -139,11 +145,27 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image Path</label>
-                                    <input type="text" id="headerHeroImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Marketingwoman.png">
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" id="headerHeroImage" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Marketingwoman.png">
+                                        <button type="button" onclick="openImageSelector('headerHeroImage')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                            <i class="fas fa-images mr-1"></i>Select
+                                        </button>
+                                    </div>
+                                    <div id="headerHeroImagePreview" class="image-preview hidden">
+                                        <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border">
+                                    </div>
                                 </div>
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Decorative Image Path</label>
-                                    <input type="text" id="headerDecorativeImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Markofinnovation.png">
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" id="headerDecorativeImage" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Markofinnovation.png">
+                                        <button type="button" onclick="openImageSelector('headerDecorativeImage')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                            <i class="fas fa-images mr-1"></i>Select
+                                        </button>
+                                    </div>
+                                    <div id="headerDecorativeImagePreview" class="image-preview hidden">
+                                        <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -183,15 +205,39 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
-                                    <input type="text" id="whoAreWeBackgroundImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Whoarewe.png">
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" id="whoAreWeBackgroundImage" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Whoarewe.png">
+                                        <button type="button" onclick="openImageSelector('whoAreWeBackgroundImage')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                            <i class="fas fa-images mr-1"></i>Select
+                                        </button>
+                                    </div>
+                                    <div id="whoAreWeBackgroundImagePreview" class="image-preview hidden">
+                                        <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border">
+                                    </div>
                                 </div>
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Decorative Arc Image</label>
-                                    <input type="text" id="whoAreWeDecorativeArc" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Layer_1.png">
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" id="whoAreWeDecorativeArc" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/Layer_1.png">
+                                        <button type="button" onclick="openImageSelector('whoAreWeDecorativeArc')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                            <i class="fas fa-images mr-1"></i>Select
+                                        </button>
+                                    </div>
+                                    <div id="whoAreWeDecorativeArcPreview" class="image-preview hidden">
+                                        <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border">
+                                    </div>
                                 </div>
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Astronaut Image</label>
-                                    <input type="text" id="whoAreWeAstronaut" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/astro.png">
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" id="whoAreWeAstronaut" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/astro.png">
+                                        <button type="button" onclick="openImageSelector('whoAreWeAstronaut')" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                            <i class="fas fa-images mr-1"></i>Select
+                                        </button>
+                                    </div>
+                                    <div id="whoAreWeAstronautPreview" class="image-preview hidden">
+                                        <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border">
+                                    </div>
                                 </div>
                             </div>
                             <div class="input-group">
@@ -453,7 +499,15 @@
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
-                            <input type="text" class="director-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${director.image || ''}" placeholder="/director-image.png">
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" class="director-image flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${director.image || ''}" placeholder="/director-image.png">
+                                <button type="button" onclick="openDirectorImageSelector(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                    <i class="fas fa-images mr-1"></i>Select
+                                </button>
+                            </div>
+                            <div class="director-image-preview ${director.image ? '' : 'hidden'}">
+                                <img src="${director.image ? (director.image.startsWith('http') ? director.image : (director.image.startsWith('/uploads/') ? 'http://localhost:8000' + director.image : director.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                            </div>
                         </div>
                     </div>
                     <div class="input-group mt-4">
@@ -503,7 +557,15 @@
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
-                            <input type="text" class="team-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.image || ''}" placeholder="/team-member.png">
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" class="team-image flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="${member.image || ''}" placeholder="/team-member.png">
+                                <button type="button" onclick="openTeamImageSelector(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                    <i class="fas fa-images mr-1"></i>Select
+                                </button>
+                            </div>
+                            <div class="team-image-preview ${member.image ? '' : 'hidden'}">
+                                <img src="${member.image ? (member.image.startsWith('http') ? member.image : (member.image.startsWith('/uploads/') ? 'http://localhost:8000' + member.image : member.image)) : ''}" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                            </div>
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 gap-4 mt-2">
@@ -548,7 +610,15 @@
                     </div>
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
-                        <input type="text" class="team-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/team-member.png">
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="team-image flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/team-member.png">
+                            <button type="button" onclick="openTeamImageSelector(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                <i class="fas fa-images mr-1"></i>Select
+                            </button>
+                        </div>
+                        <div class="team-image-preview hidden">
+                            <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                        </div>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 gap-4 mt-2">
@@ -610,7 +680,15 @@
                     </div>
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label>
-                        <input type="text" class="director-image w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/director-image.png">
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="director-image flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/director-image.png">
+                            <button type="button" onclick="openDirectorImageSelector(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                <i class="fas fa-images mr-1"></i>Select
+                            </button>
+                        </div>
+                        <div class="director-image-preview hidden">
+                            <img src="" alt="Preview" class="w-24 h-24 object-cover rounded border">
+                        </div>
                     </div>
                 </div>
                 <div class="input-group mt-4">
@@ -827,6 +905,255 @@
                 messageContainer.classList.add('hidden');
             }, 5000);
         }
+
+        // Image Upload and Management Functions
+        let currentImageInputId = null;
+        let currentDirectorImageInput = null;
+        let currentTeamImageInput = null;
+
+        function getImageUrl(imagePath) {
+            if (!imagePath) return '';
+            if (imagePath.startsWith('http')) return imagePath;
+            if (imagePath.startsWith('/uploads/')) return `http://localhost:8000${imagePath}`;
+            return imagePath;
+        }
+
+        function openImageSelector(inputId) {
+            currentImageInputId = inputId;
+            loadImages();
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function openDirectorImageSelector(button) {
+            const directorInput = button.parentElement.querySelector('.director-image');
+            currentImageInputId = 'director-image-temp';
+            currentDirectorImageInput = directorInput;
+            loadImages();
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function openTeamImageSelector(button) {
+            const teamInput = button.parentElement.querySelector('.team-image');
+            currentImageInputId = 'team-image-temp';
+            currentTeamImageInput = teamInput;
+            loadImages();
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            currentImageInputId = null;
+            currentDirectorImageInput = null;
+            currentTeamImageInput = null;
+        }
+
+        async function loadImages() {
+            try {
+                const response = await fetch('/api/images/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    populateImageGrid(result.data);
+                } else {
+                    console.error('Error loading images:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        function populateImageGrid(images) {
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+            
+            images.forEach(image => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'relative group border-2 border-gray-200 hover:border-blue-500 rounded-lg overflow-hidden';
+                
+                imageItem.innerHTML = `
+                    <div class="cursor-pointer" onclick="selectImage('${image.url}')">
+                        <img src="${image.url}" alt="${image.filename}" class="w-full h-24 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center">
+                            <i class="fas fa-check text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate">
+                        ${image.filename}
+                    </div>
+                    <button 
+                        onclick="deleteImage('${image.filename}', event)" 
+                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-opacity duration-200"
+                        title="Delete image"
+                    >
+                        <i class="fas fa-trash text-xs"></i>
+                    </button>
+                `;
+                
+                grid.appendChild(imageItem);
+            });
+        }
+
+        function selectImage(imageUrl) {
+            if (currentImageInputId === 'director-image-temp' && currentDirectorImageInput) {
+                // Handle director image selection
+                currentDirectorImageInput.value = imageUrl;
+                const previewElement = currentDirectorImageInput.parentElement.nextElementSibling;
+                if (previewElement && previewElement.classList.contains('director-image-preview')) {
+                    const img = previewElement.querySelector('img');
+                    if (img) {
+                        img.src = getImageUrl(imageUrl);
+                        previewElement.classList.remove('hidden');
+                    }
+                }
+                closeImageModal();
+            } else if (currentImageInputId === 'team-image-temp' && currentTeamImageInput) {
+                // Handle team image selection
+                currentTeamImageInput.value = imageUrl;
+                const previewElement = currentTeamImageInput.parentElement.nextElementSibling;
+                if (previewElement && previewElement.classList.contains('team-image-preview')) {
+                    const img = previewElement.querySelector('img');
+                    if (img) {
+                        img.src = getImageUrl(imageUrl);
+                        previewElement.classList.remove('hidden');
+                    }
+                }
+                closeImageModal();
+            } else if (currentImageInputId) {
+                // Handle regular image selection
+                document.getElementById(currentImageInputId).value = imageUrl;
+                updateImagePreview(currentImageInputId, imageUrl);
+                closeImageModal();
+            }
+        }
+
+        function updateImagePreview(inputId, imageUrl) {
+            const previewElement = document.getElementById(inputId + 'Preview');
+            if (previewElement) {
+                const img = previewElement.querySelector('img');
+                img.src = getImageUrl(imageUrl);
+                previewElement.classList.remove('hidden');
+            }
+        }
+
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageUploadInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file to upload');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                document.getElementById('uploadProgress').classList.remove('hidden');
+                
+                const response = await fetch('/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Image uploaded successfully!');
+                    fileInput.value = '';
+                    loadImages(); // Refresh the image grid
+                } else {
+                    alert('Error uploading image: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Error uploading image');
+            } finally {
+                document.getElementById('uploadProgress').classList.add('hidden');
+            }
+        }
+
+        async function deleteImage(filename, event) {
+            event.stopPropagation();
+            
+            if (!confirm(`Are you sure you want to delete "${filename}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/images/delete/${filename}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Image deleted successfully!');
+                    loadImages(); // Refresh the image grid
+                } else {
+                    alert('Error deleting image: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting image');
+            }
+        }
+
+        // Update image previews on page load
+        function updateAllImagePreviews() {
+            const imageInputs = [
+                'headerHeroImage', 'headerDecorativeImage', 
+                'whoAreWeBackgroundImage', 'whoAreWeDecorativeArc', 'whoAreWeAstronaut'
+            ];
+            
+            imageInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input && input.value) {
+                    updateImagePreview(inputId, input.value);
+                }
+            });
+        }
+
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateAllImagePreviews, 1000); // Allow time for content to load
+        });
     </script>
+
+    <!-- Image Upload Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold">Select Image</h3>
+                <button onclick="closeImageModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <!-- Upload Section -->
+                <div class="mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                    <div class="text-center">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-600 mb-2">Upload a new image</p>
+                        <input type="file" id="imageUploadInput" accept="image/*" class="mb-2">
+                        <button onclick="uploadImage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                            <i class="fas fa-upload mr-1"></i>Upload
+                        </button>
+                        <div id="uploadProgress" class="hidden mt-2">
+                            <div class="text-blue-600">Uploading...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image Grid -->
+                <div class="mb-4">
+                    <h4 class="text-md font-semibold mb-2">Select from uploaded images:</h4>
+                    <div id="imageGrid" class="grid grid-cols-6 gap-2 max-h-64 overflow-y-auto">
+                        <!-- Images will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
