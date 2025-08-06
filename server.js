@@ -43,6 +43,7 @@ const privacyPolicyRoutes = require('./routes/privacyPolicy');
 const aboutContentRoutes = require('./routes/aboutContent');
 const aboutPageContentRoutes = require('./routes/aboutPageContent');
 const footerContentRoutes = require('./routes/footerContent');
+const contactContentRoutes = require('./routes/contactContent');
 const imageUploadRoutes = require('./routes/imageUpload');
 const videoUploadRoutes = require('./routes/videoUpload');
 
@@ -54,6 +55,7 @@ app.use('/api/privacy-policy', privacyPolicyRoutes);
 app.use('/api/about-content', aboutContentRoutes);
 app.use('/api/about-page-content', aboutPageContentRoutes);
 app.use('/api/footer-content', footerContentRoutes);
+app.use('/api/contact-content', contactContentRoutes);
 app.use('/api/images', imageUploadRoutes);
 app.use('/api/videos', videoUploadRoutes);
 
