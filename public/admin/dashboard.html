@@ -187,6 +187,8 @@
                 const response = await fetch('/api/admin/contacts', {
                     credentials: 'include'
                 });
+
+                console.log('response :', response)
                 
                 if (response.status === 401) {
                     window.location.href = '/login.html';

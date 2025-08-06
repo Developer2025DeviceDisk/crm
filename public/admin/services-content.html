@@ -425,6 +425,16 @@
         // Initialize
         async function initializeServicesContent() {
             try {
+                // First verify session
+                const sessionResponse = await fetch('/api/auth/verify', {
+                    credentials: 'include'
+                });
+                
+                if (sessionResponse.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
                 await loadCurrentContent();
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 const mainContent = document.getElementById('mainContent');
@@ -435,7 +445,7 @@
                 setupEventListeners();
             } catch (error) {
                 console.error('Initialization error:', error);
-                alert('Error loading services content');
+                window.location.href = '/login.html';
             }
         }
 

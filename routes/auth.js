@@ -65,6 +65,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Verify session
+router.get('/verify', (req, res) => {
+  if (req.session.user) {
+    res.json({ 
+      valid: true, 
+      user: req.session.user 
+    });
+  } else {
+    res.status(401).json({ 
+      valid: false, 
+      error: 'No active session' 
+    });
+  }
+});
+
 // Logout
 router.post('/logout', (req, res) => {
   req.session.destroy(err => {

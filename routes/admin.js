@@ -20,7 +20,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 // Get all contacts
-router.get('/contacts', isAuthenticated, async (req, res) => {
+router.get('/contacts', async (req, res) => {
     try {
         const contacts = await Contact.find().sort({ createdAt: -1 });
         res.json(contacts);
