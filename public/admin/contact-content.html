@@ -81,7 +81,7 @@
                 </div>
                 <nav class="mt-4">
                     <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
-                        <i class="fas fa-envelope"></i> Contacts
+                        <i class="fas fa-envelope"></i> Enquiry
                     </a>
                     <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-cog"></i> Home Content
@@ -186,6 +186,20 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Map Section Title</label>
                                 <input type="text" id="mapTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our Presence">
                             </div>
+                        </div>
+
+                        <!-- Locations Management Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-globe mr-2 text-blue-600"></i>Contact Locations Management
+                            </h3>
+                            <p class="text-sm text-gray-600 mb-4">Manage your office locations with map coordinates, addresses, and contact information.</p>
+                            
+                            <div id="locationsContainer" class="space-y-4 mb-6"></div>
+                            
+                            <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addLocation()">
+                                <i class="fas fa-plus mr-2"></i>Add New Location
+                            </button>
                         </div>
 
                         <!-- Job Section -->
@@ -401,6 +415,7 @@
 
             // Map Section
             document.getElementById('mapTitle').value = data.mapSection?.title || 'Our Presence';
+            populateLocations(data.mapSection?.locations || []);
 
             // Job Section
             document.getElementById('jobTitle').value = data.jobSection?.title || 'Looking For VUA Filling';
@@ -515,6 +530,230 @@
             return Array.from(inputs).map(input => input.value).filter(value => value.trim() !== '');
         }
 
+        // Locations management
+        function populateLocations(locations) {
+            const container = document.getElementById('locationsContainer');
+            container.innerHTML = '';
+
+            const defaultLocations = [
+                {
+                    cx: 1087.93,
+                    cy: 361.869,
+                    city: "Mumbai",
+                    address: [
+                        "Unit No 711, A Wing",
+                        "Centrum Business Square",
+                        "Road No 16, Wagle Estate",
+                        "Thane(W) - 400604"
+                    ],
+                    phone: "+91 877 96 32312",
+                    id: "mumbai",
+                    order: 1,
+                    isActive: true
+                },
+                {
+                    cx: 985.556,
+                    cy: 330.369,
+                    city: "Dubai",
+                    address: [
+                        "14th Floor, Office No 1402",
+                        "Burjuman Business Tower",
+                        "Burjuman, Dubai"
+                    ],
+                    phone: "+971 56 189 9800",
+                    id: "dubai",
+                    order: 2,
+                    isActive: true
+                },
+                {
+                    cx: 1103.68,
+                    cy: 367.381,
+                    city: "Pune",
+                    address: [
+                        "Office 3B, 2nd Floor",
+                        "Building 3, Cerebrum IT Park",
+                        "Kalyaninagar, 411032"
+                    ],
+                    phone: "+91 797 67 48422",
+                    id: "pune",
+                    order: 3,
+                    isActive: true
+                }
+            ];
+
+            const locationsToShow = locations.length > 0 ? locations : defaultLocations;
+
+            locationsToShow.forEach((location, index) => {
+                addLocationField(location, index + 1);
+            });
+        }
+
+        function addLocation() {
+            const container = document.getElementById('locationsContainer');
+            const locationCount = container.children.length + 1;
+            addLocationField({
+                cx: 1000,
+                cy: 350,
+                city: '',
+                address: [''],
+                phone: '',
+                id: '',
+                order: locationCount,
+                isActive: true
+            }, locationCount);
+        }
+
+        function addLocationField(location = {}, orderNum) {
+            const container = document.getElementById('locationsContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-item border-2 border-gray-200 rounded-lg p-4';
+            
+            // Create address lines HTML
+            const addressLines = location.address || [''];
+            const addressFieldsHTML = addressLines.map((line, index) => `
+                <div class="flex items-center gap-2">
+                    <input type="text" placeholder="Address line ${index + 1}" value="${line}" 
+                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 address-line">
+                    ${index > 0 ? '<button type="button" onclick="removeAddressLine(this)" class="bg-red-500 text-white px-2 py-2 rounded-md hover:bg-red-600 transition-colors"><i class="fas fa-minus"></i></button>' : ''}
+                </div>
+            `).join('');
+
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-md font-semibold text-gray-700">
+                        <i class="fas fa-map-pin mr-2"></i>Location ${orderNum}
+                    </h4>
+                    <div class="flex items-center gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" ${location.isActive !== false ? 'checked' : ''} class="mr-2 location-active">
+                            <span class="text-sm text-gray-600">Active</span>
+                        </label>
+                        <button type="button" class="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors" onclick="removeLocation(this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">City Name</label>
+                        <input type="text" placeholder="City name" value="${location.city || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-city">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Location ID</label>
+                        <input type="text" placeholder="unique-id" value="${location.id || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-id">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Map X Coordinate (cx)</label>
+                        <input type="number" step="0.01" placeholder="1000" value="${location.cx || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-cx">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Map Y Coordinate (cy)</label>
+                        <input type="number" step="0.01" placeholder="350" value="${location.cy || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-cy">
+                    </div>
+                </div>
+                
+                <div class="input-group mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Address Lines</label>
+                        <button type="button" onclick="addAddressLine(this)" class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Add Line
+                        </button>
+                    </div>
+                    <div class="space-y-2 address-lines">
+                        ${addressFieldsHTML}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="text" placeholder="+91 123 456 7890" value="${location.phone || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-phone">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                        <input type="number" placeholder="1" value="${location.order || orderNum}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-order">
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        function removeLocation(button) {
+            if (confirm('Are you sure you want to remove this location?')) {
+                button.closest('.dynamic-item').remove();
+                updateLocationNumbers();
+            }
+        }
+
+        function addAddressLine(button) {
+            const addressContainer = button.closest('.dynamic-item').querySelector('.address-lines');
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-2';
+            const lineCount = addressContainer.children.length + 1;
+            div.innerHTML = `
+                <input type="text" placeholder="Address line ${lineCount}" value="" 
+                       class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 address-line">
+                <button type="button" onclick="removeAddressLine(this)" class="bg-red-500 text-white px-2 py-2 rounded-md hover:bg-red-600 transition-colors">
+                    <i class="fas fa-minus"></i>
+                </button>
+            `;
+            addressContainer.appendChild(div);
+        }
+
+        function removeAddressLine(button) {
+            button.closest('.flex').remove();
+        }
+
+        function updateLocationNumbers() {
+            const locations = document.querySelectorAll('#locationsContainer .dynamic-item');
+            locations.forEach((location, index) => {
+                const heading = location.querySelector('h4');
+                heading.innerHTML = `<i class="fas fa-map-pin mr-2"></i>Location ${index + 1}`;
+            });
+        }
+
+        function getLocations() {
+            const locationElements = document.querySelectorAll('#locationsContainer .dynamic-item');
+            const locations = [];
+            
+            locationElements.forEach(element => {
+                const addressLines = Array.from(element.querySelectorAll('.address-line'))
+                    .map(input => input.value.trim())
+                    .filter(value => value !== '');
+                
+                const location = {
+                    cx: parseFloat(element.querySelector('.location-cx').value) || 0,
+                    cy: parseFloat(element.querySelector('.location-cy').value) || 0,
+                    city: element.querySelector('.location-city').value.trim(),
+                    address: addressLines,
+                    phone: element.querySelector('.location-phone').value.trim(),
+                    id: element.querySelector('.location-id').value.trim(),
+                    order: parseInt(element.querySelector('.location-order').value) || 1,
+                    isActive: element.querySelector('.location-active').checked
+                };
+                
+                // Only add valid locations
+                if (location.city && location.address.length > 0 && location.phone && location.id) {
+                    locations.push(location);
+                }
+            });
+            
+            // Sort by order
+            return locations.sort((a, b) => a.order - b.order);
+        }
+
         // Save content
         async function saveContent() {
             const saveBtn = document.getElementById('saveBtn');
@@ -534,7 +773,8 @@
                     servicesLabel: document.getElementById('servicesLabel').value,
                     servicesSubtext: document.getElementById('servicesSubtext').value,
                     mapSection: {
-                        title: document.getElementById('mapTitle').value
+                        title: document.getElementById('mapTitle').value,
+                        locations: getLocations()
                     },
                     jobSection: {
                         title: document.getElementById('jobTitle').value,

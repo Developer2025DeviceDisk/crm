@@ -29,7 +29,64 @@ const contactContentSchema = new mongoose.Schema({
 
   // Map Section
   mapSection: {
-    title: { type: String, default: 'Our Presence' }
+    title: { type: String, default: 'Our Presence' },
+    locations: {
+      type: [{
+        cx: { type: Number, required: true },
+        cy: { type: Number, required: true },
+        city: { type: String, required: true, trim: true },
+        address: { type: [String], required: true },
+        phone: { type: String, required: true, trim: true },
+        id: { type: String, required: true, unique: false, trim: true },
+        order: { type: Number, required: true },
+        isActive: { type: Boolean, default: true }
+      }],
+      default: [
+        {
+          cx: 1087.93,
+          cy: 361.869,
+          city: "Mumbai",
+          address: [
+            "Unit No 711, A Wing",
+            "Centrum Business Square",
+            "Road No 16, Wagle Estate",
+            "Thane(W) - 400604"
+          ],
+          phone: "+91 877 96 32312",
+          id: "mumbai",
+          order: 1,
+          isActive: true
+        },
+        {
+          cx: 985.556,
+          cy: 330.369,
+          city: "Dubai",
+          address: [
+            "14th Floor, Office No 1402",
+            "Burjuman Business Tower",
+            "Burjuman, Dubai"
+          ],
+          phone: "+971 56 189 9800",
+          id: "dubai",
+          order: 2,
+          isActive: true
+        },
+        {
+          cx: 1103.68,
+          cy: 367.381,
+          city: "Pune",
+          address: [
+            "Office 3B, 2nd Floor",
+            "Building 3, Cerebrum IT Park",
+            "Kalyaninagar, 411032"
+          ],
+          phone: "+91 797 67 48422",
+          id: "pune",
+          order: 3,
+          isActive: true
+        }
+      ]
+    }
   },
 
   // Job Openings Section
