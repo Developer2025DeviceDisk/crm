@@ -416,11 +416,22 @@
             document.getElementById('saveBtn').addEventListener('click', saveContent);
 
             // Logout functionality
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to logout?')) {
-                    window.location.href = '/api/auth/logout';
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+        }
+
+              async function logout() {
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/login.html';
                 }
-            });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
         }
 
         // Load current content from API
