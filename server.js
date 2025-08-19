@@ -31,8 +31,13 @@ mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('Connected to MongoDB Atlas'))
+.then(() => {
+  console.log('Connected to MongoDB Atlas');
+  console.log('Cluster Host:', mongoose.connection.host); 
+  console.log('Database Name:', mongoose.connection.name); 
+})
 .catch(err => console.error('MongoDB connection error:', err));
+
 
 // Routes
 const contactRoutes = require('./routes/contact');

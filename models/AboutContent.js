@@ -15,7 +15,7 @@ const aboutContentSchema = new mongoose.Schema({
         },
         message: 'Hero section must have between 1 and 10 rotating texts'
       },
-      default: ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative']
+      default: ['Full-Service', 'AI Infused', 'Mar-Tech', 'Creative' ,]
     },
     backgroundVideo: {
       type: String,
