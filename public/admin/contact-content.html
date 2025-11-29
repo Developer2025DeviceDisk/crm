@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Content Manager - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar-mobile {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+        .btn-action {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+        .btn-action i {
+            margin-right: 0.5rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .dynamic-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f9fafb;
+        }
+        .dynamic-item.active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .color-input {
+            width: 60px;
+            height: 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+        <p class="text-gray-600">Loading contact content...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+        <div class="flex h-screen">
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
+                </div>
+                <nav class="mt-4">
+                    <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+                        <i class="fas fa-envelope"></i> Enquiry
+                    </a>
+                    <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Home Content
+                    </a>
+                    <a href="#" class="btn-action bg-gray-600">
+                        <i class="fas fa-phone"></i> Contact Page Content
+                    </a>
+                    <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-user-circle"></i> About Page Content
+                    </a>
+                    
+                    <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Services Content
+                    </a>
+                    <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-shield-alt"></i> Privacy Policy
+                    </a>
+                    <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-grip-horizontal"></i> Footer Content
+                    </a>
+                    <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto md:ml-0">
+                <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Contact Content Management</h2>
+                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Changes
+                        </button>
+                    </div>
+                </header>
+
+                <main class="p-4">
+                    <!-- Success/Error Messages -->
+                    <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                        <i class="fas fa-check-circle mr-2"></i><span></span>
+                    </div>
+                    <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        <i class="fas fa-exclamation-circle mr-2"></i><span></span>
+                    </div>
+
+                    <form id="contactForm" class="space-y-6">
+                        <!-- Hero Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-star mr-2 text-blue-600"></i>Hero Section
+                            </h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Title</label>
+                                <input type="text" id="heroTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Reach Us">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Description</label>
+                                <textarea id="heroDescription" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="At Voix & Vision Worx, we are dedicated to transforming..."></textarea>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Form Section Title</label>
+                                <input type="text" id="formSectionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="I am interested in">
+                            </div>
+                        </div>
+
+                        <!-- Services Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-cogs mr-2 text-blue-600"></i>Services Configuration
+                            </h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Services Label</label>
+                                <input type="text" id="servicesLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Services">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Services Subtext</label>
+                                <input type="text" id="servicesSubtext" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(Select at least one)">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Services List</label>
+                                <div id="servicesContainer" class="space-y-2 mb-4"></div>
+                                <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addService()">
+                                    <i class="fas fa-plus mr-2"></i>Add Service
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Map Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Map Section
+                            </h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Map Section Title</label>
+                                <input type="text" id="mapTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our Presence">
+                            </div>
+                        </div>
+
+                        <!-- Locations Management Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-globe mr-2 text-blue-600"></i>Contact Locations Management
+                            </h3>
+                            <p class="text-sm text-gray-600 mb-4">Manage your office locations with map coordinates, addresses, and contact information.</p>
+                            
+                            <div id="locationsContainer" class="space-y-4 mb-6"></div>
+                            
+                            <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addLocation()">
+                                <i class="fas fa-plus mr-2"></i>Add New Location
+                            </button>
+                        </div>
+
+                        <!-- Job Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-briefcase mr-2 text-blue-600"></i>Job Openings Section
+                            </h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Job Section Title</label>
+                                <input type="text" id="jobTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Looking For VUA Filling">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Job Section Subtitle</label>
+                                <input type="text" id="jobSubtitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Current Opening">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Job Openings <span class="text-gray-500 text-xs">(Recommended: 6 items for proper layout)</span></label>
+                                <div id="openingsContainer" class="space-y-2 mb-4"></div>
+                                <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addOpening()">
+                                    <i class="fas fa-plus mr-2"></i>Add Job Opening
+                                </button>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Text</label>
+                                <input type="text" id="contactText" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Work With Us:">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
+                                <input type="email" id="contactEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="hr@vvworx.com">
+                            </div>
+                        </div>
+
+                        <!-- Styling Section -->
+                        <div class="bg-white rounded-lg shadow p-6 hidden">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-palette mr-2 text-blue-600"></i>Color Configuration
+                            </h3>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                                    <input type="color" id="backgroundColor" class="color-input" value="#EEF0FF">
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                                    <input type="color" id="primaryColor" class="color-input" value="#6210FF">
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                                    <input type="color" id="secondaryColor" class="color-input" value="#BE2FF4">
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+                                    <input type="color" id="textColor" class="color-input" value="#000000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version Info -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-info-circle mr-2 text-blue-600"></i>Version Information
+                            </h3>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Version</label>
+                                    <input type="text" id="version" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1.0">
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Updated By</label>
+                                    <input type="text" id="lastUpdatedBy" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Admin">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentContent = {};
+
+        // Initialize page with session verification
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+        });
+
+        // Check session and load content
+        async function initializePage() {
+            try {
+                // First verify session
+                const sessionResponse = await fetch('/api/auth/verify', {
+                    credentials: 'include'
+                });
+                
+                if (sessionResponse.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                // Session is valid, load content
+                await loadCurrentContent();
+                
+                // Hide loader and show content
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                const mainContent = document.getElementById('mainContent');
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('fade-in');
+                
+                // Setup mobile menu and other interactions
+                setupMobileMenu();
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Setup mobile menu toggle
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (mobileMenuButton && sidebar) {
+                mobileMenuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('open');
+                });
+                
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && 
+                        !sidebar.contains(e.target) && 
+                        e.target !== mobileMenuButton) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Save button click handler
+            document.getElementById('saveBtn').addEventListener('click', saveContent);
+            
+            // Logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        const response = await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        
+                        if (response.ok) {
+                            window.location.href = '/login.html';
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    }
+                });
+            }
+        }
+
+        // Load current content from API
+        async function loadCurrentContent() {
+            try {
+                const response = await fetch('/api/contact-content/active');
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    currentContent = result.data;
+                    populateForm(result.data);
+                } else {
+                    console.log('No active content found, using defaults');
+                    populateForm({});
+                }
+            } catch (error) {
+                console.error('Error loading content:', error);
+                showError('Error loading current content');
+                populateForm({});
+            }
+        }
+
+        // Populate form with data
+        function populateForm(data) {
+            // Hero Section
+            document.getElementById('heroTitle').value = data.heroSection?.title || 'Reach Us';
+            document.getElementById('heroDescription').value = data.heroSection?.description || '';
+            document.getElementById('formSectionTitle').value = data.heroSection?.formSectionTitle || 'I am interested in';
+
+            // Services Section
+            document.getElementById('servicesLabel').value = data.servicesLabel || 'Services';
+            document.getElementById('servicesSubtext').value = data.servicesSubtext || '(Select at least one)';
+            populateServices(data.servicesList || []);
+
+            // Map Section
+            document.getElementById('mapTitle').value = data.mapSection?.title || 'Our Presence';
+            populateLocations(data.mapSection?.locations || []);
+
+            // Job Section
+            document.getElementById('jobTitle').value = data.jobSection?.title || 'Looking For VUA Filling';
+            document.getElementById('jobSubtitle').value = data.jobSection?.subtitle || 'Current Opening';
+            document.getElementById('contactText').value = data.jobSection?.contactText || 'Work With Us:';
+            document.getElementById('contactEmail').value = data.jobSection?.contactEmail || 'hr@vvworx.com';
+            populateOpenings(data.jobSection?.openings || []);
+
+            // Styling
+            document.getElementById('backgroundColor').value = data.styling?.backgroundColor || '#EEF0FF';
+            document.getElementById('primaryColor').value = data.styling?.primaryColor || '#6210FF';
+            document.getElementById('secondaryColor').value = data.styling?.secondaryColor || '#BE2FF4';
+            document.getElementById('textColor').value = data.styling?.textColor || '#000000';
+
+            // Version
+            document.getElementById('version').value = data.version || '1.0';
+            document.getElementById('lastUpdatedBy').value = data.lastUpdatedBy || 'Admin';
+        }
+
+        // Services management
+        function populateServices(services) {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = '';
+
+            const defaultServices = [
+                'Strategy',
+                'Branding & Design',
+                'Content & Production', 
+                'Digital Marketing',
+                'Agent Vua',
+                'Agent Vision',
+                'Agent XR'
+            ];
+
+            const servicesToShow = services.length > 0 ? services : defaultServices;
+
+            servicesToShow.forEach(service => {
+                addServiceField(service);
+            });
+        }
+
+        function addService() {
+            addServiceField('');
+        }
+
+        function addServiceField(value = '') {
+            const container = document.getElementById('servicesContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-item flex items-center gap-3';
+            div.innerHTML = `
+                <input type="text" placeholder="Service name" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="button" class="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors" onclick="removeService(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeService(button) {
+            button.parentElement.remove();
+        }
+
+        function getServices() {
+            const inputs = document.querySelectorAll('#servicesContainer input');
+            return Array.from(inputs).map(input => input.value).filter(value => value.trim() !== '');
+        }
+
+        // Job openings management
+        function populateOpenings(openings) {
+            const container = document.getElementById('openingsContainer');
+            container.innerHTML = '';
+
+            const defaultOpenings = [
+                'Brand Manager',
+                'UI Designer', 
+                'Marketing Intern',
+                'Senior Designer',
+                'Animator',
+                'Business Development'
+            ];
+
+            const openingsToShow = openings.length > 0 ? openings : defaultOpenings;
+
+            openingsToShow.forEach(opening => {
+                addOpeningField(opening);
+            });
+        }
+
+        function addOpening() {
+            addOpeningField('');
+        }
+
+        function addOpeningField(value = '') {
+            const container = document.getElementById('openingsContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-item flex items-center gap-3';
+            div.innerHTML = `
+                <input type="text" placeholder="Job opening" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="button" class="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors" onclick="removeOpening(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeOpening(button) {
+            button.parentElement.remove();
+        }
+
+        function getOpenings() {
+            const inputs = document.querySelectorAll('#openingsContainer input');
+            return Array.from(inputs).map(input => input.value).filter(value => value.trim() !== '');
+        }
+
+        // Locations management
+        function populateLocations(locations) {
+            const container = document.getElementById('locationsContainer');
+            container.innerHTML = '';
+
+            const defaultLocations = [
+                {
+                    cx: 1087.93,
+                    cy: 361.869,
+                    city: "Mumbai",
+                    address: [
+                        "Unit No 711, A Wing",
+                        "Centrum Business Square",
+                        "Road No 16, Wagle Estate",
+                        "Thane(W) - 400604"
+                    ],
+                    phone: "+91 877 96 32312",
+                    id: "mumbai",
+                    order: 1,
+                    isActive: true
+                },
+                {
+                    cx: 985.556,
+                    cy: 330.369,
+                    city: "Dubai",
+                    address: [
+                        "14th Floor, Office No 1402",
+                        "Burjuman Business Tower",
+                        "Burjuman, Dubai"
+                    ],
+                    phone: "+971 56 189 9800",
+                    id: "dubai",
+                    order: 2,
+                    isActive: true
+                },
+                {
+                    cx: 1103.68,
+                    cy: 367.381,
+                    city: "Pune",
+                    address: [
+                        "Office 3B, 2nd Floor",
+                        "Building 3, Cerebrum IT Park",
+                        "Kalyaninagar, 411032"
+                    ],
+                    phone: "+91 797 67 48422",
+                    id: "pune",
+                    order: 3,
+                    isActive: true
+                }
+            ];
+
+            const locationsToShow = locations.length > 0 ? locations : defaultLocations;
+
+            locationsToShow.forEach((location, index) => {
+                addLocationField(location, index + 1);
+            });
+        }
+
+        function addLocation() {
+            const container = document.getElementById('locationsContainer');
+            const locationCount = container.children.length + 1;
+            addLocationField({
+                cx: 1000,
+                cy: 350,
+                city: '',
+                address: [''],
+                phone: '',
+                id: '',
+                order: locationCount,
+                isActive: true
+            }, locationCount);
+        }
+
+        function addLocationField(location = {}, orderNum) {
+            const container = document.getElementById('locationsContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-item border-2 border-gray-200 rounded-lg p-4';
+            
+            // Create address lines HTML
+            const addressLines = location.address || [''];
+            const addressFieldsHTML = addressLines.map((line, index) => `
+                <div class="flex items-center gap-2">
+                    <input type="text" placeholder="Address line ${index + 1}" value="${line}" 
+                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 address-line">
+                    ${index > 0 ? '<button type="button" onclick="removeAddressLine(this)" class="bg-red-500 text-white px-2 py-2 rounded-md hover:bg-red-600 transition-colors"><i class="fas fa-minus"></i></button>' : ''}
+                </div>
+            `).join('');
+
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-md font-semibold text-gray-700">
+                        <i class="fas fa-map-pin mr-2"></i>Location ${orderNum}
+                    </h4>
+                    <div class="flex items-center gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" ${location.isActive !== false ? 'checked' : ''} class="mr-2 location-active">
+                            <span class="text-sm text-gray-600">Active</span>
+                        </label>
+                        <button type="button" class="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors" onclick="removeLocation(this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">City Name</label>
+                        <input type="text" placeholder="City name" value="${location.city || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-city">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Location ID</label>
+                        <input type="text" placeholder="unique-id" value="${location.id || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-id">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Map X Coordinate (cx)</label>
+                        <input type="number" step="0.01" placeholder="1000" value="${location.cx || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-cx">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Map Y Coordinate (cy)</label>
+                        <input type="number" step="0.01" placeholder="350" value="${location.cy || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-cy">
+                    </div>
+                </div>
+                
+                <div class="input-group mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Address Lines</label>
+                        <button type="button" onclick="addAddressLine(this)" class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Add Line
+                        </button>
+                    </div>
+                    <div class="space-y-2 address-lines">
+                        ${addressFieldsHTML}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="text" placeholder="+91 123 456 7890" value="${location.phone || ''}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-phone">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                        <input type="number" placeholder="1" value="${location.order || orderNum}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 location-order">
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(div);
+        }
+
+        function removeLocation(button) {
+            if (confirm('Are you sure you want to remove this location?')) {
+                button.closest('.dynamic-item').remove();
+                updateLocationNumbers();
+            }
+        }
+
+        function addAddressLine(button) {
+            const addressContainer = button.closest('.dynamic-item').querySelector('.address-lines');
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-2';
+            const lineCount = addressContainer.children.length + 1;
+            div.innerHTML = `
+                <input type="text" placeholder="Address line ${lineCount}" value="" 
+                       class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 address-line">
+                <button type="button" onclick="removeAddressLine(this)" class="bg-red-500 text-white px-2 py-2 rounded-md hover:bg-red-600 transition-colors">
+                    <i class="fas fa-minus"></i>
+                </button>
+            `;
+            addressContainer.appendChild(div);
+        }
+
+        function removeAddressLine(button) {
+            button.closest('.flex').remove();
+        }
+
+        function updateLocationNumbers() {
+            const locations = document.querySelectorAll('#locationsContainer .dynamic-item');
+            locations.forEach((location, index) => {
+                const heading = location.querySelector('h4');
+                heading.innerHTML = `<i class="fas fa-map-pin mr-2"></i>Location ${index + 1}`;
+            });
+        }
+
+        function getLocations() {
+            const locationElements = document.querySelectorAll('#locationsContainer .dynamic-item');
+            const locations = [];
+            
+            locationElements.forEach(element => {
+                const addressLines = Array.from(element.querySelectorAll('.address-line'))
+                    .map(input => input.value.trim())
+                    .filter(value => value !== '');
+                
+                const location = {
+                    cx: parseFloat(element.querySelector('.location-cx').value) || 0,
+                    cy: parseFloat(element.querySelector('.location-cy').value) || 0,
+                    city: element.querySelector('.location-city').value.trim(),
+                    address: addressLines,
+                    phone: element.querySelector('.location-phone').value.trim(),
+                    id: element.querySelector('.location-id').value.trim(),
+                    order: parseInt(element.querySelector('.location-order').value) || 1,
+                    isActive: element.querySelector('.location-active').checked
+                };
+                
+                // Only add valid locations
+                if (location.city && location.address.length > 0 && location.phone && location.id) {
+                    locations.push(location);
+                }
+            });
+            
+            // Sort by order
+            return locations.sort((a, b) => a.order - b.order);
+        }
+
+        // Save content
+        async function saveContent() {
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            
+            try {
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+                saveBtn.disabled = true;
+
+                const contentData = {
+                    heroSection: {
+                        title: document.getElementById('heroTitle').value,
+                        description: document.getElementById('heroDescription').value,
+                        formSectionTitle: document.getElementById('formSectionTitle').value
+                    },
+                    servicesList: getServices(),
+                    servicesLabel: document.getElementById('servicesLabel').value,
+                    servicesSubtext: document.getElementById('servicesSubtext').value,
+                    mapSection: {
+                        title: document.getElementById('mapTitle').value,
+                        locations: getLocations()
+                    },
+                    jobSection: {
+                        title: document.getElementById('jobTitle').value,
+                        subtitle: document.getElementById('jobSubtitle').value,
+                        openings: getOpenings(),
+                        contactText: document.getElementById('contactText').value,
+                        contactEmail: document.getElementById('contactEmail').value
+                    },
+                    styling: {
+                        backgroundColor: document.getElementById('backgroundColor').value,
+                        primaryColor: document.getElementById('primaryColor').value,
+                        secondaryColor: document.getElementById('secondaryColor').value,
+                        textColor: document.getElementById('textColor').value
+                    },
+                    version: document.getElementById('version').value,
+                    lastUpdatedBy: document.getElementById('lastUpdatedBy').value,
+                    isActive: true
+                };
+
+                const response = await fetch('/api/contact-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contentData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess('Contact content saved successfully!');
+                    currentContent = result.data;
+                } else {
+                    showError('Error saving content: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showError('Error saving content: ' + error.message);
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        // Utility functions
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.querySelector('span').textContent = message;
+            successDiv.classList.remove('hidden');
+            setTimeout(() => {
+                successDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.querySelector('span').textContent = message;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

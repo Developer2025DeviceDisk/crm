@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Content Manager - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar-mobile {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+        .btn-action {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+        .btn-action i {
+            margin-right: 0.5rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            min-height: 2.5rem;
+        }
+        .tag {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        .tag button {
+            margin-left: 0.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+        <p class="text-gray-600">Loading services content...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+        <div class="flex h-screen">
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
+                </div>
+                  <nav class="mt-4">
+                 <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+                        <i class="fas fa-envelope"></i> Enquiry
+                    </a>
+                         <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Home Content
+                    </a>
+                           <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-phone"></i> Contact Page Content
+                    </a>
+                         <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-user-circle"></i> About Page Content
+                    </a>
+                    <a href="/admin/services-content.html" class="btn-action bg-gray-600">
+                        <i class="fas fa-cog"></i> Services Content
+                    </a>
+                      <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> privacy-policy
+                    </a>
+                      <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-grip-horizontal"></i> Footer Content
+                    </a>
+                    <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto md:ml-0">
+                <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Services Content Management</h2>
+                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Changes
+                        </button>
+                    </div>
+                </header>
+
+                <main class="p-4">
+                    <form id="servicesForm" class="space-y-6">
+                        <!-- Header Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Header Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Header Title</label>
+                                <input type="text" id="headerTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Header Description</label>
+                                <textarea id="headerDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Strategy Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Strategy Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Title</label>
+                                <input type="text" id="strategyTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Description</label>
+                                <textarea id="strategyDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Services</label>
+                                <div id="strategyServicesContainer" class="tag-input"></div>
+                                <input type="text" id="strategyServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Branding & Design Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Branding & Design Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Branding Title</label>
+                                <input type="text" id="brandingTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Branding Description</label>
+                                <textarea id="brandingDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Branding Services</label>
+                                <div id="brandingServicesContainer" class="tag-input"></div>
+                                <input type="text" id="brandingServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Content & Production Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Content & Production Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Content Title</label>
+                                <input type="text" id="contentTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Content Description</label>
+                                <textarea id="contentDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Content Services</label>
+                                <div id="contentServicesContainer" class="tag-input"></div>
+                                <input type="text" id="contentServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Digital Marketing Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Digital Marketing Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Title</label>
+                                <input type="text" id="digitalTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Description</label>
+                                <textarea id="digitalDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Services</label>
+                                <div id="digitalServicesContainer" class="tag-input"></div>
+                                <input type="text" id="digitalServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Agent VUA Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent VUA Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Title</label>
+                                <input type="text" id="agentVUATitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Description</label>
+                                <textarea id="agentVUADescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Tagline</label>
+                                <input type="text" id="agentVUATagline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Impact Title</label>
+                                <input type="text" id="agentVUAImpactTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Key Features & Benefits">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Features</label>
+                                <div id="agentVUAFeaturesContainer" class="tag-input"></div>
+                                <input type="text" id="agentVUAFeatureInput" placeholder="Type feature and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Tech Solutions Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Tech Solutions Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Title</label>
+                                <input type="text" id="techSolutionsTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Tech Solutions">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Description</label>
+                                <textarea id="techSolutionsDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Describe your tech solutions offerings"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Tagline</label>
+                                <input type="text" id="techSolutionsTagline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Innovative technology solutions for modern businesses">
+                            </div>
+                        </div>
+
+                        <!-- Agent Vision Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent Vision Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision Title</label>
+                                <input type="text" id="agentVisionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision Description</label>
+                                <textarea id="agentVisionDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Labels</h4>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Launch Videos Label</label>
+                                    <input type="text" id="agentVisionLaunchVideosLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Production & Films Label</label>
+                                    <input type="text" id="agentVisionProductionFilmsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Reel/Content Label</label>
+                                    <input type="text" id="agentVisionReelContentLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Walkthroughs Label</label>
+                                    <input type="text" id="agentVisionProjectWalkthroughsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Statistics</h4>
+                            
+                            <div id="agentVisionStatsContainer">
+                                <!-- Statistics will be dynamically added here -->
+                            </div>
+                            
+                            <button type="button" id="addAgentVisionStatBtn" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
+                                Add Agent Vision Statistic
+                            </button>
+                        </div>
+
+                        <!-- Agent XR Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent XR Section</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Title</label>
+                                <input type="text" id="agentXRTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Description</label>
+                                <textarea id="agentXRDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Services</label>
+                                <div id="agentXRServicesContainer" class="tag-input"></div>
+                                <input type="text" id="agentXRServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent XR Statistics</h4>
+                            
+                            <div id="agentXRStatsContainer">
+                                <!-- Statistics will be dynamically added here -->
+                            </div>
+                            
+                            <button type="button" id="addStatBtn" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
+                                Add Statistic
+                            </button>
+                        </div>
+
+                        <!-- Videos Management -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Videos Management</h3>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">VR Section Video</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="vrVideo" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/uploads/videos/vr.mp4">
+                                    <button type="button" onclick="openVideoSelector('vrVideo')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select Video
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <video id="vrVideoPreview" src="" class="hidden w-32 h-20 object-cover rounded border" controls></video>
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Collections</h4>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section One (Project walkthroughs/Reel content)</label>
+                                <div id="agentVisionVideoOneContainer" class="tag-input"></div>
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoOneInput" placeholder="Type video URL and press Enter (e.g., /agentVision/1.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoOneInput', 'agentVisionVideoOneContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Two (Production & films)</label>
+                                <div id="agentVisionVideoTwoContainer" class="tag-input"></div>
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoTwoInput" placeholder="Type video URL and press Enter (e.g., /agentVision/2.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoTwoInput', 'agentVisionVideoTwoContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Three (Launch Videos)</label>
+                                <div id="agentVisionVideoThreeContainer" class="tag-input"></div>
+                                <div class="flex gap-2 mt-2">
+                                    <input type="text" id="agentVisionVideoThreeInput" placeholder="Type video URL and press Enter (e.g., /agentVision/4.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoThreeInput', 'agentVisionVideoThreeContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                        <i class="fas fa-video mr-1"></i>Select
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentContent = null;
+
+        // Initialize
+        async function initializeServicesContent() {
+            try {
+                // First verify session
+                const sessionResponse = await fetch('/api/auth/verify', {
+                    credentials: 'include'
+                });
+                
+                if (sessionResponse.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                await loadCurrentContent();
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                const mainContent = document.getElementById('mainContent');
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('fade-in');
+                setupMobileMenu();
+                setupTagInputs();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Load current content from API
+        async function loadCurrentContent() {
+            try {
+                const response = await fetch('/api/services-content/active');
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentContent = result.data;
+                    populateForm(currentContent);
+                }
+            } catch (error) {
+                console.error('Error loading content:', error);
+                throw error;
+            }
+        }
+
+        // Populate form with content data
+        function populateForm(content = {}) {
+            // Default values from the model
+            const defaults = {
+                headerTitle: 'Your 360° Growth Engine',
+                headerDescription: 'We are India-UAE focused Tech-infused brand marketing agency offering an exhaustive services portfolio in Go-To-Market Strategy Development, Branding & Creative Solutions, AI-backed Performance & Social Media Marketing, and MarTech Automation. Founded by industry veterans, we are a passionate team offering scalable marketing solutions with a data-driven approach with presence in Mumbai, Pune and Dubai.',
+                strategyTitle: 'Strategy',
+                strategyDescription: 'We translate your aspirations into a precise and actionable blueprint for achieving your goals.',
+                strategyServices: ['GTM Strategy', 'Brand Strategy', 'Brand Voice', 'Campaign Strategy', 'PR Strategy', 'Social Media Strategy'],
+                brandingTitle: 'Branding & Design',
+                brandingDescription: 'We transform your vision into a tangible and impactful brand experience.',
+                brandingServices: ['Brand Identity Design', 'Website Design', 'UI/UX Design', 'Event Branding', 'Office Branding', 'Print & Digital Creatives'],
+                contentTitle: 'Content & Production',
+                contentDescription: 'We bring your story to life, crafting impactful content experiences that resonate.',
+                contentServices: ['Influencer Marketing', 'Blogs / Articles', 'Conceptualization of Content', 'Motion Graphics', 'Creative Copywriting', 'Reel Production', 'High Quality Video Production'],
+                digitalTitle: 'Digital Marketing',
+                digitalDescription: 'We convert digital footprints into tangible results, connecting you with your audience and driving results.',
+                digitalServices: ['Growth Marketing', 'Social Media Management', 'SEO Optimization'],
+                agentVUATitle: 'Agent VUA',
+                agentVUADescription: 'AI Powered Calling Agent for all your Pre-Sales / Post-Sales & Customer Support Requirements',
+                agentVUATagline: 'Agent Vua can breakeven at the cost of just 5 Agents',
+                agentVUAImpactTitle: 'Key Features & Benefits',
+                agentVUAFeatures: ['24/7 Availability', 'Multi-language Support', 'CRM Integration', 'Call Analytics', 'Lead Qualification', 'Cost Effective'],
+                techSolutionsTitle: 'Tech Solutions',
+                techSolutionsDescription: 'Cutting-edge technology solutions designed to transform your business operations and drive digital transformation.',
+                techSolutionsTagline: 'Innovative technology solutions for modern businesses',
+                agentVisionTitle: 'Agent Vision',
+                agentVisionDescription: 'Fast, affordable production quality films',
+                agentVisionVideoLabels: {
+                    launchVideos: 'Launch Videos',
+                    productionFilms: 'Production & films',
+                    reelContent: 'Reel/content generation',
+                    projectWalkthroughs: 'Project walkthroughs'
+                },
+                agentVisionStats: [
+                    { value: '10%', description: 'Production\nBudget' },
+                    { value: '50X', description: 'Faster time\nto market' },
+                    { value: '100%', description: 'Realistic\nfootage' }
+                ],
+                agentXRTitle: 'Agent XR',
+                agentXRDescription: 'Don\'t leave it to their imagination, immerse them in the experience',
+                agentXRServices: ['Virtual Reality', 'Digital twins', 'Mixed reality', 'Realistic renderings'],
+                agentXRStats: [
+                    { value: '90%', label: 'Cost Saving' },
+                    { value: '50X', label: 'Faster time to market' },
+                    { value: '400%', label: 'Increased Engagement' }
+                ],
+                videos: {
+                    agentVisionVideoOne: ['/agentVision/1.mp4', '/agentVision/5.mp4'],
+                    agentVisionVideoTwo: ['/agentVision/2.mp4', '/agentVision/3.mp4'],
+                    agentVisionVideoThree: ['/agentVision/4.mp4', '/agentVision/6.mp4'],
+                    vrVideo: '/agentVision/2.mp4'
+                }
+            };
+
+            // Header
+            document.getElementById('headerTitle').value = content.headerTitle || defaults.headerTitle;
+            document.getElementById('headerDescription').value = content.headerDescription || defaults.headerDescription;
+            
+            // Strategy
+            document.getElementById('strategyTitle').value = content.strategyTitle || defaults.strategyTitle;
+            document.getElementById('strategyDescription').value = content.strategyDescription || defaults.strategyDescription;
+            populateTagContainer('strategyServicesContainer', content.strategyServices || defaults.strategyServices);
+            
+            // Branding
+            document.getElementById('brandingTitle').value = content.brandingTitle || defaults.brandingTitle;
+            document.getElementById('brandingDescription').value = content.brandingDescription || defaults.brandingDescription;
+            populateTagContainer('brandingServicesContainer', content.brandingServices || defaults.brandingServices);
+            
+            // Content
+            document.getElementById('contentTitle').value = content.contentTitle || defaults.contentTitle;
+            document.getElementById('contentDescription').value = content.contentDescription || defaults.contentDescription;
+            populateTagContainer('contentServicesContainer', content.contentServices || defaults.contentServices);
+            
+            // Digital
+            document.getElementById('digitalTitle').value = content.digitalTitle || defaults.digitalTitle;
+            document.getElementById('digitalDescription').value = content.digitalDescription || defaults.digitalDescription;
+            populateTagContainer('digitalServicesContainer', content.digitalServices || defaults.digitalServices);
+            
+            // Agent VUA
+            document.getElementById('agentVUATitle').value = content.agentVUATitle || defaults.agentVUATitle;
+            document.getElementById('agentVUADescription').value = content.agentVUADescription || defaults.agentVUADescription;
+            document.getElementById('agentVUATagline').value = content.agentVUATagline || defaults.agentVUATagline;
+            document.getElementById('agentVUAImpactTitle').value = content.agentVUAImpactTitle || defaults.agentVUAImpactTitle;
+            populateTagContainer('agentVUAFeaturesContainer', content.agentVUAFeatures || defaults.agentVUAFeatures);
+            
+            // Tech Solutions
+            document.getElementById('techSolutionsTitle').value = content.techSolutionsTitle || defaults.techSolutionsTitle;
+            document.getElementById('techSolutionsDescription').value = content.techSolutionsDescription || defaults.techSolutionsDescription;
+            document.getElementById('techSolutionsTagline').value = content.techSolutionsTagline || defaults.techSolutionsTagline;
+            
+            // Agent Vision
+            document.getElementById('agentVisionTitle').value = content.agentVisionTitle || defaults.agentVisionTitle;
+            document.getElementById('agentVisionDescription').value = content.agentVisionDescription || defaults.agentVisionDescription;
+            
+            // Agent Vision Video Labels
+            const videoLabels = content.agentVisionVideoLabels || defaults.agentVisionVideoLabels;
+            document.getElementById('agentVisionLaunchVideosLabel').value = videoLabels.launchVideos || defaults.agentVisionVideoLabels.launchVideos;
+            document.getElementById('agentVisionProductionFilmsLabel').value = videoLabels.productionFilms || defaults.agentVisionVideoLabels.productionFilms;
+            document.getElementById('agentVisionReelContentLabel').value = videoLabels.reelContent || defaults.agentVisionVideoLabels.reelContent;
+            document.getElementById('agentVisionProjectWalkthroughsLabel').value = videoLabels.projectWalkthroughs || defaults.agentVisionVideoLabels.projectWalkthroughs;
+            
+            // Agent Vision Statistics
+            populateAgentVisionStats(content.agentVisionStats || defaults.agentVisionStats);
+            
+            // Agent XR
+            document.getElementById('agentXRTitle').value = content.agentXRTitle || defaults.agentXRTitle;
+            document.getElementById('agentXRDescription').value = content.agentXRDescription || defaults.agentXRDescription;
+            populateTagContainer('agentXRServicesContainer', content.agentXRServices || defaults.agentXRServices);
+            populateStats(content.agentXRStats || defaults.agentXRStats);
+            
+            // Videos
+            populateTagContainer('agentVisionVideoOneContainer', content.videos?.agentVisionVideoOne || defaults.videos.agentVisionVideoOne);
+            populateTagContainer('agentVisionVideoTwoContainer', content.videos?.agentVisionVideoTwo || defaults.videos.agentVisionVideoTwo);
+            populateTagContainer('agentVisionVideoThreeContainer', content.videos?.agentVisionVideoThree || defaults.videos.agentVisionVideoThree);
+            document.getElementById('vrVideo').value = content.videos?.vrVideo || defaults.videos.vrVideo;
+
+            // Update previews
+            updateAllVideoPreviews();
+        }
+
+        // Setup tag inputs
+        function setupTagInputs() {
+            const tagInputs = [
+                { input: 'strategyServiceInput', container: 'strategyServicesContainer' },
+                { input: 'brandingServiceInput', container: 'brandingServicesContainer' },
+                { input: 'contentServiceInput', container: 'contentServicesContainer' },
+                { input: 'digitalServiceInput', container: 'digitalServicesContainer' },
+                { input: 'agentVUAFeatureInput', container: 'agentVUAFeaturesContainer' },
+                { input: 'agentVisionVideoOneInput', container: 'agentVisionVideoOneContainer' },
+                { input: 'agentVisionVideoTwoInput', container: 'agentVisionVideoTwoContainer' },
+                { input: 'agentVisionVideoThreeInput', container: 'agentVisionVideoThreeContainer' },
+                { input: 'agentXRServiceInput', container: 'agentXRServicesContainer' }
+            ];
+
+            tagInputs.forEach(({ input, container }) => {
+                const inputElement = document.getElementById(input);
+                inputElement.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const value = inputElement.value.trim();
+                        if (value) {
+                            addTag(container, value);
+                            inputElement.value = '';
+                        }
+                    }
+                });
+            });
+        }
+
+        // Add tag to container
+        function addTag(containerId, text) {
+            const container = document.getElementById(containerId);
+            const tag = document.createElement('div');
+            tag.className = 'tag';
+            tag.innerHTML = `${text.trim()}<button type="button" onclick="removeTag(this)">×</button>`;
+            container.appendChild(tag);
+        }
+
+        // Remove tag
+        function removeTag(button) {
+            button.parentElement.remove();
+        }
+
+        // Populate tag container
+        function populateTagContainer(containerId, tags) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            tags.forEach(tag => addTag(containerId, tag));
+        }
+
+        // Get tags from container
+        function getTagsFromContainer(containerId) {
+            const container = document.getElementById(containerId);
+            const tags = container.querySelectorAll('.tag');
+            return Array.from(tags).map(tag => tag.textContent.trim().replace('×', '').trim());
+        }
+
+        // Agent Vision Statistics functions
+        function populateAgentVisionStats(stats) {
+            const container = document.getElementById('agentVisionStatsContainer');
+            container.innerHTML = '';
+            
+            if (!Array.isArray(stats)) {
+                stats = [
+                    { value: '10%', description: 'Production\nBudget' },
+                    { value: '50X', description: 'Faster time\nto market' },
+                    { value: '100%', description: 'Realistic\nfootage' }
+                ];
+            }
+            
+            stats.forEach((stat, index) => addAgentVisionStatField(stat.value, stat.description, index));
+        }
+
+        function addAgentVisionStatField(value = '', description = '', index = null) {
+            const container = document.getElementById('agentVisionStatsContainer');
+            const statIndex = index !== null ? index : container.children.length;
+            
+            const statDiv = document.createElement('div');
+            statDiv.className = 'flex gap-2 mb-2 agent-vision-stat-field';
+            statDiv.innerHTML = `
+                <input type="text" placeholder="Value (e.g., 10%)" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 agent-vision-stat-value">
+                <textarea placeholder="Description (use \\n for line breaks)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 agent-vision-stat-description" rows="2">${description}</textarea>
+                <button type="button" onclick="removeAgentVisionStat(this)" class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 text-sm">Remove</button>
+            `;
+            container.appendChild(statDiv);
+        }
+
+        function removeAgentVisionStat(button) {
+            button.parentElement.remove();
+        }
+
+        function getAgentVisionStats() {
+            const container = document.getElementById('agentVisionStatsContainer');
+            const statFields = container.querySelectorAll('.agent-vision-stat-field');
+            return Array.from(statFields).map(field => ({
+                value: field.querySelector('.agent-vision-stat-value').value,
+                description: field.querySelector('.agent-vision-stat-description').value
+            })).filter(stat => stat.value && stat.description);
+        }
+
+        // Agent XR Statistics functions
+        function populateStats(stats) {
+            const container = document.getElementById('agentXRStatsContainer');
+            container.innerHTML = '';
+            
+            // Handle case where stats might not be an array (old data structure)
+            if (!Array.isArray(stats)) {
+                // If stats is an object with old structure, convert it
+                if (stats && typeof stats === 'object') {
+                    const statsArray = [];
+                    if (stats.costSaving) {
+                        statsArray.push({ value: stats.costSaving.value || '90%', label: stats.costSaving.label || 'Cost Saving' });
+                    }
+                    if (stats.timeToMarket) {
+                        statsArray.push({ value: stats.timeToMarket.value || '50X', label: stats.timeToMarket.label || 'Faster time to market' });
+                    }
+                    if (stats.engagement) {
+                        statsArray.push({ value: stats.engagement.value || '400%', label: stats.engagement.label || 'Increased Engagement' });
+                    }
+                    stats = statsArray;
+                } else {
+                    // Use default values if stats is null/undefined
+                    stats = [
+                        { value: '90%', label: 'Cost Saving' },
+                        { value: '50X', label: 'Faster time to market' },
+                        { value: '400%', label: 'Increased Engagement' }
+                    ];
+                }
+            }
+            
+            stats.forEach((stat, index) => addStatField(stat.value, stat.label, index));
+        }
+
+        function addStatField(value = '', label = '', index = null) {
+            const container = document.getElementById('agentXRStatsContainer');
+            const statIndex = index !== null ? index : container.children.length;
+            
+            const statDiv = document.createElement('div');
+            statDiv.className = 'flex gap-2 mb-2 stat-field';
+            statDiv.innerHTML = `
+                <input type="text" placeholder="Value (e.g., 90%)" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 stat-value">
+                <input type="text" placeholder="Label (e.g., Cost Saving)" value="${label}" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 stat-label">
+                <button type="button" onclick="removeStat(this)" class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 text-sm">Remove</button>
+            `;
+            container.appendChild(statDiv);
+        }
+
+        function removeStat(button) {
+            button.parentElement.remove();
+        }
+
+        function getStats() {
+            const container = document.getElementById('agentXRStatsContainer');
+            const statFields = container.querySelectorAll('.stat-field');
+            return Array.from(statFields).map(field => ({
+                value: field.querySelector('.stat-value').value,
+                label: field.querySelector('.stat-label').value
+            })).filter(stat => stat.value && stat.label);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('saveBtn').addEventListener('click', saveContent);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('addStatBtn').addEventListener('click', () => addStatField());
+            document.getElementById('addAgentVisionStatBtn').addEventListener('click', () => addAgentVisionStatField());
+        }
+
+        // Save content
+        async function saveContent() {
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+            saveBtn.disabled = true;
+            
+            try {
+                const formData = {
+                    headerTitle: document.getElementById('headerTitle').value,
+                    headerDescription: document.getElementById('headerDescription').value,
+                    strategyTitle: document.getElementById('strategyTitle').value,
+                    strategyDescription: document.getElementById('strategyDescription').value,
+                    strategyServices: getTagsFromContainer('strategyServicesContainer'),
+                    brandingTitle: document.getElementById('brandingTitle').value,
+                    brandingDescription: document.getElementById('brandingDescription').value,
+                    brandingServices: getTagsFromContainer('brandingServicesContainer'),
+                    contentTitle: document.getElementById('contentTitle').value,
+                    contentDescription: document.getElementById('contentDescription').value,
+                    contentServices: getTagsFromContainer('contentServicesContainer'),
+                    digitalTitle: document.getElementById('digitalTitle').value,
+                    digitalDescription: document.getElementById('digitalDescription').value,
+                    digitalServices: getTagsFromContainer('digitalServicesContainer'),
+                    agentVUATitle: document.getElementById('agentVUATitle').value,
+                    agentVUADescription: document.getElementById('agentVUADescription').value,
+                    agentVUATagline: document.getElementById('agentVUATagline').value,
+                    agentVUAImpactTitle: document.getElementById('agentVUAImpactTitle').value,
+                    agentVUAFeatures: getTagsFromContainer('agentVUAFeaturesContainer'),
+                    techSolutionsTitle: document.getElementById('techSolutionsTitle').value,
+                    techSolutionsDescription: document.getElementById('techSolutionsDescription').value,
+                    techSolutionsTagline: document.getElementById('techSolutionsTagline').value,
+                    agentVisionTitle: document.getElementById('agentVisionTitle').value,
+                    agentVisionDescription: document.getElementById('agentVisionDescription').value,
+                    agentVisionVideoLabels: {
+                        launchVideos: document.getElementById('agentVisionLaunchVideosLabel').value,
+                        productionFilms: document.getElementById('agentVisionProductionFilmsLabel').value,
+                        reelContent: document.getElementById('agentVisionReelContentLabel').value,
+                        projectWalkthroughs: document.getElementById('agentVisionProjectWalkthroughsLabel').value
+                    },
+                    agentVisionStats: getAgentVisionStats(),
+                    agentXRTitle: document.getElementById('agentXRTitle').value,
+                    agentXRDescription: document.getElementById('agentXRDescription').value,
+                    agentXRServices: getTagsFromContainer('agentXRServicesContainer'),
+                    agentXRStats: getStats(),
+                    videos: {
+                        agentVisionVideoOne: getTagsFromContainer('agentVisionVideoOneContainer'),
+                        agentVisionVideoTwo: getTagsFromContainer('agentVisionVideoTwoContainer'),
+                        agentVisionVideoThree: getTagsFromContainer('agentVisionVideoThreeContainer'),
+                        vrVideo: document.getElementById('vrVideo').value
+                    },
+                    lastUpdatedBy: 'Admin',
+                    version: new Date().toISOString()
+                };
+
+                const response = await fetch('/api/services-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData),
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Services content saved successfully!');
+                    currentContent = result.data;
+                } else {
+                    alert('Error saving content: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error saving content:', error);
+                alert('Error saving content');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        // Setup mobile menu
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const sidebar = document.getElementById('sidebar');
+            
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+            });
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Video Upload Functions
+        let currentVideoInputId = null;
+        let currentCollectionInput = null;
+        let currentCollectionContainer = null;
+
+        function openVideoSelector(inputId) {
+            currentVideoInputId = inputId;
+            loadVideos();
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function openVideoSelectorForCollection(inputId, containerId) {
+            currentCollectionInput = document.getElementById(inputId);
+            currentCollectionContainer = containerId;
+            loadVideos();
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.add('hidden');
+            currentVideoInputId = null;
+            currentCollectionInput = null;
+            currentCollectionContainer = null;
+        }
+
+
+        async function loadVideos() {
+            try {
+                const response = await fetch('/api/videos/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayVideos(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading videos:', error);
+            }
+        }
+
+
+        function displayVideos(videos) {
+            const videoGrid = document.getElementById('videoGrid');
+            videoGrid.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'relative group border-2 border-gray-200 hover:border-green-500 rounded-lg overflow-hidden transition-colors';
+                
+                const fileSizeMB = (video.size / (1024 * 1024)).toFixed(1);
+                
+                videoItem.innerHTML = `
+                    <div class="cursor-pointer" onclick="selectVideo('${video.url}')">
+                        <video class="w-full h-24 object-cover bg-gray-200" preload="metadata" muted onloadedmetadata="this.currentTime = 0.1">
+                            <source src="http://15.206.84.81:8000${video.url}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition-opacity">
+                            <i class="fas fa-play text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1">
+                        <div class="truncate">${video.filename}</div>
+                        <div class="text-gray-300">${fileSizeMB} MB</div>
+                    </div>
+                    <button 
+                        onclick="deleteVideo('${video.filename}', event)" 
+                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-opacity duration-200"
+                        title="Delete video"
+                    >
+                        <i class="fas fa-trash text-xs"></i>
+                    </button>
+                `;
+                
+                // After adding to DOM, try to load the video thumbnail
+                videoGrid.appendChild(videoItem);
+                
+                // Force thumbnail generation by seeking to a specific time
+                const videoElement = videoItem.querySelector('video');
+                videoElement.addEventListener('loadedmetadata', function() {
+                    this.currentTime = Math.min(0.5, this.duration * 0.1); // Seek to 10% or 0.5s, whichever is smaller
+                });
+            });
+        }
+
+        async function deleteVideo(filename, event) {
+            event.stopPropagation();
+            
+            if (!confirm(`Are you sure you want to delete "${filename}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/videos/delete/${filename}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Video deleted successfully!');
+                    loadVideos(); // Reload the video list
+                } else {
+                    alert('Error deleting video: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting video');
+            }
+        }
+
+        function selectVideo(videoPath) {
+            if (currentVideoInputId) {
+                document.getElementById(currentVideoInputId).value = videoPath;
+                updateVideoPreview(currentVideoInputId, videoPath);
+            } else if (currentCollectionInput && currentCollectionContainer) {
+                // Add to collection
+                addTag(currentCollectionContainer, videoPath);
+                currentCollectionInput.value = '';
+            }
+            closeVideoModal();
+        }
+
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('videoFileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a video file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('video', file);
+
+            try {
+                const response = await fetch('/api/videos/upload', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Video uploaded successfully!');
+                    fileInput.value = '';
+                    loadVideos(); // Reload videos
+                } else {
+                    alert('Upload failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed');
+            }
+        }
+
+
+        function updateVideoPreview(inputId, videoPath) {
+            const previewId = inputId + 'Preview';
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                preview.src = `http://15.206.84.81:8000${videoPath}`;
+                preview.classList.remove('hidden');
+            }
+        }
+
+        function updateAllVideoPreviews() {
+            const videoInputs = ['vrVideo'];
+            videoInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input && input.value) {
+                    updateVideoPreview(inputId, input.value);
+                }
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeServicesContent);
+    </script>
+
+    <!-- Video Upload Modal -->
+    <div id="videoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold">Select Video</h3>
+                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <input type="file" id="videoFileInput" accept="video/*" class="flex-1 px-3 py-2 border border-gray-300 rounded-md">
+                        <button onclick="uploadVideo()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                            <i class="fas fa-upload mr-2"></i>Upload
+                        </button>
+                    </div>
+                </div>
+                <div class="border-t pt-4">
+                    <h4 class="text-md font-semibold mb-3">Existing Videos</h4>
+                    <div id="videoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                        <!-- Videos will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

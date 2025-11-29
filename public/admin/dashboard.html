@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .sidebar-mobile {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar-mobile.open {
+      transform: translateX(0);
+    }
+
+    .btn-action {
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+    }
+
+    .btn-action i {
+      margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .responsive-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+    <p class="text-gray-600">Verifying session...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="hidden">
+    <div class="flex h-screen">
+      <!-- Mobile Hamburger -->
+      <button id="mobileMenuButton"
+        class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+
+      <!-- Sidebar -->
+      <div id="sidebar"
+        class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+        <div class="p-4 border-b border-gray-700">
+          <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">
+            VVWorx Admin Panel
+          </h1>
+        </div>
+        <nav class="mt-4">
+          <a href="#" class="btn-action bg-gray-700">
+            <i class="fas fa-envelope"></i> Enquiry
+          </a>
+          <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-cog"></i> Home Content
+          </a>
+          <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-phone"></i> Contact Page Content
+          </a>
+          <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-user-circle"></i> About Page Content
+          </a>
+          <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-cog"></i> Services Content
+          </a>
+          <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-briefcase"></i> Our Work
+          </a>
+          <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-shield-alt"></i> Privacy Policy
+          </a>
+          <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-grip-horizontal"></i> Footer Content
+          </a>
+          <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </nav>
+      </div>
+
+      <!-- Content Area -->
+      <div class="flex-1 overflow-auto md:ml-0">
+        <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+          <h2 class="text-xl font-semibold text-gray-800">
+            Contact Submissions
+          </h2>
+        </header>
+
+        <main class="p-4">
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="responsive-table">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Full Name
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Company
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Phone
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Services
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Message
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="contactsTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Contacts will load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Modal -->
+  <div id="messageModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+      <h2 class="text-lg font-semibold mb-4">Full Message</h2>
+      <p id="modalMessage" class="text-gray-700 whitespace-pre-wrap"></p>
+      <div class="mt-6 flex justify-end">
+        <button onclick="closeMessage()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check session and load content
+    async function initializeDashboard() {
+      try {
+        const sessionResponse = await fetch("/api/auth/verify", {
+          credentials: "include",
+        });
+
+        if (sessionResponse.status === 401) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        await loadContacts();
+
+        document.getElementById("loadingOverlay").classList.add("hidden");
+        const mainContent = document.getElementById("mainContent");
+        mainContent.classList.remove("hidden");
+        mainContent.classList.add("fade-in");
+
+        setupMobileMenu();
+      } catch (error) {
+        console.error("Initialization error:", error);
+        window.location.href = "/login.html";
+      }
+    }
+
+    function setupMobileMenu() {
+      const mobileMenuButton = document.getElementById("mobileMenuButton");
+      const sidebar = document.getElementById("sidebar");
+
+      mobileMenuButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle("open");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          window.innerWidth < 768 &&
+          !sidebar.contains(e.target) &&
+          e.target !== mobileMenuButton
+        ) {
+          sidebar.classList.remove("open");
+        }
+      });
+
+      sidebar.addEventListener("click", (e) => {
+        if (window.innerWidth < 768 && e.target.tagName === "A") {
+          sidebar.classList.remove("open");
+        }
+      });
+    }
+    async function loadContacts() {
+      try {
+        const response = await fetch("/api/admin/contacts", {
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        const contacts = await response.json();
+        const tableBody = document.getElementById("contactsTable");
+
+        if (!tableBody) {
+          console.error("Table body with ID 'contactsTable' not found.");
+          return;
+        }
+
+        tableBody.innerHTML = contacts
+          .map((contact) => {
+            const message = contact.message || "";
+            const services = contact.services || [];
+
+            return `
+          <tr>
+            <td class="px-4 py-4 whitespace-nowrap">${contact.fullName || "N/A"}</td>
+            <td class="px-4 py-4 whitespace-nowrap">${contact.companyName || "N/A"}</td>
+            <td class="px-4 py-4 whitespace-nowrap">${contact.phone || "N/A"}</td>
+            <td class="px-4 py-4">
+              ${services
+                .map(
+                  (service) =>
+                    `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">${service}</span>`
+                )
+                .join("")}
+            </td>
+            <td class="px-4 py-4 max-w-xs truncate">
+              ${message.length > 40
+                ? `${message.substring(0, 40)}... <button onclick="showMessage(\`${message.replace(
+                  /`/g,
+                  "\\`"
+                )}\`)" class="text-blue-600 underline">Read more</button>`
+                : message
+              }
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">${new Date(
+                contact.createdAt
+              ).toLocaleString()}</td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <button onclick="deleteContact('${contact._id
+              }')" class="text-red-600 hover:text-red-900 p-2 rounded-full hover:bg-red-100">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+          })
+          .join("");
+      } catch (error) {
+        console.error("Error loading contacts:", error);
+      }
+    }
+
+    window.onload = loadContacts;
+
+
+
+    async function deleteContact(id) {
+      if (confirm("Are you sure you want to delete this contact?")) {
+        try {
+          const response = await fetch(`/api/admin/contacts/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            loadContacts();
+          }
+        } catch (error) {
+          console.error("Error deleting contact:", error);
+        }
+      }
+    }
+
+    function showMessage(message) {
+      document.getElementById("modalMessage").textContent = message;
+      document.getElementById("messageModal").classList.remove("hidden");
+      document.getElementById("messageModal").classList.add("flex");
+    }
+
+    function closeMessage() {
+      document.getElementById("messageModal").classList.add("hidden");
+      document.getElementById("messageModal").classList.remove("flex");
+    }
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch("/api/auth/logout", {
+            method: "POST",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            window.location.href = "/login.html";
+          }
+        } catch (error) {
+          console.error("Logout error:", error);
+        }
+      });
+
+    document.addEventListener("DOMContentLoaded", initializeDashboard);
+  </script>
+</body>
+
+</html>

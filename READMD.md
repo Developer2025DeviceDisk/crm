@@ -1,0 +1,1 @@
+ssh -i contact-us-admin-key.pem ubuntu@15.206.84.81

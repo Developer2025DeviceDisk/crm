@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Content Manager - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar-mobile {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+        .btn-action {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+        .btn-action i {
+            margin-right: 0.5rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            min-height: 2.5rem;
+        }
+        .tag {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        .tag button {
+            margin-left: 0.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .card-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f9fafb;
+        }
+        .card-item.active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+        <p class="text-gray-600">Loading footer content...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+        <div class="flex h-screen">
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
+                </div>
+                <nav class="mt-4">
+                    <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+                        <i class="fas fa-envelope"></i> Enquiry
+                    </a>
+                    <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Home Content
+                    </a>
+                           <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-phone"></i> Contact Page Content
+                    </a>
+                         <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-user-circle"></i> About Page Content
+                    </a>
+                    <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Services Content
+                    </a>
+                    <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> privacy-policy
+                    </a>
+                    <a href="/admin/footer-content.html" class="btn-action bg-gray-600">
+                        <i class="fas fa-grip-horizontal"></i> Footer Content
+                    </a>
+                    <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+        </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto md:ml-0">
+                <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Footer Content Management</h2>
+                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Changes
+                        </button>
+                    </div>
+                </header>
+
+                <main class="p-4">
+                    <form id="footerForm" class="space-y-6">
+                        <!-- Company Information Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-building mr-2 text-blue-600"></i>Company Information
+                            </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                                <input type="text" id="companyName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter company name">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Logo Path</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="companyLogo" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter logo path">
+                                    <button type="button" onclick="openImageSelector('companyLogo')" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 whitespace-nowrap">
+                                        <i class="fas fa-image mr-1"></i>Select Image
+                                    </button>
+                                </div>
+                                <div id="companyLogoPreview" class="mt-2 hidden">
+                                    <img class="max-w-full h-32 rounded-md border" alt="Logo Preview">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Description</label>
+                            <textarea id="companyDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter company description (optional)"></textarea>
+                        </div>
+                    </div>
+
+                        <!-- Social Media Links Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-share-alt mr-2 text-blue-600"></i>Social Media Links
+                                </h3>
+                                <button type="button" onclick="addSocialLink()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm">
+                                    <i class="fas fa-plus mr-1"></i>Add Social Link
+                                </button>
+                            </div>
+                        
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Follow Text</label>
+                            <input type="text" id="followText" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter follow text">
+                        </div>
+                        
+                        <div id="socialLinksContainer" class="mt-4">
+                            <!-- Social links will be populated here -->
+                        </div>
+                    </div>
+
+                        <!-- Navigation Menu Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-bars mr-2 text-blue-600"></i>Navigation Menu
+                                </h3>
+                                <button type="button" onclick="addNavigationLink()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm">
+                                    <i class="fas fa-plus mr-1"></i>Add Navigation Link
+                                </button>
+                            </div>
+                        
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Menu Title</label>
+                            <input type="text" id="menuTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter menu title">
+                        </div>
+                        
+                        <div id="navigationLinksContainer" class="mt-4">
+                            <!-- Navigation links will be populated here -->
+                        </div>
+                    </div>
+
+                        <!-- Office Locations Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Office Locations
+                                </h3>
+                                <button type="button" onclick="addOfficeLocation()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm">
+                                    <i class="fas fa-plus mr-1"></i>Add Location
+                                </button>
+                            </div>
+                        
+                        <div id="officeLocationsContainer" class="mt-4">
+                            <!-- Office locations will be populated here -->
+                        </div>
+                    </div>
+
+                        <!-- Footer Styling Section -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-palette mr-2 text-blue-600"></i>Footer Styling
+                            </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Background Classes</label>
+                                <input type="text" id="backgroundColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter Tailwind classes">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Text Color Classes</label>
+                                <input type="text" id="textColor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter Tailwind classes">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Font Family</label>
+                                <input type="text" id="fontFamily" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter font family">
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- Version Information -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-info-circle mr-2 text-blue-600"></i>Version Information
+                            </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Version</label>
+                                <input type="text" id="version" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 1.0">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Updated By</label>
+                                <input type="text" id="lastUpdatedBy" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your name">
+                            </div>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Image Upload Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold">Select Image</h3>
+                <button type="button" onclick="closeImageModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <!-- Upload Section -->
+                <div class="mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                    <div class="text-center">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-600 mb-2">Upload a new image</p>
+                        <input type="file" id="imageUploadInput" accept="image/*" class="mb-2">
+                        <button type="button" onclick="uploadImage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                            <i class="fas fa-upload mr-1"></i>Upload
+                        </button>
+                        <div id="uploadProgress" class="hidden mt-2">
+                            <div class="text-blue-600">Uploading...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image Grid -->
+                <div class="mb-4">
+                    <h4 class="text-md font-semibold mb-2">Select from uploaded images:</h4>
+                    <div id="imageGrid" class="grid grid-cols-6 gap-2 max-h-64 overflow-y-auto">
+                        <!-- Images will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeImageModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentContent = null;
+        let socialLinkCounter = 0;
+        let navigationLinkCounter = 0;
+        let locationCounter = 0;
+        let currentImageInputId = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // First verify session
+                const sessionResponse = await fetch('/api/auth/verify', {
+                    credentials: 'include'
+                });
+
+                console.log('sessionResponse :', sessionResponse)
+                
+                if (sessionResponse.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                setupMobileMenu();
+                loadCurrentContent();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                window.location.href = '/login.html';
+            }
+        });
+
+        // Mobile menu functionality
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const sidebar = document.getElementById('sidebar');
+
+            mobileMenuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-mobile');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth < 768) {
+                    if (!sidebar.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                        sidebar.classList.add('sidebar-mobile');
+                    }
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('saveBtn').addEventListener('click', saveContent);
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+        }
+
+              async function logout() {
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Load current content from API
+        async function loadCurrentContent() {
+            try {
+                const response = await fetch('/api/footer-content/active');
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    currentContent = result.data;
+                    populateForm(result.data);
+                } else {
+                    showMessage('No active footer content found. Using defaults.', 'warning');
+                }
+            } catch (error) {
+                console.error('Error loading footer content:', error);
+                showMessage('Error loading footer content: ' + error.message, 'error');
+            } finally {
+                // Hide loading overlay and show main content
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('hidden');
+            }
+        }
+
+        // Image Management Functions
+        function openImageSelector(inputId) {
+            currentImageInputId = inputId;
+            loadImages();
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            currentImageInputId = null;
+        }
+
+        async function loadImages() {
+            try {
+                const response = await fetch('/api/images/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    populateImageGrid(result.data);
+                } else {
+                    console.error('Error loading images:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        function populateImageGrid(images) {
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+            
+            images.forEach(image => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'relative group border-2 border-gray-200 hover:border-blue-500 rounded-lg overflow-hidden';
+                
+                imageItem.innerHTML = `
+                    <div class="cursor-pointer" onclick="selectImage('${image.url}')">
+                        <img src="${image.url}" alt="${image.filename}" class="w-full h-24 object-cover">
+                    </div>
+                    <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button type="button" onclick="deleteImage('${image.filename}')" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+                            ×
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(imageItem);
+            });
+        }
+
+        function selectImage(imageUrl) {
+            if (currentImageInputId) {
+                document.getElementById(currentImageInputId).value = imageUrl;
+                updateImagePreview(currentImageInputId, imageUrl);
+            }
+            closeImageModal();
+        }
+
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageUploadInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file to upload');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                document.getElementById('uploadProgress').classList.remove('hidden');
+                
+                const response = await fetch('/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Image uploaded successfully!', 'success');
+                    fileInput.value = '';
+                    loadImages(); // Refresh the image grid
+                } else {
+                    throw new Error(result.message || 'Upload failed');
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                showMessage('Error uploading image: ' + error.message, 'error');
+            } finally {
+                document.getElementById('uploadProgress').classList.add('hidden');
+            }
+        }
+
+        async function deleteImage(filename) {
+            if (!confirm('Are you sure you want to delete this image?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/images/delete/${filename}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Image deleted successfully!', 'success');
+                    loadImages(); // Refresh the image grid
+                } else {
+                    throw new Error(result.message || 'Delete failed');
+                }
+            } catch (error) {
+                console.error('Error deleting image:', error);
+                showMessage('Error deleting image: ' + error.message, 'error');
+            }
+        }
+
+        function updateImagePreview(inputId, imageUrl) {
+            const previewContainer = document.getElementById(inputId + 'Preview');
+            if (previewContainer) {
+                const img = previewContainer.querySelector('img');
+                if (img) {
+                    img.src = imageUrl;
+                    previewContainer.classList.remove('hidden');
+                }
+            }
+        }
+
+        function updateAllImagePreviews() {
+            // Update company logo preview
+            const companyLogo = document.getElementById('companyLogo').value;
+            if (companyLogo) {
+                updateImagePreview('companyLogo', companyLogo);
+            }
+        }
+
+        // Populate form with current content
+        function populateForm(content) {
+            // Company Information
+            document.getElementById('companyName').value = content.companyInfo?.name || '';
+            document.getElementById('companyLogo').value = content.companyInfo?.logo || '';
+            document.getElementById('companyDescription').value = content.companyInfo?.description || '';
+
+            // Social Links
+            document.getElementById('followText').value = content.socialLinks?.followText || '';
+            populateSocialLinks(content.socialLinks?.links || []);
+
+            // Navigation Menu
+            document.getElementById('menuTitle').value = content.navigationMenu?.title || '';
+            populateNavigationLinks(content.navigationMenu?.links || []);
+
+            // Office Locations
+            populateOfficeLocations(content.officeLocations || []);
+
+            // Styling
+            document.getElementById('backgroundColor').value = content.styling?.backgroundColor || '';
+            document.getElementById('textColor').value = content.styling?.textColor || '';
+            document.getElementById('fontFamily').value = content.styling?.fontFamily || '';
+
+            // Version Information
+            document.getElementById('version').value = content.version || '';
+            document.getElementById('lastUpdatedBy').value = content.lastUpdatedBy || '';
+
+            // Update image previews
+            updateAllImagePreviews();
+        }
+
+        // Populate social links
+        function populateSocialLinks(links) {
+            const container = document.getElementById('socialLinksContainer');
+            container.innerHTML = '';
+            socialLinkCounter = 0;
+
+            links.forEach(link => {
+                addSocialLinkField(link);
+            });
+        }
+
+        // Add social link field
+        function addSocialLink() {
+            addSocialLinkField();
+        }
+
+        function addSocialLinkField(linkData = null) {
+            const container = document.getElementById('socialLinksContainer');
+            const id = socialLinkCounter++;
+            
+            const linkDiv = document.createElement('div');
+            linkDiv.className = 'card-item';
+            linkDiv.id = `socialLink-${id}`;
+            
+            linkDiv.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-medium text-gray-700">Social Link ${id + 1}</h3>
+                    <button type="button" onclick="removeSocialLink('socialLink-${id}')" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Platform</label>
+                        <select class="w-full px-2 py-1 border border-gray-300 rounded text-sm" name="platform">
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="behance">Behance</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="twitter">Twitter</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">URL</label>
+                        <input type="url" name="url" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="https://..." value="${linkData?.url || ''}">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="flex items-center text-sm">
+                            <input type="checkbox" name="isActive" ${linkData?.isActive !== false ? 'checked' : ''} class="mr-2">
+                            Active
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(linkDiv);
+            
+            if (linkData) {
+                const select = linkDiv.querySelector('select[name="platform"]');
+                select.value = linkData.platform;
+            }
+        }
+
+        // Remove social link
+        function removeSocialLink(linkId) {
+            document.getElementById(linkId).remove();
+        }
+
+        // Populate navigation links
+        function populateNavigationLinks(links) {
+            const container = document.getElementById('navigationLinksContainer');
+            container.innerHTML = '';
+            navigationLinkCounter = 0;
+
+            links.forEach(link => {
+                addNavigationLinkField(link);
+            });
+        }
+
+        // Add navigation link field
+        function addNavigationLink() {
+            addNavigationLinkField();
+        }
+
+        function addNavigationLinkField(linkData = null) {
+            const container = document.getElementById('navigationLinksContainer');
+            const id = navigationLinkCounter++;
+            
+            const linkDiv = document.createElement('div');
+            linkDiv.className = 'card-item';
+            linkDiv.id = `navLink-${id}`;
+            
+            linkDiv.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-medium text-gray-700">Navigation Link ${id + 1}</h3>
+                    <button type="button" onclick="removeNavigationLink('navLink-${id}')" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Text</label>
+                        <input type="text" name="text" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="Link text" value="${linkData?.text || ''}">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">URL</label>
+                        <input type="text" name="url" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="/page" value="${linkData?.url || ''}">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Order</label>
+                        <input type="number" name="order" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="1" value="${linkData?.order || 0}">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="flex items-center text-sm">
+                            <input type="checkbox" name="isActive" ${linkData?.isActive !== false ? 'checked' : ''} class="mr-2">
+                            Active
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(linkDiv);
+        }
+
+        // Remove navigation link
+        function removeNavigationLink(linkId) {
+            document.getElementById(linkId).remove();
+        }
+
+        // Populate office locations
+        function populateOfficeLocations(locations) {
+            const container = document.getElementById('officeLocationsContainer');
+            container.innerHTML = '';
+            locationCounter = 0;
+
+            locations.forEach(location => {
+                addOfficeLocationField(location);
+            });
+        }
+
+        // Add office location field
+        function addOfficeLocation() {
+            addOfficeLocationField();
+        }
+
+        function addOfficeLocationField(locationData = null) {
+            const container = document.getElementById('officeLocationsContainer');
+            const id = locationCounter++;
+            
+            const locationDiv = document.createElement('div');
+            locationDiv.className = 'card-item';
+            locationDiv.id = `location-${id}`;
+            
+            locationDiv.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-medium text-gray-700">Office Location ${id + 1}</h3>
+                    <button type="button" onclick="removeOfficeLocation('location-${id}')" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">City</label>
+                        <input type="text" name="city" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="City name" value="${locationData?.city || ''}">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Phone</label>
+                        <input type="text" name="phone" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="Phone number" value="${locationData?.phone || ''}">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Address Line 1</label>
+                        <input type="text" name="addressLine1" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="Address line 1" value="${locationData?.address?.line1 || ''}">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Address Line 2</label>
+                        <input type="text" name="addressLine2" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="Address line 2" value="${locationData?.address?.line2 || ''}">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Address Line 3</label>
+                        <input type="text" name="addressLine3" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="Address line 3" value="${locationData?.address?.line3 || ''}">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Order</label>
+                        <input type="number" name="order" class="w-20 px-2 py-1 border border-gray-300 rounded text-sm" placeholder="1" value="${locationData?.order || 0}">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="flex items-center text-sm">
+                            <input type="checkbox" name="isActive" ${locationData?.isActive !== false ? 'checked' : ''} class="mr-2">
+                            Active
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(locationDiv);
+        }
+
+        // Remove office location
+        function removeOfficeLocation(locationId) {
+            document.getElementById(locationId).remove();
+        }
+
+        // Collect social links data
+        function getSocialLinksData() {
+            const container = document.getElementById('socialLinksContainer');
+            const linkCards = container.querySelectorAll('.card-item');
+            const links = [];
+
+            linkCards.forEach(card => {
+                const platform = card.querySelector('select[name="platform"]').value;
+                const url = card.querySelector('input[name="url"]').value;
+                const isActive = card.querySelector('input[name="isActive"]').checked;
+
+                if (platform && url) {
+                    links.push({ platform, url, isActive });
+                }
+            });
+
+            return links;
+        }
+
+        // Collect navigation links data
+        function getNavigationLinksData() {
+            const container = document.getElementById('navigationLinksContainer');
+            const linkCards = container.querySelectorAll('.card-item');
+            const links = [];
+
+            linkCards.forEach(card => {
+                const text = card.querySelector('input[name="text"]').value;
+                const url = card.querySelector('input[name="url"]').value;
+                const order = parseInt(card.querySelector('input[name="order"]').value) || 0;
+                const isActive = card.querySelector('input[name="isActive"]').checked;
+
+                if (text && url) {
+                    links.push({ text, url, order, isActive });
+                }
+            });
+
+            return links.sort((a, b) => a.order - b.order);
+        }
+
+        // Collect office locations data
+        function getOfficeLocationsData() {
+            const container = document.getElementById('officeLocationsContainer');
+            const locationCards = container.querySelectorAll('.card-item');
+            const locations = [];
+
+            locationCards.forEach(card => {
+                const city = card.querySelector('input[name="city"]').value;
+                const phone = card.querySelector('input[name="phone"]').value;
+                const addressLine1 = card.querySelector('input[name="addressLine1"]').value;
+                const addressLine2 = card.querySelector('input[name="addressLine2"]').value;
+                const addressLine3 = card.querySelector('input[name="addressLine3"]').value;
+                const order = parseInt(card.querySelector('input[name="order"]').value) || 0;
+                const isActive = card.querySelector('input[name="isActive"]').checked;
+
+                if (city && phone && addressLine1) {
+                    locations.push({
+                        city,
+                        phone,
+                        address: {
+                            line1: addressLine1,
+                            line2: addressLine2,
+                            line3: addressLine3
+                        },
+                        order,
+                        isActive
+                    });
+                }
+            });
+
+            return locations.sort((a, b) => a.order - b.order);
+        }
+
+        // Save content
+        async function saveContent() {
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+            saveBtn.disabled = true;
+            
+            try {
+                const contentData = {
+                    companyInfo: {
+                        name: document.getElementById('companyName').value,
+                        logo: document.getElementById('companyLogo').value,
+                        description: document.getElementById('companyDescription').value
+                    },
+                    socialLinks: {
+                        followText: document.getElementById('followText').value,
+                        links: getSocialLinksData()
+                    },
+                    navigationMenu: {
+                        title: document.getElementById('menuTitle').value,
+                        links: getNavigationLinksData()
+                    },
+                    officeLocations: getOfficeLocationsData(),
+                    styling: {
+                        backgroundColor: document.getElementById('backgroundColor').value,
+                        textColor: document.getElementById('textColor').value,
+                        fontFamily: document.getElementById('fontFamily').value
+                    },
+                    version: document.getElementById('version').value || '1.0',
+                    lastUpdatedBy: document.getElementById('lastUpdatedBy').value || 'Admin'
+                };
+
+                const response = await fetch('/api/footer-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contentData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('Footer content saved successfully!', 'success');
+                    currentContent = result.data;
+                } else {
+                    throw new Error(result.message || 'Failed to save footer content');
+                }
+            } catch (error) {
+                console.error('Error saving footer content:', error);
+                showMessage('Error saving footer content: ' + error.message, 'error');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        // Utility functions
+
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-green-500' : 
+                           type === 'error' ? 'bg-red-500' : 
+                           type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+            
+            messageDiv.className = `${bgColor} text-white px-4 py-2 rounded-md shadow-lg fade-in`;
+            messageDiv.textContent = message;
+            
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
