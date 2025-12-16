@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,17 +11,26 @@
         .fade-in {
             animation: fadeIn 0.3s ease-in;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         .sidebar-mobile {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
         }
+
         .sidebar-mobile.open {
             transform: translateX(0);
         }
+
         .btn-action {
             padding: 0.5rem 1rem;
             display: flex;
@@ -28,17 +38,21 @@
             width: 100%;
             text-align: left;
         }
+
         .btn-action i {
             margin-right: 0.5rem;
         }
+
         .section-divider {
             border-top: 2px solid #e5e7eb;
             margin: 2rem 0;
             padding-top: 2rem;
         }
+
         .input-group {
             margin-bottom: 1rem;
         }
+
         .dynamic-item {
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
@@ -46,10 +60,12 @@
             margin-bottom: 1rem;
             background-color: #f9fafb;
         }
+
         .dynamic-item.active {
             border-color: #3b82f6;
             background-color: #eff6ff;
         }
+
         .color-input {
             width: 60px;
             height: 40px;
@@ -59,6 +75,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 font-sans">
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
@@ -70,12 +87,14 @@
     <div id="mainContent" class="hidden">
         <div class="flex h-screen">
             <!-- Mobile Hamburger Button -->
-            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+            <button id="mobileMenuButton"
+                class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
                 <i class="fas fa-bars text-lg"></i>
             </button>
 
             <!-- Sidebar -->
-            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+            <div id="sidebar"
+                class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
                 <div class="p-4 border-b border-gray-700">
                     <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
                 </div>
@@ -89,10 +108,16 @@
                     <a href="#" class="btn-action bg-gray-600">
                         <i class="fas fa-phone"></i> Contact Page Content
                     </a>
+                    <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-briefcase"></i> Our Work (Home)
+                    </a>
+                    <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-file-alt"></i> Our Work Detail
+                    </a>
                     <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-user-circle"></i> About Page Content
                     </a>
-                    
+
                     <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-cog"></i> Services Content
                     </a>
@@ -113,7 +138,8 @@
                 <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xl font-semibold text-gray-800">Contact Content Management</h2>
-                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                        <button id="saveBtn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
                             <i class="fas fa-save mr-2"></i>Save Changes
                         </button>
                     </div>
@@ -121,10 +147,12 @@
 
                 <main class="p-4">
                     <!-- Success/Error Messages -->
-                    <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    <div id="successMessage"
+                        class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                         <i class="fas fa-check-circle mr-2"></i><span></span>
                     </div>
-                    <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <div id="errorMessage"
+                        class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                         <i class="fas fa-exclamation-circle mr-2"></i><span></span>
                     </div>
 
@@ -134,20 +162,26 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-star mr-2 text-blue-600"></i>Hero Section
                             </h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Hero Title</label>
-                                <input type="text" id="heroTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Reach Us">
+                                <input type="text" id="heroTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Reach Us">
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Hero Description</label>
-                                <textarea id="heroDescription" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="At Voix & Vision Worx, we are dedicated to transforming..."></textarea>
+                                <textarea id="heroDescription" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="At Voix & Vision Worx, we are dedicated to transforming..."></textarea>
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Form Section Title</label>
-                                <input type="text" id="formSectionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="I am interested in">
+                                <input type="text" id="formSectionTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="I am interested in">
                             </div>
                         </div>
 
@@ -156,21 +190,27 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-cogs mr-2 text-blue-600"></i>Services Configuration
                             </h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Services Label</label>
-                                <input type="text" id="servicesLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Services">
+                                <input type="text" id="servicesLabel"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Services">
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Services Subtext</label>
-                                <input type="text" id="servicesSubtext" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(Select at least one)">
+                                <input type="text" id="servicesSubtext"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="(Select at least one)">
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Services List</label>
                                 <div id="servicesContainer" class="space-y-2 mb-4"></div>
-                                <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addService()">
+                                <button type="button"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                                    onclick="addService()">
                                     <i class="fas fa-plus mr-2"></i>Add Service
                                 </button>
                             </div>
@@ -181,10 +221,12 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Map Section
                             </h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Map Section Title</label>
-                                <input type="text" id="mapTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Our Presence">
+                                <input type="text" id="mapTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Our Presence">
                             </div>
                         </div>
 
@@ -193,11 +235,14 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-globe mr-2 text-blue-600"></i>Contact Locations Management
                             </h3>
-                            <p class="text-sm text-gray-600 mb-4">Manage your office locations with map coordinates, addresses, and contact information.</p>
-                            
+                            <p class="text-sm text-gray-600 mb-4">Manage your office locations with map coordinates,
+                                addresses, and contact information.</p>
+
                             <div id="locationsContainer" class="space-y-4 mb-6"></div>
-                            
-                            <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addLocation()">
+
+                            <button type="button"
+                                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                                onclick="addLocation()">
                                 <i class="fas fa-plus mr-2"></i>Add New Location
                             </button>
                         </div>
@@ -207,33 +252,45 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-briefcase mr-2 text-blue-600"></i>Job Openings Section
                             </h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Job Section Title</label>
-                                <input type="text" id="jobTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Looking For VUA Filling">
+                                <input type="text" id="jobTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Looking For VUA Filling">
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Job Section Subtitle</label>
-                                <input type="text" id="jobSubtitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Current Opening">
+                                <input type="text" id="jobSubtitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Current Opening">
                             </div>
 
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Job Openings <span class="text-gray-500 text-xs">(Recommended: 6 items for proper layout)</span></label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Job Openings <span
+                                        class="text-gray-500 text-xs">(Recommended: 6 items for proper
+                                        layout)</span></label>
                                 <div id="openingsContainer" class="space-y-2 mb-4"></div>
-                                <button type="button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors" onclick="addOpening()">
+                                <button type="button"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                                    onclick="addOpening()">
                                     <i class="fas fa-plus mr-2"></i>Add Job Opening
                                 </button>
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Contact Text</label>
-                                <input type="text" id="contactText" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Work With Us:">
+                                <input type="text" id="contactText"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Work With Us:">
                             </div>
 
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
-                                <input type="email" id="contactEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="hr@vvworx.com">
+                                <input type="email" id="contactEmail"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="hr@vvworx.com">
                             </div>
                         </div>
 
@@ -242,7 +299,7 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-palette mr-2 text-blue-600"></i>Color Configuration
                             </h3>
-                            
+
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
@@ -271,16 +328,20 @@
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                                 <i class="fas fa-info-circle mr-2 text-blue-600"></i>Version Information
                             </h3>
-                            
+
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Version</label>
-                                    <input type="text" id="version" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1.0">
+                                    <input type="text" id="version"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="1.0">
                                 </div>
 
                                 <div class="input-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Last Updated By</label>
-                                    <input type="text" id="lastUpdatedBy" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Admin">
+                                    <input type="text" id="lastUpdatedBy"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Admin">
                                 </div>
                             </div>
                         </div>
@@ -289,7 +350,7 @@
             </div>
         </div>
     </div>
-        </div>
+    </div>
     </div>
 
     <script>
@@ -297,7 +358,7 @@
         let currentContent = {};
 
         // Initialize page with session verification
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializePage();
         });
 
@@ -308,25 +369,25 @@
                 const sessionResponse = await fetch('/api/auth/verify', {
                     credentials: 'include'
                 });
-                
+
                 if (sessionResponse.status === 401) {
                     window.location.href = '/login.html';
                     return;
                 }
-                
+
                 // Session is valid, load content
                 await loadCurrentContent();
-                
+
                 // Hide loader and show content
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 const mainContent = document.getElementById('mainContent');
                 mainContent.classList.remove('hidden');
                 mainContent.classList.add('fade-in');
-                
+
                 // Setup mobile menu and other interactions
                 setupMobileMenu();
                 setupEventListeners();
-                
+
             } catch (error) {
                 console.error('Initialization error:', error);
                 window.location.href = '/login.html';
@@ -337,17 +398,17 @@
         function setupMobileMenu() {
             const mobileMenuButton = document.getElementById('mobileMenuButton');
             const sidebar = document.getElementById('sidebar');
-            
+
             if (mobileMenuButton && sidebar) {
                 mobileMenuButton.addEventListener('click', (e) => {
                     e.stopPropagation();
                     sidebar.classList.toggle('open');
                 });
-                
+
                 // Close sidebar when clicking outside on mobile
                 document.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768 && 
-                        !sidebar.contains(e.target) && 
+                    if (window.innerWidth < 768 &&
+                        !sidebar.contains(e.target) &&
                         e.target !== mobileMenuButton) {
                         sidebar.classList.remove('open');
                     }
@@ -359,7 +420,7 @@
         function setupEventListeners() {
             // Save button click handler
             document.getElementById('saveBtn').addEventListener('click', saveContent);
-            
+
             // Logout button
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
@@ -370,7 +431,7 @@
                             method: 'POST',
                             credentials: 'include'
                         });
-                        
+
                         if (response.ok) {
                             window.location.href = '/login.html';
                         }
@@ -386,7 +447,7 @@
             try {
                 const response = await fetch('/api/contact-content/active');
                 const result = await response.json();
-                
+
                 if (result.success && result.data) {
                     currentContent = result.data;
                     populateForm(result.data);
@@ -443,7 +504,7 @@
             const defaultServices = [
                 'Strategy',
                 'Branding & Design',
-                'Content & Production', 
+                'Content & Production',
                 'Digital Marketing',
                 'Agent Vua',
                 'Agent Vision',
@@ -490,7 +551,7 @@
 
             const defaultOpenings = [
                 'Brand Manager',
-                'UI Designer', 
+                'UI Designer',
                 'Marketing Intern',
                 'Senior Designer',
                 'Animator',
@@ -607,7 +668,7 @@
             const container = document.getElementById('locationsContainer');
             const div = document.createElement('div');
             div.className = 'dynamic-item border-2 border-gray-200 rounded-lg p-4';
-            
+
             // Create address lines HTML
             const addressLines = location.address || [''];
             const addressFieldsHTML = addressLines.map((line, index) => `
@@ -686,7 +747,7 @@
                     </div>
                 </div>
             `;
-            
+
             container.appendChild(div);
         }
 
@@ -727,12 +788,12 @@
         function getLocations() {
             const locationElements = document.querySelectorAll('#locationsContainer .dynamic-item');
             const locations = [];
-            
+
             locationElements.forEach(element => {
                 const addressLines = Array.from(element.querySelectorAll('.address-line'))
                     .map(input => input.value.trim())
                     .filter(value => value !== '');
-                
+
                 const location = {
                     cx: parseFloat(element.querySelector('.location-cx').value) || 0,
                     cy: parseFloat(element.querySelector('.location-cy').value) || 0,
@@ -743,13 +804,13 @@
                     order: parseInt(element.querySelector('.location-order').value) || 1,
                     isActive: element.querySelector('.location-active').checked
                 };
-                
+
                 // Only add valid locations
                 if (location.city && location.address.length > 0 && location.phone && location.id) {
                     locations.push(location);
                 }
             });
-            
+
             // Sort by order
             return locations.sort((a, b) => a.order - b.order);
         }
@@ -758,7 +819,7 @@
         async function saveContent() {
             const saveBtn = document.getElementById('saveBtn');
             const originalText = saveBtn.innerHTML;
-            
+
             try {
                 saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
                 saveBtn.disabled = true;
@@ -839,4 +900,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -55,7 +55,7 @@ router.post('/upload', upload.single('image'), (req, res) => {
     }
 
     const imageUrl = `/uploads/about/${req.file.filename}`;
-    
+
     res.json({
       success: true,
       message: 'Image uploaded successfully',
@@ -97,7 +97,9 @@ router.get('/list', (req, res) => {
 
     res.json({
       success: true,
-      data: images
+      success: true,
+      data: images,
+      images: images
     });
   } catch (error) {
     console.error('List images error:', error);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,17 +11,26 @@
         .fade-in {
             animation: fadeIn 0.3s ease-in;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         .sidebar-mobile {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
         }
+
         .sidebar-mobile.open {
             transform: translateX(0);
         }
+
         .btn-action {
             padding: 0.5rem 1rem;
             display: flex;
@@ -28,17 +38,21 @@
             width: 100%;
             text-align: left;
         }
+
         .btn-action i {
             margin-right: 0.5rem;
         }
+
         .section-divider {
             border-top: 2px solid #e5e7eb;
             margin: 2rem 0;
             padding-top: 2rem;
         }
+
         .input-group {
             margin-bottom: 1rem;
         }
+
         .tag-input {
             display: flex;
             flex-wrap: wrap;
@@ -48,6 +62,7 @@
             border-radius: 0.375rem;
             min-height: 2.5rem;
         }
+
         .tag {
             background-color: #3b82f6;
             color: white;
@@ -57,6 +72,7 @@
             align-items: center;
             font-size: 0.875rem;
         }
+
         .tag button {
             margin-left: 0.5rem;
             background: none;
@@ -66,6 +82,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 font-sans">
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
@@ -77,35 +94,43 @@
     <div id="mainContent" class="hidden">
         <div class="flex h-screen">
             <!-- Mobile Hamburger Button -->
-            <button id="mobileMenuButton" class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+            <button id="mobileMenuButton"
+                class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
                 <i class="fas fa-bars text-lg"></i>
             </button>
 
             <!-- Sidebar -->
-            <div id="sidebar" class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+            <div id="sidebar"
+                class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
                 <div class="p-4 border-b border-gray-700">
                     <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">VVWorx Admin Panel</h1>
                 </div>
-                  <nav class="mt-4">
-                 <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+                <nav class="mt-4">
+                    <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
                         <i class="fas fa-envelope"></i> Enquiry
                     </a>
-                         <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                    <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-cog"></i> Home Content
                     </a>
-                           <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
+                    <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-phone"></i> Contact Page Content
                     </a>
-                         <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+                    <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-user-circle"></i> About Page Content
                     </a>
                     <a href="/admin/services-content.html" class="btn-action bg-gray-600">
                         <i class="fas fa-cog"></i> Services Content
                     </a>
-                      <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                    <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-briefcase"></i> Our Work (Home)
+                    </a>
+                    <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-file-alt"></i> Our Work Detail
+                    </a>
+                    <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-cog"></i> privacy-policy
                     </a>
-                      <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+                    <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-grip-horizontal"></i> Footer Content
                     </a>
                     <button id="logoutBtn" class="btn-action hover:bg-gray-600">
@@ -119,7 +144,8 @@
                 <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xl font-semibold text-gray-800">Services Content Management</h2>
-                        <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                        <button id="saveBtn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
                             <i class="fas fa-save mr-2"></i>Save Changes
                         </button>
                     </div>
@@ -130,200 +156,245 @@
                         <!-- Header Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Header Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Header Title</label>
-                                <input type="text" id="headerTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="headerTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Header Description</label>
-                                <textarea id="headerDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="headerDescription" rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                         </div>
 
                         <!-- Strategy Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Strategy Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Title</label>
-                                <input type="text" id="strategyTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="strategyTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Description</label>
-                                <textarea id="strategyDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="strategyDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Strategy Services</label>
                                 <div id="strategyServicesContainer" class="tag-input"></div>
-                                <input type="text" id="strategyServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="strategyServiceInput" placeholder="Type service and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
 
                         <!-- Branding & Design Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Branding & Design Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Branding Title</label>
-                                <input type="text" id="brandingTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="brandingTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Branding Description</label>
-                                <textarea id="brandingDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="brandingDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Branding Services</label>
                                 <div id="brandingServicesContainer" class="tag-input"></div>
-                                <input type="text" id="brandingServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="brandingServiceInput" placeholder="Type service and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
 
                         <!-- Content & Production Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Content & Production Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Content Title</label>
-                                <input type="text" id="contentTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="contentTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Content Description</label>
-                                <textarea id="contentDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="contentDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Content Services</label>
                                 <div id="contentServicesContainer" class="tag-input"></div>
-                                <input type="text" id="contentServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="contentServiceInput" placeholder="Type service and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
 
                         <!-- Digital Marketing Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Digital Marketing Section</h3>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Title</label>
-                                <input type="text" id="digitalTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing
+                                    Title</label>
+                                <input type="text" id="digitalTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Description</label>
-                                <textarea id="digitalDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing
+                                    Description</label>
+                                <textarea id="digitalDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing Services</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Digital Marketing
+                                    Services</label>
                                 <div id="digitalServicesContainer" class="tag-input"></div>
-                                <input type="text" id="digitalServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="digitalServiceInput" placeholder="Type service and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
 
                         <!-- Agent VUA Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent VUA Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Title</label>
-                                <input type="text" id="agentVUATitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentVUATitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Description</label>
-                                <textarea id="agentVUADescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA
+                                    Description</label>
+                                <textarea id="agentVUADescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Tagline</label>
-                                <input type="text" id="agentVUATagline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentVUATagline"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Impact Title</label>
-                                <input type="text" id="agentVUAImpactTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Key Features & Benefits">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Impact
+                                    Title</label>
+                                <input type="text" id="agentVUAImpactTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="e.g., Key Features & Benefits">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent VUA Features</label>
                                 <div id="agentVUAFeaturesContainer" class="tag-input"></div>
-                                <input type="text" id="agentVUAFeatureInput" placeholder="Type feature and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentVUAFeatureInput" placeholder="Type feature and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
 
                         <!-- Tech Solutions Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Tech Solutions Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Title</label>
-                                <input type="text" id="techSolutionsTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Tech Solutions">
+                                <input type="text" id="techSolutionsTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="e.g., Tech Solutions">
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Description</label>
-                                <textarea id="techSolutionsDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Describe your tech solutions offerings"></textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions
+                                    Description</label>
+                                <textarea id="techSolutionsDescription" rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Describe your tech solutions offerings"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions Tagline</label>
-                                <input type="text" id="techSolutionsTagline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Innovative technology solutions for modern businesses">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tech Solutions
+                                    Tagline</label>
+                                <input type="text" id="techSolutionsTagline"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="e.g., Innovative technology solutions for modern businesses">
                             </div>
                         </div>
 
                         <!-- Agent Vision Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent Vision Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision Title</label>
-                                <input type="text" id="agentVisionTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentVisionTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision Description</label>
-                                <textarea id="agentVisionDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Agent Vision
+                                    Description</label>
+                                <textarea id="agentVisionDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="section-divider"></div>
                             <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Labels</h4>
-                            
+
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Launch Videos Label</label>
-                                    <input type="text" id="agentVisionLaunchVideosLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Launch Videos
+                                        Label</label>
+                                    <input type="text" id="agentVisionLaunchVideosLabel"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
-                                
+
                                 <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Production & Films Label</label>
-                                    <input type="text" id="agentVisionProductionFilmsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Production & Films
+                                        Label</label>
+                                    <input type="text" id="agentVisionProductionFilmsLabel"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
-                                
+
                                 <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Reel/Content Label</label>
-                                    <input type="text" id="agentVisionReelContentLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Reel/Content
+                                        Label</label>
+                                    <input type="text" id="agentVisionReelContentLabel"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
-                                
+
                                 <div class="input-group">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Walkthroughs Label</label>
-                                    <input type="text" id="agentVisionProjectWalkthroughsLabel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Walkthroughs
+                                        Label</label>
+                                    <input type="text" id="agentVisionProjectWalkthroughsLabel"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>
-                            
+
                             <div class="section-divider"></div>
                             <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Statistics</h4>
-                            
+
                             <div id="agentVisionStatsContainer">
                                 <!-- Statistics will be dynamically added here -->
                             </div>
-                            
-                            <button type="button" id="addAgentVisionStatBtn" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
+
+                            <button type="button" id="addAgentVisionStatBtn"
+                                class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
                                 Add Agent Vision Statistic
                             </button>
                         </div>
@@ -331,31 +402,35 @@
                         <!-- Agent XR Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Agent XR Section</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Title</label>
-                                <input type="text" id="agentXRTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentXRTitle"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Description</label>
-                                <textarea id="agentXRDescription" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="agentXRDescription" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Agent XR Services</label>
                                 <div id="agentXRServicesContainer" class="tag-input"></div>
-                                <input type="text" id="agentXRServiceInput" placeholder="Type service and press Enter" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="agentXRServiceInput" placeholder="Type service and press Enter"
+                                    class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            
+
                             <div class="section-divider"></div>
                             <h4 class="text-md font-medium text-gray-800 mb-3">Agent XR Statistics</h4>
-                            
+
                             <div id="agentXRStatsContainer">
                                 <!-- Statistics will be dynamically added here -->
                             </div>
-                            
-                            <button type="button" id="addStatBtn" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
+
+                            <button type="button" id="addStatBtn"
+                                class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm">
                                 Add Statistic
                             </button>
                         </div>
@@ -363,51 +438,70 @@
                         <!-- Videos Management -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Videos Management</h3>
-                            
+
                             <div class="input-group">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">VR Section Video</label>
                                 <div class="flex items-center gap-2">
-                                    <input type="text" id="vrVideo" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/uploads/videos/vr.mp4">
-                                    <button type="button" onclick="openVideoSelector('vrVideo')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                    <input type="text" id="vrVideo"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="/uploads/videos/vr.mp4">
+                                    <button type="button" onclick="openVideoSelector('vrVideo')"
+                                        class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
                                         <i class="fas fa-video mr-1"></i>Select Video
                                     </button>
                                 </div>
                                 <div class="mt-2">
-                                    <video id="vrVideoPreview" src="" class="hidden w-32 h-20 object-cover rounded border" controls></video>
+                                    <video id="vrVideoPreview" src=""
+                                        class="hidden w-32 h-20 object-cover rounded border" controls></video>
                                 </div>
                             </div>
-                            
+
                             <div class="section-divider"></div>
                             <h4 class="text-md font-medium text-gray-800 mb-3">Agent Vision Video Collections</h4>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section One (Project walkthroughs/Reel content)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section One (Project
+                                    walkthroughs/Reel content)</label>
                                 <div id="agentVisionVideoOneContainer" class="tag-input"></div>
                                 <div class="flex gap-2 mt-2">
-                                    <input type="text" id="agentVisionVideoOneInput" placeholder="Type video URL and press Enter (e.g., /agentVision/1.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoOneInput', 'agentVisionVideoOneContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                    <input type="text" id="agentVisionVideoOneInput"
+                                        placeholder="Type video URL and press Enter (e.g., /agentVision/1.mp4)"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button"
+                                        onclick="openVideoSelectorForCollection('agentVisionVideoOneInput', 'agentVisionVideoOneContainer')"
+                                        class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
                                         <i class="fas fa-video mr-1"></i>Select
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Two (Production & films)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Two
+                                    (Production & films)</label>
                                 <div id="agentVisionVideoTwoContainer" class="tag-input"></div>
                                 <div class="flex gap-2 mt-2">
-                                    <input type="text" id="agentVisionVideoTwoInput" placeholder="Type video URL and press Enter (e.g., /agentVision/2.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoTwoInput', 'agentVisionVideoTwoContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                    <input type="text" id="agentVisionVideoTwoInput"
+                                        placeholder="Type video URL and press Enter (e.g., /agentVision/2.mp4)"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button"
+                                        onclick="openVideoSelectorForCollection('agentVisionVideoTwoInput', 'agentVisionVideoTwoContainer')"
+                                        class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
                                         <i class="fas fa-video mr-1"></i>Select
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="input-group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Three (Launch Videos)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Video Section Three (Launch
+                                    Videos)</label>
                                 <div id="agentVisionVideoThreeContainer" class="tag-input"></div>
                                 <div class="flex gap-2 mt-2">
-                                    <input type="text" id="agentVisionVideoThreeInput" placeholder="Type video URL and press Enter (e.g., /agentVision/4.mp4)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <button type="button" onclick="openVideoSelectorForCollection('agentVisionVideoThreeInput', 'agentVisionVideoThreeContainer')" class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
+                                    <input type="text" id="agentVisionVideoThreeInput"
+                                        placeholder="Type video URL and press Enter (e.g., /agentVision/4.mp4)"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="button"
+                                        onclick="openVideoSelectorForCollection('agentVisionVideoThreeInput', 'agentVisionVideoThreeContainer')"
+                                        class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm">
                                         <i class="fas fa-video mr-1"></i>Select
                                     </button>
                                 </div>
@@ -429,12 +523,12 @@
                 const sessionResponse = await fetch('/api/auth/verify', {
                     credentials: 'include'
                 });
-                
+
                 if (sessionResponse.status === 401) {
                     window.location.href = '/login.html';
                     return;
                 }
-                
+
                 await loadCurrentContent();
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 const mainContent = document.getElementById('mainContent');
@@ -454,7 +548,7 @@
             try {
                 const response = await fetch('/api/services-content/active');
                 const result = await response.json();
-                
+
                 if (result.success) {
                     currentContent = result.data;
                     populateForm(currentContent);
@@ -523,59 +617,59 @@
             // Header
             document.getElementById('headerTitle').value = content.headerTitle || defaults.headerTitle;
             document.getElementById('headerDescription').value = content.headerDescription || defaults.headerDescription;
-            
+
             // Strategy
             document.getElementById('strategyTitle').value = content.strategyTitle || defaults.strategyTitle;
             document.getElementById('strategyDescription').value = content.strategyDescription || defaults.strategyDescription;
             populateTagContainer('strategyServicesContainer', content.strategyServices || defaults.strategyServices);
-            
+
             // Branding
             document.getElementById('brandingTitle').value = content.brandingTitle || defaults.brandingTitle;
             document.getElementById('brandingDescription').value = content.brandingDescription || defaults.brandingDescription;
             populateTagContainer('brandingServicesContainer', content.brandingServices || defaults.brandingServices);
-            
+
             // Content
             document.getElementById('contentTitle').value = content.contentTitle || defaults.contentTitle;
             document.getElementById('contentDescription').value = content.contentDescription || defaults.contentDescription;
             populateTagContainer('contentServicesContainer', content.contentServices || defaults.contentServices);
-            
+
             // Digital
             document.getElementById('digitalTitle').value = content.digitalTitle || defaults.digitalTitle;
             document.getElementById('digitalDescription').value = content.digitalDescription || defaults.digitalDescription;
             populateTagContainer('digitalServicesContainer', content.digitalServices || defaults.digitalServices);
-            
+
             // Agent VUA
             document.getElementById('agentVUATitle').value = content.agentVUATitle || defaults.agentVUATitle;
             document.getElementById('agentVUADescription').value = content.agentVUADescription || defaults.agentVUADescription;
             document.getElementById('agentVUATagline').value = content.agentVUATagline || defaults.agentVUATagline;
             document.getElementById('agentVUAImpactTitle').value = content.agentVUAImpactTitle || defaults.agentVUAImpactTitle;
             populateTagContainer('agentVUAFeaturesContainer', content.agentVUAFeatures || defaults.agentVUAFeatures);
-            
+
             // Tech Solutions
             document.getElementById('techSolutionsTitle').value = content.techSolutionsTitle || defaults.techSolutionsTitle;
             document.getElementById('techSolutionsDescription').value = content.techSolutionsDescription || defaults.techSolutionsDescription;
             document.getElementById('techSolutionsTagline').value = content.techSolutionsTagline || defaults.techSolutionsTagline;
-            
+
             // Agent Vision
             document.getElementById('agentVisionTitle').value = content.agentVisionTitle || defaults.agentVisionTitle;
             document.getElementById('agentVisionDescription').value = content.agentVisionDescription || defaults.agentVisionDescription;
-            
+
             // Agent Vision Video Labels
             const videoLabels = content.agentVisionVideoLabels || defaults.agentVisionVideoLabels;
             document.getElementById('agentVisionLaunchVideosLabel').value = videoLabels.launchVideos || defaults.agentVisionVideoLabels.launchVideos;
             document.getElementById('agentVisionProductionFilmsLabel').value = videoLabels.productionFilms || defaults.agentVisionVideoLabels.productionFilms;
             document.getElementById('agentVisionReelContentLabel').value = videoLabels.reelContent || defaults.agentVisionVideoLabels.reelContent;
             document.getElementById('agentVisionProjectWalkthroughsLabel').value = videoLabels.projectWalkthroughs || defaults.agentVisionVideoLabels.projectWalkthroughs;
-            
+
             // Agent Vision Statistics
             populateAgentVisionStats(content.agentVisionStats || defaults.agentVisionStats);
-            
+
             // Agent XR
             document.getElementById('agentXRTitle').value = content.agentXRTitle || defaults.agentXRTitle;
             document.getElementById('agentXRDescription').value = content.agentXRDescription || defaults.agentXRDescription;
             populateTagContainer('agentXRServicesContainer', content.agentXRServices || defaults.agentXRServices);
             populateStats(content.agentXRStats || defaults.agentXRStats);
-            
+
             // Videos
             populateTagContainer('agentVisionVideoOneContainer', content.videos?.agentVisionVideoOne || defaults.videos.agentVisionVideoOne);
             populateTagContainer('agentVisionVideoTwoContainer', content.videos?.agentVisionVideoTwo || defaults.videos.agentVisionVideoTwo);
@@ -647,7 +741,7 @@
         function populateAgentVisionStats(stats) {
             const container = document.getElementById('agentVisionStatsContainer');
             container.innerHTML = '';
-            
+
             if (!Array.isArray(stats)) {
                 stats = [
                     { value: '10%', description: 'Production\nBudget' },
@@ -655,14 +749,14 @@
                     { value: '100%', description: 'Realistic\nfootage' }
                 ];
             }
-            
+
             stats.forEach((stat, index) => addAgentVisionStatField(stat.value, stat.description, index));
         }
 
         function addAgentVisionStatField(value = '', description = '', index = null) {
             const container = document.getElementById('agentVisionStatsContainer');
             const statIndex = index !== null ? index : container.children.length;
-            
+
             const statDiv = document.createElement('div');
             statDiv.className = 'flex gap-2 mb-2 agent-vision-stat-field';
             statDiv.innerHTML = `
@@ -690,7 +784,7 @@
         function populateStats(stats) {
             const container = document.getElementById('agentXRStatsContainer');
             container.innerHTML = '';
-            
+
             // Handle case where stats might not be an array (old data structure)
             if (!Array.isArray(stats)) {
                 // If stats is an object with old structure, convert it
@@ -715,14 +809,14 @@
                     ];
                 }
             }
-            
+
             stats.forEach((stat, index) => addStatField(stat.value, stat.label, index));
         }
 
         function addStatField(value = '', label = '', index = null) {
             const container = document.getElementById('agentXRStatsContainer');
             const statIndex = index !== null ? index : container.children.length;
-            
+
             const statDiv = document.createElement('div');
             statDiv.className = 'flex gap-2 mb-2 stat-field';
             statDiv.innerHTML = `
@@ -760,7 +854,7 @@
             const originalText = saveBtn.innerHTML;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
             saveBtn.disabled = true;
-            
+
             try {
                 const formData = {
                     headerTitle: document.getElementById('headerTitle').value,
@@ -818,7 +912,7 @@
                 });
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert('Services content saved successfully!');
                     currentContent = result.data;
@@ -838,7 +932,7 @@
         function setupMobileMenu() {
             const mobileMenuButton = document.getElementById('mobileMenuButton');
             const sidebar = document.getElementById('sidebar');
-            
+
             mobileMenuButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 sidebar.classList.toggle('open');
@@ -852,7 +946,7 @@
                     method: 'POST',
                     credentials: 'include'
                 });
-                
+
                 if (response.ok) {
                     window.location.href = '/login.html';
                 }
@@ -891,7 +985,7 @@
             try {
                 const response = await fetch('/api/videos/list');
                 const result = await response.json();
-                
+
                 if (result.success) {
                     displayVideos(result.data);
                 }
@@ -904,13 +998,13 @@
         function displayVideos(videos) {
             const videoGrid = document.getElementById('videoGrid');
             videoGrid.innerHTML = '';
-            
+
             videos.forEach(video => {
                 const videoItem = document.createElement('div');
                 videoItem.className = 'relative group border-2 border-gray-200 hover:border-green-500 rounded-lg overflow-hidden transition-colors';
-                
+
                 const fileSizeMB = (video.size / (1024 * 1024)).toFixed(1);
-                
+
                 videoItem.innerHTML = `
                     <div class="cursor-pointer" onclick="selectVideo('${video.url}')">
                         <video class="w-full h-24 object-cover bg-gray-200" preload="metadata" muted onloadedmetadata="this.currentTime = 0.1">
@@ -932,13 +1026,13 @@
                         <i class="fas fa-trash text-xs"></i>
                     </button>
                 `;
-                
+
                 // After adding to DOM, try to load the video thumbnail
                 videoGrid.appendChild(videoItem);
-                
+
                 // Force thumbnail generation by seeking to a specific time
                 const videoElement = videoItem.querySelector('video');
-                videoElement.addEventListener('loadedmetadata', function() {
+                videoElement.addEventListener('loadedmetadata', function () {
                     this.currentTime = Math.min(0.5, this.duration * 0.1); // Seek to 10% or 0.5s, whichever is smaller
                 });
             });
@@ -946,18 +1040,18 @@
 
         async function deleteVideo(filename, event) {
             event.stopPropagation();
-            
+
             if (!confirm(`Are you sure you want to delete "${filename}"? This action cannot be undone.`)) {
                 return;
             }
-            
+
             try {
                 const response = await fetch(`/api/videos/delete/${filename}`, {
                     method: 'DELETE'
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert('Video deleted successfully!');
                     loadVideos(); // Reload the video list
@@ -986,7 +1080,7 @@
         async function uploadVideo() {
             const fileInput = document.getElementById('videoFileInput');
             const file = fileInput.files[0];
-            
+
             if (!file) {
                 alert('Please select a video file');
                 return;
@@ -1003,7 +1097,7 @@
                 });
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert('Video uploaded successfully!');
                     fileInput.value = '';
@@ -1053,15 +1147,18 @@
             <div class="p-4">
                 <div class="mb-4">
                     <div class="flex gap-2 mb-4">
-                        <input type="file" id="videoFileInput" accept="video/*" class="flex-1 px-3 py-2 border border-gray-300 rounded-md">
-                        <button onclick="uploadVideo()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        <input type="file" id="videoFileInput" accept="video/*"
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md">
+                        <button onclick="uploadVideo()"
+                            class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
                             <i class="fas fa-upload mr-2"></i>Upload
                         </button>
                     </div>
                 </div>
                 <div class="border-t pt-4">
                     <h4 class="text-md font-semibold mb-3">Existing Videos</h4>
-                    <div id="videoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                    <div id="videoGrid"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
                         <!-- Videos will be loaded here -->
                     </div>
                 </div>
@@ -1069,4 +1166,5 @@
         </div>
     </div>
 </body>
+
 </html>

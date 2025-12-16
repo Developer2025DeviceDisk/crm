@@ -59,6 +59,30 @@ const ourWorkContentSchema = new mongoose.Schema({
         }
     },
 
+    // Work Page Details (New Section)
+    workPageSection: {
+        bannerImage: {
+            type: String,
+            default: '/serviceVector.png'
+        },
+        mainTitle: {
+            type: String,
+            default: 'From Brief \n To Brilliance'
+        },
+        description: {
+            type: String,
+            default: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit...'
+        },
+        filters: {
+            type: [String],
+            default: ["All", "Branding & Design", "Strategy", "Content & Production", "AI Videos", "UI Design"]
+        },
+        galleryImages: {
+            type: [String],
+            default: []
+        }
+    },
+
     // Metadata
     isActive: {
         type: Boolean,
@@ -108,11 +132,12 @@ ourWorkContentSchema.methods.getSortedPortfolioItems = function () {
 
 // Static method to get active content
 ourWorkContentSchema.statics.getActiveContent = async function () {
-    const activeContent = await this.findOne({ isActive: true });
+    let activeContent = await this.findOne({ isActive: true });
 
     if (!activeContent) {
-        // Return default content if none exists
-        return new this();
+        // Create and save default content if none exists
+        activeContent = new this();
+        await activeContent.save();
     }
 
     return activeContent;

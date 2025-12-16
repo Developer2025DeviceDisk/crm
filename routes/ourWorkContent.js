@@ -110,6 +110,7 @@ router.post('/', async (req, res) => {
             headerSection,
             portfolioItems,
             footerSection,
+            workPageSection,
             lastUpdatedBy
         } = req.body;
 
@@ -118,6 +119,7 @@ router.post('/', async (req, res) => {
             headerSection,
             portfolioItems,
             footerSection,
+            workPageSection,
             lastUpdatedBy,
             isActive: true // New content becomes active by default
         });

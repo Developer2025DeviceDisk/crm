@@ -52,6 +52,7 @@ const contactContentRoutes = require('./routes/contactContent');
 const imageUploadRoutes = require('./routes/imageUpload');
 const videoUploadRoutes = require('./routes/videoUpload');
 const ourWorkContentRoutes = require('./routes/ourWorkContent');
+const clientContentRoutes = require('./routes/clientContent');
 
 app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
@@ -65,6 +66,7 @@ app.use('/api/contact-content', contactContentRoutes);
 app.use('/api/images', imageUploadRoutes);
 app.use('/api/videos', videoUploadRoutes);
 app.use('/api/our-work-content', ourWorkContentRoutes);
+app.use('/api/client-content', clientContentRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

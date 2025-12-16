@@ -18,17 +18,19 @@ async function createAdmin() {
     });
 
     const existingAdmin = await User.findOne({ username: 'admin' });
-    
+
     if (!existingAdmin) {
       const admin = new User({
         username: 'admin',
-        password: 'admin123' // Change this in production!
+        password: 'admin123'
       });
-      
+
       await admin.save();
       console.log('✅ Admin user created successfully');
     } else {
-      console.log('ℹ️ Admin user already exists');
+      existingAdmin.password = 'admin123';
+      await existingAdmin.save();
+      console.log('ℹ️ Admin user exists. Password reset to admin123');
     }
   } catch (error) {
     console.error('❌ Error creating admin user:', error);

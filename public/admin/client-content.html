@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Our Work Content Manager - Admin</title>
+    <title>Client Content Manager - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
@@ -43,7 +43,7 @@
             margin-right: 0.5rem;
         }
 
-        .portfolio-item {
+        .client-item {
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
             padding: 1rem;
@@ -57,7 +57,7 @@
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-        <p class="text-gray-600">Loading our work content...</p>
+        <p class="text-gray-600">Loading client content...</p>
     </div>
 
     <!-- Main Content -->
@@ -91,11 +91,14 @@
                     <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-cog"></i> Services Content
                     </a>
-                    <a href="#" class="btn-action bg-gray-600">
+                    <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-briefcase"></i> Our Work (Home)
                     </a>
                     <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-file-alt"></i> Our Work Detail
+                    </a>
+                    <a href="#" class="btn-action bg-gray-600">
+                        <i class="fas fa-users"></i> Clients
                     </a>
                     <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-shield-alt"></i> Privacy Policy
@@ -113,7 +116,7 @@
             <div class="flex-1 overflow-auto md:ml-0">
                 <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-semibold text-gray-800">Our Work Content Management</h2>
+                        <h2 class="text-xl font-semibold text-gray-800">Client Content Management</h2>
                         <button id="saveBtn"
                             class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
                             <i class="fas fa-save mr-2"></i>Save Changes
@@ -122,7 +125,7 @@
                 </header>
 
                 <main class="p-4">
-                    <form id="ourWorkForm" class="space-y-6">
+                    <form id="clientForm" class="space-y-6">
                         <!-- Header Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
@@ -133,7 +136,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
                                 <input type="text" id="headerTitle"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Our Work" />
+                                    placeholder="Our Client" />
                             </div>
 
                             <div class="mb-4">
@@ -142,43 +145,22 @@
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Enter description..."></textarea>
                             </div>
-
-                            <div class="mb-4 hidden">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Underline Color</label>
-                                <input type="color" id="underlineColor"
-                                    class="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    value="#007BFF" />
-                            </div>
                         </div>
 
-                        <!-- Portfolio Items Section -->
+                        <!-- Client Items Section -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-semibold text-gray-800">
-                                    <i class="fas fa-images mr-2 text-blue-600"></i>Portfolio Items
+                                    <i class="fas fa-users mr-2 text-blue-600"></i>Clients
                                 </h3>
-                                <button type="button" onclick="addPortfolioItem()"
+                                <button type="button" onclick="addClientItem()"
                                     class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm">
-                                    <i class="fas fa-plus mr-2"></i>Add Item
+                                    <i class="fas fa-plus mr-2"></i>Add Client
                                 </button>
                             </div>
 
-                            <div id="portfolioItemsContainer" class="space-y-4">
-                                <!-- Dynamic portfolio items will be added here -->
-                            </div>
-                        </div>
-
-                        <!-- Footer Section -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                <i class="fas fa-mouse-pointer mr-2 text-blue-600"></i>Footer Section
-                            </h3>
-
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Button Text</label>
-                                <input type="text" id="footerButtonText"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="See All Work" />
+                            <div id="clientItemsContainer" class="space-y-4">
+                                <!-- Dynamic client items will be added here -->
                             </div>
                         </div>
                     </form>
@@ -207,7 +189,7 @@
         let currentImageInputId = null;
 
         // Initialize
-        async function initializeOurWorkContent() {
+        async function initializeClientContent() {
             try {
                 const sessionResponse = await fetch("/api/auth/verify", {
                     credentials: "include",
@@ -234,14 +216,13 @@
         // Load current content from API
         async function loadCurrentContent() {
             try {
-                const response = await fetch("/api/our-work-content/active");
+                const response = await fetch("/api/client-content/active");
                 const result = await response.json();
 
                 if (result.success && result.data) {
                     currentContent = result.data;
                     populateForm(currentContent);
                 } else {
-                    // No active content exists, set to null so POST will be used
                     currentContent = null;
                     populateForm({});
                 }
@@ -255,175 +236,99 @@
         // Populate form with content data
         function populateForm(content = {}) {
             // Header Section
-            document.getElementById("headerTitle").value = content.headerSection?.title || "Our Work";
-            document.getElementById("headerDescription").value = content.headerSection?.description || "Lorem Ipsum Dolor Sit Amet, Consectetuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Magna Aliquam Erat Volutpat.";
-            document.getElementById("underlineColor").value = content.headerSection?.underlineColor || "#007BFF";
+            document.getElementById("headerTitle").value = content.title || "Our Client";
+            document.getElementById("headerDescription").value = content.description || "At VVWorx, we've had the opportunity to collaborate with brands across real estate, technology, and consumer verticals. Here are some of the amazing clients who trust our work.";
 
-            // Portfolio Items
-            populatePortfolioItems(content.portfolioItems || []);
-
-            // Footer Section
-            document.getElementById("footerButtonText").value = content.footerSection?.buttonText || "See All Work";
+            // Client Items
+            populateClientItems(content.clients || []);
         }
 
-        // Portfolio Items Management
-        function populatePortfolioItems(items) {
-            const container = document.getElementById("portfolioItemsContainer");
+        // Client Items Management
+        function populateClientItems(items) {
+            const container = document.getElementById("clientItemsContainer");
             container.innerHTML = "";
-
-            const itemsToUse = items && items.length > 0 ? items : [
-                { name: "Nutrafab", category: "Product Design", year: "2024", image: "/portfolio-1.jpg", order: 1 },
-                { name: "Shri Namahh", category: "Branding", year: "2024", image: "/portfolio-2.jpg", order: 2 },
-                { name: "Visionstone", category: "Brand Identity", year: "2024", image: "/portfolio-3.jpg", order: 3 }
-            ];
-
-            itemsToUse.forEach((item, index) => {
-                addPortfolioItemElement(item, index);
+            items.forEach((item, index) => {
+                addClientItemElement(item, index);
             });
         }
 
-        function addPortfolioItem() {
-            const container = document.getElementById("portfolioItemsContainer");
-            const existingItems = container.querySelectorAll(".portfolio-item").length;
+        function addClientItem() {
+            const container = document.getElementById("clientItemsContainer");
+            const existingItems = container.querySelectorAll(".client-item").length;
 
             const newItem = {
                 name: "",
-                category: "",
-                year: new Date().getFullYear().toString(),
-                image: "",
+                logo: "",
                 order: existingItems + 1
             };
 
-            addPortfolioItemElement(newItem, existingItems);
-            showToast("Portfolio item added successfully", "success");
+            addClientItemElement(newItem, existingItems);
+            showToast("Client added successfully", "success");
         }
 
-        function addPortfolioItemElement(item, index) {
-            const container = document.getElementById("portfolioItemsContainer");
+        function addClientItemElement(item, index) {
+            const container = document.getElementById("clientItemsContainer");
             const itemDiv = document.createElement("div");
-            itemDiv.className = "portfolio-item";
+            itemDiv.className = "client-item";
             itemDiv.innerHTML = `
         <div class="flex justify-between items-center mb-3">
-          <h4 class="text-md font-medium text-gray-800">Item ${index + 1}</h4>
-          <button type="button" onclick="removePortfolioItem(this)" class="text-red-500 hover:text-red-700">
+          <h4 class="text-md font-medium text-gray-800">Client ${index + 1}</h4>
+          <button type="button" onclick="removeClientItem(this)" class="text-red-500 hover:text-red-700">
             <i class="fas fa-trash"></i>
           </button>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
-            <input type="text" value="${item.name}" class="portfolio-name w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Project Name" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-            <input type="text" value="${item.category}" class="portfolio-category w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Category" />
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
-            <input type="text" value="${item.year}" class="portfolio-year w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="2024" />
+            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+            <input type="text" value="${item.name}" class="client-name w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Client Name" />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Order</label>
-            <input type="number" value="${item.order}" class="portfolio-order w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" />
+            <input type="number" value="${item.order}" class="client-order w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" />
           </div>
         </div>
         <div class="mb-3">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Logo</label>
           <div class="flex gap-2">
-            <input type="text" value="${item.image}" class="portfolio-image flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/portfolio-1.jpg" readonly />
-            <input type="file" accept="image/*" class="hidden portfolio-image-file" onchange="uploadPortfolioImage(this)" />
+            <input type="text" value="${item.logo}" class="client-logo flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="/logo.png" readonly />
+            <input type="file" accept="image/*" class="hidden client-logo-file" onchange="uploadClientLogo(this)" />
             <button type="button" onclick="this.previousElementSibling.click()" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                <i class="fas fa-upload mr-1"></i>Upload
+              <i class="fas fa-upload mr-1"></i>Upload
             </button>
           </div>
-          ${item.image ? `<img src="${item.image}" class="mt-2 w-32 h-20 object-cover rounded border" />` : ''}
+          ${item.logo ? `<img src="${item.logo}" class="mt-2 w-32 h-20 object-contain rounded border bg-gray-50" />` : ''}
         </div>
       `;
             container.appendChild(itemDiv);
         }
 
-        function removePortfolioItem(button) {
-            if (confirm("Are you sure you want to remove this portfolio item?")) {
-                button.closest(".portfolio-item").remove();
-                updatePortfolioItemLabels();
-                showToast("Portfolio item removed successfully", "success");
+        function removeClientItem(button) {
+            if (confirm("Are you sure you want to remove this client?")) {
+                button.closest(".client-item").remove();
+                updateClientItemLabels();
+                showToast("Client removed successfully", "success");
             }
         }
 
-        function updatePortfolioItemLabels() {
-            const items = document.querySelectorAll("#portfolioItemsContainer .portfolio-item");
+        function updateClientItemLabels() {
+            const items = document.querySelectorAll("#clientItemsContainer .client-item");
             items.forEach((item, index) => {
                 const label = item.querySelector("h4");
-                label.textContent = `Item ${index + 1}`;
+                label.textContent = `Client ${index + 1}`;
             });
         }
 
-        function getPortfolioItems() {
-            const items = document.querySelectorAll("#portfolioItemsContainer .portfolio-item");
+        function getClientItems() {
+            const items = document.querySelectorAll("#clientItemsContainer .client-item");
             return Array.from(items).map((item, index) => ({
-                name: item.querySelector(".portfolio-name").value,
-                category: item.querySelector(".portfolio-category").value,
-                year: item.querySelector(".portfolio-year").value,
-                image: item.querySelector(".portfolio-image").value,
-                order: parseInt(item.querySelector(".portfolio-order").value) || (index + 1)
-            })).filter(item => item.name && item.image);
-        }
-
-        // Image Selector
-        function openImageSelectorForPortfolio(button) {
-            currentImageInputId = button.previousElementSibling;
-            openImageSelector();
-        }
-
-        async function openImageSelector() {
-            try {
-                const response = await fetch("/api/images/list");
-                const result = await response.json();
-
-                if (result.success) {
-                    const imageGrid = document.getElementById("imageGrid");
-                    imageGrid.innerHTML = result.images.map(img => `
-            <div class="cursor-pointer hover:opacity-75 transition-opacity" onclick="selectImage('${img.url}')">
-              <img src="${img.url}" class="w-full h-32 object-cover rounded border" />
-              <p class="text-xs text-gray-600 mt-1 truncate">${img.filename}</p>
-            </div>
-          `).join("");
-
-                    document.getElementById("imageSelectorModal").classList.remove("hidden");
-                    document.getElementById("imageSelectorModal").classList.add("flex");
-                }
-            } catch (error) {
-                console.error("Error loading images:", error);
-                showToast("Error loading images", "error");
-            }
-        }
-
-        function selectImage(url) {
-            if (currentImageInputId) {
-                currentImageInputId.value = url;
-                const preview = currentImageInputId.parentElement.nextElementSibling;
-                if (preview && preview.tagName === 'IMG') {
-                    preview.src = url;
-                } else {
-                    const newPreview = document.createElement('img');
-                    newPreview.src = url;
-                    newPreview.className = 'mt-2 w-32 h-20 object-cover rounded border';
-                    currentImageInputId.parentElement.insertAdjacentElement('afterend', newPreview);
-                }
-            }
-            closeImageSelector();
-        }
-
-        function closeImageSelector() {
-            document.getElementById("imageSelectorModal").classList.add("hidden");
-            document.getElementById("imageSelectorModal").classList.remove("flex");
-            currentImageInputId = null;
+                name: item.querySelector(".client-name").value,
+                logo: item.querySelector(".client-logo").value,
+                order: parseInt(item.querySelector(".client-order").value) || (index + 1)
+            })).filter(item => item.name && item.logo);
         }
 
         // Image Upload from Local Computer
-        async function uploadPortfolioImage(input) {
+        async function uploadClientLogo(input) {
             const file = input.files[0];
             if (!file) return;
 
@@ -447,29 +352,27 @@
 
                 if (result.success) {
                     // Get the text input field (sibling of file input)
-                    const imageInput = input.parentElement.querySelector('.portfolio-image');
-                    imageInput.value = result.data.url;
+                    const logoInput = input.parentElement.querySelector('.client-logo');
+                    logoInput.value = result.data.url;
 
                     // Update or create preview image
-                    const container = input.closest('.mb-3');
-                    let preview = container.querySelector('img');
-                    
-                    if (preview) {
-                        preview.src = result.data.url;
+                    const existingPreview = input.parentElement.nextElementSibling;
+                    if (existingPreview && existingPreview.tagName === 'IMG') {
+                        existingPreview.src = result.data.url;
                     } else {
                         const newPreview = document.createElement('img');
                         newPreview.src = result.data.url;
-                        newPreview.className = 'mt-2 w-32 h-20 object-cover rounded border';
-                        container.appendChild(newPreview);
+                        newPreview.className = 'mt-2 w-32 h-20 object-contain rounded border bg-gray-50';
+                        input.parentElement.insertAdjacentElement('afterend', newPreview);
                     }
 
-                    showToast('Image uploaded successfully!', 'success');
+                    showToast('Logo uploaded successfully!', 'success');
                 } else {
-                    showToast('Error uploading image: ' + result.message, 'error');
+                    showToast('Error uploading logo: ' + result.message, 'error');
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                showToast('Error uploading image', 'error');
+                showToast('Error uploading logo', 'error');
             } finally {
                 // Restore button state
                 uploadButton.innerHTML = originalText;
@@ -483,21 +386,15 @@
         async function saveContent() {
             try {
                 const contentData = {
-                    headerSection: {
-                        title: document.getElementById("headerTitle").value,
-                        description: document.getElementById("headerDescription").value,
-                        underlineColor: document.getElementById("underlineColor").value
-                    },
-                    portfolioItems: getPortfolioItems(),
-                    footerSection: {
-                        buttonText: document.getElementById("footerButtonText").value
-                    },
-                    lastUpdatedBy: "Admin"
+                    title: document.getElementById("headerTitle").value,
+                    description: document.getElementById("headerDescription").value,
+                    clients: getClientItems(),
+                    lastUpdated: Date.now()
                 };
 
                 const url = currentContent && currentContent._id
-                    ? `/api/our-work-content/${currentContent._id}`
-                    : "/api/our-work-content";
+                    ? `/api/client-content/${currentContent._id}`
+                    : "/api/client-content";
 
                 const method = currentContent && currentContent._id ? "PUT" : "POST";
 
@@ -585,7 +482,7 @@
         }
 
         // Initialize on page load
-        document.addEventListener("DOMContentLoaded", initializeOurWorkContent);
+        document.addEventListener("DOMContentLoaded", initializeClientContent);
     </script>
 </body>
 
