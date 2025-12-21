@@ -24,7 +24,13 @@ const ourWorkContentSchema = new mongoose.Schema({
             category: { type: String, required: true },
             year: { type: String, required: true },
             image: { type: String, required: true },
-            order: { type: Number, required: true }
+            order: { type: Number, required: true },
+            // Detail Page Fields
+            detailTitle: { type: String },
+            detailDescription: { type: String },
+            tags: [String],
+            galleryImages: [String],
+            clientLogo: { type: String }
         }],
         default: [
             {

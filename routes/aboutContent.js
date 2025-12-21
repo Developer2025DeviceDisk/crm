@@ -6,7 +6,7 @@ const AboutContent = require('../models/AboutContent');
 router.get('/active', async (req, res) => {
   try {
     const activeContent = await AboutContent.getActiveContent();
-    
+
     if (!activeContent) {
       return res.status(404).json({
         success: false,
@@ -35,9 +35,9 @@ router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const sortBy = req.query.sortBy || 'updatedAt';
     const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
-    
+
     const skip = (page - 1) * limit;
-    
+
     const [content, total] = await Promise.all([
       AboutContent.find()
         .sort({ [sortBy]: sortOrder })
@@ -71,9 +71,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const content = await AboutContent.findById(id);
-    
+
     if (!content) {
       return res.status(404).json({
         success: false,
@@ -87,14 +87,14 @@ router.get('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching about content by ID:', error);
-    
+
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid content ID format'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -112,6 +112,8 @@ router.post('/', async (req, res) => {
       servicesSection,
       foundationSection,
       videoSection,
+      aboutTitle,
+      aboutTextLines,
       lastUpdatedBy
     } = req.body;
 
@@ -122,6 +124,8 @@ router.post('/', async (req, res) => {
       servicesSection,
       foundationSection,
       videoSection,
+      aboutTitle,
+      aboutTextLines,
       lastUpdatedBy,
       isActive: true // New content becomes active by default
     });
@@ -136,20 +140,20 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating about content:', error);
-    
+
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => ({
         field: err.path,
         message: err.message
       }));
-      
+
       return res.status(400).json({
         success: false,
         message: 'Validation error',
         errors
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -163,16 +167,16 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
-    
+
     // Always update the timestamp
     updateData.updatedAt = new Date();
 
     const updatedContent = await AboutContent.findByIdAndUpdate(
       id,
       updateData,
-      { 
-        new: true, 
-        runValidators: true 
+      {
+        new: true,
+        runValidators: true
       }
     );
 
@@ -190,27 +194,27 @@ router.put('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Error updating about content:', error);
-    
+
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid content ID format'
       });
     }
-    
+
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => ({
         field: err.path,
         message: err.message
       }));
-      
+
       return res.status(400).json({
         success: false,
         message: 'Validation error',
         errors
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -223,21 +227,21 @@ router.put('/:id', async (req, res) => {
 router.post('/:id/activate', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // First, deactivate all content
     await AboutContent.updateMany(
       {},
       { $set: { isActive: false } }
     );
-    
+
     // Then activate the specified content
     const activatedContent = await AboutContent.findByIdAndUpdate(
       id,
-      { 
-        $set: { 
+      {
+        $set: {
           isActive: true,
           updatedAt: new Date()
-        } 
+        }
       },
       { new: true }
     );
@@ -256,14 +260,14 @@ router.post('/:id/activate', async (req, res) => {
     });
   } catch (error) {
     console.error('Error activating about content:', error);
-    
+
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid content ID format'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -276,16 +280,16 @@ router.post('/:id/activate', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const content = await AboutContent.findById(id);
-    
+
     if (!content) {
       return res.status(404).json({
         success: false,
         message: 'About content not found'
       });
     }
-    
+
     // Prevent deletion of active content
     if (content.isActive) {
       return res.status(400).json({
@@ -293,7 +297,7 @@ router.delete('/:id', async (req, res) => {
         message: 'Cannot delete active content. Please activate another version first.'
       });
     }
-    
+
     await AboutContent.findByIdAndDelete(id);
 
     res.json({
@@ -302,14 +306,14 @@ router.delete('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Error deleting about content:', error);
-    
+
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid content ID format'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -323,37 +327,37 @@ router.post('/:id/cards', async (req, res) => {
   try {
     const { id } = req.params;
     const { card } = req.body;
-    
+
     if (!card) {
       return res.status(400).json({
         success: false,
         message: 'Card data is required'
       });
     }
-    
+
     const content = await AboutContent.findById(id);
-    
+
     if (!content) {
       return res.status(404).json({
         success: false,
         message: 'About content not found'
       });
     }
-    
+
     // Generate a unique ID for the card
     card.id = card.id || `card-${Date.now()}`;
-    
+
     // Set order if not provided
     if (!card.order) {
       const maxOrder = Math.max(...content.servicesSection.cards.map(c => c.order), 0);
       card.order = maxOrder + 1;
     }
-    
+
     content.servicesSection.cards.push(card);
     content.updatedAt = new Date();
-    
+
     await content.save();
-    
+
     res.json({
       success: true,
       message: 'Service card added successfully',
@@ -374,31 +378,31 @@ router.put('/:id/cards/:cardId', async (req, res) => {
   try {
     const { id, cardId } = req.params;
     const cardUpdates = req.body;
-    
+
     const content = await AboutContent.findById(id);
-    
+
     if (!content) {
       return res.status(404).json({
         success: false,
         message: 'About content not found'
       });
     }
-    
+
     const cardIndex = content.servicesSection.cards.findIndex(card => card.id === cardId);
-    
+
     if (cardIndex === -1) {
       return res.status(404).json({
         success: false,
         message: 'Service card not found'
       });
     }
-    
+
     // Update card
     Object.assign(content.servicesSection.cards[cardIndex], cardUpdates);
     content.updatedAt = new Date();
-    
+
     await content.save();
-    
+
     res.json({
       success: true,
       message: 'Service card updated successfully',
@@ -418,30 +422,30 @@ router.put('/:id/cards/:cardId', async (req, res) => {
 router.delete('/:id/cards/:cardId', async (req, res) => {
   try {
     const { id, cardId } = req.params;
-    
+
     const content = await AboutContent.findById(id);
-    
+
     if (!content) {
       return res.status(404).json({
         success: false,
         message: 'About content not found'
       });
     }
-    
+
     const cardIndex = content.servicesSection.cards.findIndex(card => card.id === cardId);
-    
+
     if (cardIndex === -1) {
       return res.status(404).json({
         success: false,
         message: 'Service card not found'
       });
     }
-    
+
     content.servicesSection.cards.splice(cardIndex, 1);
     content.updatedAt = new Date();
-    
+
     await content.save();
-    
+
     res.json({
       success: true,
       message: 'Service card removed successfully',

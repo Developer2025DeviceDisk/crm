@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Work Detail Manager - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .sidebar-mobile {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+
+        .btn-action i {
+            margin-right: 0.5rem;
+        }
+
+        .tag-pill {
+            background: #E0DAFF;
+            color: #6210FF;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-pill button {
+            color: #6210FF;
+        }
+
+        .tag-pill button:hover {
+            color: red;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+        <p class="text-gray-600">Loading projects...</p>
+    </div>
+
+    <div id="mainContent" class="hidden">
+        <div class="flex h-screen">
+            <button id="mobileMenuButton"
+                class="md:hidden fixed top-4 left-4 z-30 bg-gray-800 text-white py-1 px-2 rounded-md shadow-lg">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <!-- Sidebar -->
+            <div id="sidebar"
+                class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
+                <div class="p-4 border-b border-gray-700">
+                    <h1 class="text-sm md:text-xl font-bold pl-16 md:pl-0">
+                        VVWorx Admin Panel
+                    </h1>
+                </div>
+                <nav class="mt-4">
+                    <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-envelope"></i> Enquiry
+                    </a>
+                    <a href="/admin/about-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Home Content
+                    </a>
+                    <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-phone"></i> Contact Page Content
+                    </a>
+                    <a href="/admin/about-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-user-circle"></i> About Page Content
+                    </a>
+                    <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-cog"></i> Services Content
+                    </a>
+                    <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-briefcase"></i> Our Work (Home)
+                    </a>
+                    <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-file-alt"></i> Our Work Detail
+                    </a>
+                    <a href="/admin/work-detail-content.html" class="btn-action bg-gray-700">
+                        <i class="fas fa-file-invoice"></i> Work Page Detail Items
+                    </a>
+                    <a href="/admin/client-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-users"></i> Clients
+                    </a>
+                    <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-shield-alt"></i> Privacy Policy
+                    </a>
+                    <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-grip-horizontal"></i> Footer Content
+                    </a>
+                    <button id="logoutBtn" class="btn-action hover:bg-gray-600">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+            </div>
+
+            <div class="flex-1 overflow-auto md:ml-0">
+                <header class="bg-white shadow-sm p-4 md:ml-0 pl-16 md:pl-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Manage Work Details</h2>
+                        <button id="saveBtn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Details
+                        </button>
+                    </div>
+                </header>
+
+                <main class="p-6">
+                    <!-- Project Selector -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Project to Edit</label>
+                        <select id="projectSelect"
+                            class="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50 text-blue-900 font-medium">
+                            <option value="">-- Choose a Project --</option>
+                        </select>
+                    </div>
+
+                    <form id="detailForm" class="space-y-6 hidden">
+                        <!-- Main Info -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i
+                                    class="fas fa-info-circle mr-2 text-blue-600"></i>Project Details</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Detailed Title (Case
+                                        Study Title)</label>
+                                    <input type="text" id="detailTitle"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="e.g. Creating a Visionary Brand Identity" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Client Logo</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="clientLogo"
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            readonly />
+                                        <button type="button" onclick="openImageSelector('clientLogo')"
+                                            class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"><i
+                                                class="fas fa-image"></i></button>
+                                    </div>
+                                    <img id="logoPreview" class="mt-2 h-12 object-contain hidden" />
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Introduction /
+                                    Description</label>
+                                <textarea id="detailDescription" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Project introduction text..."></textarea>
+                            </div>
+
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="tagInput"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Add tag (e.g. Branding)" />
+                                    <button type="button" onclick="addTag()"
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Add</button>
+                                </div>
+                                <div id="tagsContainer" class="mt-3 flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Gallery -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800"><i
+                                        class="fas fa-images mr-2 text-blue-600"></i>Data Gallery</h3>
+                                <button type="button" onclick="openImageSelector('gallery')"
+                                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"><i
+                                        class="fas fa-plus mr-1"></i> Add Image</button>
+                            </div>
+                            <div id="galleryContainer"
+                                class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded min-h-[100px]">
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="emptyState" class="text-center py-20 bg-white rounded-lg shadow">
+                        <i class="fas fa-arrow-up text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg">Please select a project above to start editing.</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reused Image Selector Modal -->
+    <div id="imageSelectorModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Select Image</h2>
+                <button onclick="closeImageSelector()" class="text-gray-500 hover:text-gray-700"><i
+                        class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                <h4 class="text-sm font-semibold mb-2">Upload New Image</h4>
+                <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                    <input type="file" id="imageUploadInput" accept="image/*"
+                        class="text-sm p-1 border border-gray-300 rounded bg-white" />
+                    <button onclick="uploadImage()"
+                        class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-sm flex items-center"><i
+                            class="fas fa-upload mr-1"></i> Upload</button>
+                </div>
+                <div id="uploadProgress" class="hidden mt-2 text-sm text-blue-600"><i
+                        class="fas fa-spinner fa-spin mr-1"></i> Uploading...</div>
+            </div>
+            <div id="imageGrid" class="grid grid-cols-3 gap-4"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentContent = null;
+        let selectedItemIndex = -1;
+        let currentImageInputId = null;
+        let pTags = [];
+        let pGallery = [];
+
+        async function initialize() {
+            try {
+                const sessionRes = await fetch("/api/auth/verify", { credentials: "include" });
+                if (sessionRes.status === 401) return window.location.href = "/login.html";
+
+                await loadData();
+                document.getElementById("loadingOverlay").classList.add("hidden");
+                document.getElementById("mainContent").classList.remove("hidden");
+                document.getElementById("mainContent").classList.add("fade-in");
+
+                setupEventListeners();
+                setupMobileMenu();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadData() {
+            try {
+                const res = await fetch("/api/our-work-content/active");
+                const result = await res.json();
+                if (result.success && result.data) {
+                    currentContent = result.data;
+                    renderProjectSelect();
+                }
+            } catch (e) { console.error("Load error", e); }
+        }
+
+        function renderProjectSelect() {
+            const select = document.getElementById("projectSelect");
+            select.innerHTML = '<option value="">-- Choose a Project --</option>';
+            currentContent.portfolioItems.forEach((item, idx) => {
+                const opt = document.createElement("option");
+                opt.value = idx;
+                opt.textContent = `${item.name} (${item.year})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function loadProjectDetails(index) {
+            selectedItemIndex = index;
+            const item = currentContent.portfolioItems[index];
+            const form = document.getElementById("detailForm");
+            const emptyState = document.getElementById("emptyState");
+
+            if (!item) {
+                form.classList.add("hidden");
+                emptyState.classList.remove("hidden");
+                return;
+            }
+
+            form.classList.remove("hidden");
+            emptyState.classList.add("hidden");
+
+            // Populate Item Data
+            document.getElementById("detailTitle").value = item.detailTitle || item.name; // Fallback to name if generic
+            document.getElementById("detailDescription").value = item.detailDescription || "";
+            document.getElementById("clientLogo").value = item.clientLogo || "";
+            if (item.clientLogo) {
+                document.getElementById("logoPreview").src = item.clientLogo;
+                document.getElementById("logoPreview").classList.remove("hidden");
+            } else {
+                document.getElementById("logoPreview").classList.add("hidden");
+            }
+
+            // Tags
+            pTags = item.tags ? [...item.tags] : [];
+            renderTags();
+
+            // Gallery
+            pGallery = item.galleryImages ? [...item.galleryImages] : [];
+            renderGallery();
+        }
+
+        // --- TAGS ---
+        function renderTags() {
+            const container = document.getElementById("tagsContainer");
+            container.innerHTML = "";
+            pTags.forEach((tag, idx) => {
+                const pill = document.createElement("div");
+                pill.className = "tag-pill";
+                pill.innerHTML = `${tag} <button onclick="removeTag(${idx})" type="button"><i class="fas fa-times"></i></button>`;
+                container.appendChild(pill);
+            });
+        }
+
+        function addTag() {
+            const inp = document.getElementById("tagInput");
+            const val = inp.value.trim();
+            if (val && !pTags.includes(val)) {
+                pTags.push(val);
+                renderTags();
+                inp.value = "";
+            }
+        }
+        function removeTag(idx) { pTags.splice(idx, 1); renderTags(); }
+
+        // --- GALLERY ---
+        function renderGallery() {
+            const container = document.getElementById("galleryContainer");
+            if (pGallery.length === 0) {
+                container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-4">No gallery images.</p>';
+                return;
+            }
+            container.innerHTML = pGallery.map((img, i) => `
+                <div class="relative group aspect-square rounded overflow-hidden border">
+                    <img src="${img}" class="w-full h-full object-cover">
+                    <button onclick="removeGallery(${i})" type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join("");
+        }
+
+        function addGallery(url) {
+            pGallery.push(url);
+            renderGallery();
+        }
+        function removeGallery(idx) { pGallery.splice(idx, 1); renderGallery(); }
+
+        // --- IMAGE SELECTOR & UPLOAD (Reused) ---
+        function openImageSelector(target) {
+            currentImageInputId = target;
+            fetchImages();
+            document.getElementById("imageSelectorModal").classList.remove("hidden");
+            document.getElementById("imageSelectorModal").classList.add("flex");
+        }
+        function closeImageSelector() {
+            document.getElementById("imageSelectorModal").classList.add("hidden");
+            document.getElementById("imageSelectorModal").classList.remove("flex");
+        }
+        async function fetchImages() {
+            try {
+                const res = await fetch("/api/images/list");
+                const result = await res.json();
+                if (result.success) {
+                    const grid = document.getElementById("imageGrid");
+                    grid.innerHTML = result.images.map(img => `
+                        <div class="cursor-pointer hover:opacity-75" onclick="selectImage('${img.url}')">
+                            <img src="${img.url}" class="w-full h-24 object-cover rounded border">
+                            <p class="text-xs truncate text-gray-600">${img.filename}</p>
+                        </div>
+                    `).join("");
+                }
+            } catch (e) { console.error(e); }
+        }
+        async function uploadImage() {
+            const input = document.getElementById('imageUploadInput');
+            const file = input.files[0];
+            if (!file) return alert("Select file");
+
+            const fd = new FormData();
+            fd.append('image', file);
+            document.getElementById('uploadProgress').classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/images/upload', { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.success) {
+                    fetchImages();
+                    input.value = '';
+                } else alert(data.message);
+            } catch (e) { console.error(e); }
+            finally { document.getElementById('uploadProgress').classList.add('hidden'); }
+        }
+        function selectImage(url) {
+            if (currentImageInputId === 'gallery') {
+                addGallery(url);
+            } else {
+                document.getElementById(currentImageInputId).value = url;
+                if (currentImageInputId === 'clientLogo') {
+                    document.getElementById('logoPreview').src = url;
+                    document.getElementById('logoPreview').classList.remove("hidden");
+                }
+            }
+            closeImageSelector();
+        }
+
+        // --- SAVE ---
+        async function saveDetails() {
+            if (selectedItemIndex === -1 || !currentContent) return;
+
+            // Update local object
+            const item = currentContent.portfolioItems[selectedItemIndex];
+            item.detailTitle = document.getElementById("detailTitle").value;
+            item.detailDescription = document.getElementById("detailDescription").value;
+            item.clientLogo = document.getElementById("clientLogo").value;
+            item.tags = pTags;
+            item.galleryImages = pGallery;
+
+            try {
+                const url = `/api/our-work-content/${currentContent._id}`;
+                const res = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(currentContent) // Sending full object back
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast("Work Details Saved!", "success");
+                    currentContent = result.data; // Refresh ID/state
+                } else {
+                    showToast(result.message, "error");
+                }
+            } catch (e) {
+                console.error(e);
+                showToast("Save failed", "error");
+            }
+        }
+
+        // --- UTILS ---
+        function setupEventListeners() {
+            document.getElementById("projectSelect").addEventListener("change", (e) => {
+                const idx = e.target.value;
+                if (idx !== "") loadProjectDetails(parseInt(idx));
+                else {
+                    document.getElementById("detailForm").classList.add("hidden");
+                    document.getElementById("emptyState").classList.remove("hidden");
+                }
+            });
+
+            document.getElementById("saveBtn").addEventListener("click", saveDetails);
+
+            // Logout
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await fetch("/api/auth/logout", { method: "POST" });
+                window.location.href = "/login.html";
+            });
+        }
+
+        function setupMobileMenu() {
+            const btn = document.getElementById("mobileMenuButton");
+            const sb = document.getElementById("sidebar");
+            btn.onclick = (e) => { e.stopPropagation(); sb.classList.toggle("open"); };
+            document.onclick = (e) => { if (window.innerWidth < 768 && !sb.contains(e.target) && e.target !== btn) sb.classList.remove("open"); };
+        }
+
+        function showToast(msg, type = "info") {
+            const t = document.createElement("div");
+            t.className = `fixed bottom-4 right-4 px-6 py-3 rounded text-white z-50 ${type === "success" ? "bg-green-500" : "bg-red-500"}`;
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        document.addEventListener("DOMContentLoaded", initialize);
+    </script>
+</body>
+
+</html>

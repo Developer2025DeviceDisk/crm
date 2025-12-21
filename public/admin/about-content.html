@@ -158,6 +158,7 @@
       </button>
 
       <!-- Sidebar -->
+      <!-- Sidebar -->
       <div id="sidebar"
         class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
         <div class="p-4 border-b border-gray-700">
@@ -166,14 +167,11 @@
           </h1>
         </div>
         <nav class="mt-4">
-          <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-700">
+          <a href="/admin/dashboard.html" class="btn-action hover:bg-gray-600">
             <i class="fas fa-envelope"></i> Enquiry
           </a>
-          <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
-            <i class="fas fa-briefcase"></i> Our Work (Home)
-          </a>
-          <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
-            <i class="fas fa-file-alt"></i> Our Work Detail
+          <a href="/admin/about-content.html" class="btn-action bg-gray-700">
+            <i class="fas fa-cog"></i> Home Content
           </a>
           <a href="/admin/contact-content.html" class="btn-action hover:bg-gray-600">
             <i class="fas fa-phone"></i> Contact Page Content
@@ -184,8 +182,20 @@
           <a href="/admin/services-content.html" class="btn-action hover:bg-gray-600">
             <i class="fas fa-cog"></i> Services Content
           </a>
+          <a href="/admin/our-work-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-briefcase"></i> Our Work (Home)
+          </a>
+          <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-file-alt"></i> Our Work Detail
+          </a>
+          <a href="/admin/work-detail-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-file-invoice"></i> Work Page Detail Items
+          </a>
+          <a href="/admin/client-content.html" class="btn-action hover:bg-gray-600">
+            <i class="fas fa-users"></i> Clients
+          </a>
           <a href="/admin/privacy-policy-content.html" class="btn-action hover:bg-gray-600">
-            <i class="fas fa-cog"></i> privacy-policy
+            <i class="fas fa-shield-alt"></i> Privacy Policy
           </a>
           <a href="/admin/footer-content.html" class="btn-action hover:bg-gray-600">
             <i class="fas fa-grip-horizontal"></i> Footer Content
@@ -212,92 +222,8 @@
 
         <main class="p-4">
           <form id="aboutForm" class="space-y-6">
-            <!-- Hero Section -->
-            <div class="bg-white rounded-lg shadow p-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                <i class="fas fa-star mr-2 text-blue-600"></i>Hero Section
-              </h3>
+            <!-- Hero Section removed -->
 
-              <div class="input-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Main Title</label>
-                <input type="text" id="heroMainTitle"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., We are" />
-              </div>
-
-              <div class="input-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Background Video Source</label>
-                <div class="flex gap-2">
-                  <input type="text" id="heroVideoSrc"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="/hero.mp4" />
-                  <button type="button" onclick="openVideoSelector('heroVideoSrc')"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 whitespace-nowrap">
-                    <i class="fas fa-video mr-1"></i>Select Video
-                  </button>
-                </div>
-                <div id="heroVideoSrcPreview" class="mt-2 hidden">
-                  <video controls class="max-w-full h-32 rounded-md border">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-
-              <div class="section-divider"></div>
-              <h4 class="text-md font-medium text-gray-800 mb-3">
-                Rotating Texts
-              </h4>
-              <p class="text-sm text-gray-600 mb-3">
-                ✨ <strong>Unlimited Animation Support!</strong> All texts
-                will animate in sequence. Images cycle through available hero
-                images.
-              </p>
-
-              <div class="mb-4">
-                <div class="flex gap-2 mb-2">
-                  <input type="text" id="newRotatingText"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter new rotating text" />
-                  <button type="button" onclick="addRotatingText()"
-                    class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                    <i class="fas fa-plus mr-1"></i>Add
-                  </button>
-                </div>
-              </div>
-
-              <div id="rotatingTextsContainer" class="space-y-2 mb-4">
-                <!-- Dynamic rotating text inputs will be added here -->
-              </div>
-
-              <div class="section-divider"></div>
-              <h4 class="text-md font-medium text-gray-800 mb-3">
-                Hero Images
-              </h4>
-              <p class="text-sm text-gray-600 mb-3">
-                🎨 <strong>Unlimited Images Support!</strong> All images will
-                animate in sequence with rotating texts.
-              </p>
-
-              <div class="mb-4">
-                <div class="flex gap-2 mb-2">
-                  <input type="text" id="newHeroImage"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter image URL or path" />
-                  <button type="button" onclick="openImageSelector('newHeroImage')"
-                    class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                    <i class="fas fa-images mr-1"></i>Select
-                  </button>
-                  <button type="button" onclick="addHeroImage()"
-                    class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                    <i class="fas fa-plus mr-1"></i>Add
-                  </button>
-                </div>
-              </div>
-
-              <div id="heroImagesContainer" class="space-y-2 mb-4">
-                <!-- Dynamic hero image inputs will be added here -->
-              </div>
-            </div>
 
             <!-- About Section -->
             <div class="bg-white rounded-lg shadow p-6">
@@ -334,82 +260,11 @@
               </div>
             </div>
 
-            <!-- Parallax Section -->
-            <div class="bg-white rounded-lg shadow p-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                <i class="fas fa-image mr-2 text-blue-600"></i>Parallax
-                Section
-              </h3>
+            <!-- Parallax Section removed -->
 
-              <div class="input-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                <textarea id="parallaxTitle" rows="3"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your Voice in the Future of Marketing."></textarea>
-              </div>
 
-              <div class="input-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
-                <div class="flex gap-2 mb-2">
-                  <input type="text" id="parallaxBgImage"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="/voice.jpg" />
-                  <button type="button" onclick="openImageSelector('parallaxBgImage')"
-                    class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                    <i class="fas fa-images mr-1"></i>Select
-                  </button>
-                </div>
-                <div id="parallaxBgImagePreview" class="image-preview hidden">
-                  <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border" />
-                </div>
-              </div>
-            </div>
+            <!-- Services Section removed -->
 
-            <!-- Services Section -->
-            <div class="bg-white rounded-lg shadow p-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                <i class="fas fa-cogs mr-2 text-blue-600"></i>Services Section
-              </h3>
-
-              <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="input-group">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Section Title</label>
-                  <input type="text" id="servicesTitle"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Our Services" />
-                </div>
-                <div class="input-group">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
-                  <div class="flex gap-2 mb-2">
-                    <input type="text" id="servicesBgImage"
-                      class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/serviceVector.png" />
-                    <button type="button" onclick="openImageSelector('servicesBgImage')"
-                      class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
-                      <i class="fas fa-images mr-1"></i>Select
-                    </button>
-                  </div>
-                  <div id="servicesBgImagePreview" class="image-preview hidden">
-                    <img src="" alt="Preview" class="w-32 h-20 object-cover rounded border" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="section-divider"></div>
-              <div class="flex justify-between items-center mb-4">
-                <h4 class="text-md font-medium text-gray-800">
-                  Service Cards
-                </h4>
-                <button type="button" id="addServiceCardBtn"
-                  class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm">
-                  <i class="fas fa-plus mr-2"></i>Add New Card
-                </button>
-              </div>
-
-              <div id="serviceCardsContainer" class="space-y-4">
-                <!-- Dynamic service cards will be added here -->
-              </div>
-            </div>
 
             <!-- Foundation Section -->
             <div class="bg-white rounded-lg shadow p-6">
@@ -449,37 +304,8 @@
               </div>
             </div>
 
-            <!-- Video Section -->
-            <div class="bg-white rounded-lg shadow p-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                <i class="fas fa-video mr-2 text-blue-600"></i>Video Section
-              </h3>
+            <!-- Video Section removed -->
 
-              <div class="grid grid-cols-2 gap-4">
-                <div class="input-group">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Video Source</label>
-                  <div class="flex gap-2 mb-2">
-                    <input type="text" id="videoSrc"
-                      class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/vua-intro.mp4" />
-                    <button type="button" onclick="openVideoSelector('videoSrc')"
-                      class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 whitespace-nowrap">
-                      <i class="fas fa-video mr-1"></i>Select Video
-                    </button>
-                  </div>
-                  <div id="videoSrcPreview" class="hidden">
-                    <video controls class="max-w-full h-32 rounded-md border">
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                </div>
-                <div class="input-group hidden">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
-                  <input type="color" id="videoBgColor"
-                    class="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value="#EEF0FF" />
-                </div>
-              </div>
           </form>
         </main>
       </div>
@@ -536,32 +362,6 @@
 
     // Populate form with content data
     function populateForm(content = {}) {
-      // Hero Section
-      document.getElementById("heroMainTitle").value =
-        content.heroSection?.mainTitle || "We are";
-      document.getElementById("heroVideoSrc").value =
-        content.heroSection?.backgroundVideo || "/hero.mp4";
-
-      // Hero Images
-      // Legacy code - now using dynamic arrays
-
-      // Populate rotating texts
-      populateRotatingTexts(
-        content.heroSection?.rotatingTexts || [
-          "Full-Service",
-          "AI Infused",
-          "Mar-Tech",
-          "Creative",
-        ]
-      );
-      populateHeroImages(
-        content.heroSection?.heroImages || [
-          "/fullservice.jpeg",
-          "/ai.jpeg",
-          "/tech.jpeg",
-          "/creative.jpeg",
-        ]
-      );
 
       // About Text Lines
       document.getElementById("aboutTitle").value =
@@ -577,22 +377,6 @@
         ]
       );
 
-      // Parallax Section
-      document.getElementById("parallaxTitle").value =
-        content.parallaxSection?.title ||
-        "Your Voice in the Future of Marketing.";
-      document.getElementById("parallaxBgImage").value =
-        content.parallaxSection?.backgroundImage || "/voice.jpg";
-
-      // Services Section
-      document.getElementById("servicesTitle").value =
-        content.servicesSection?.title || "Our Services";
-      document.getElementById("servicesBgImage").value =
-        content.servicesSection?.backgroundImage || "/serviceVector.png";
-
-      // Populate service cards
-      populateServiceCards(content.servicesSection?.cards || []);
-
       // Foundation Section
       document.getElementById("foundationTitle").value =
         content.foundationSection?.title || "Our Foundation";
@@ -601,13 +385,8 @@
 
       // Populate foundations
       populateFoundations(content.foundationSection?.foundations || []);
-
-      // Video Section
-      document.getElementById("videoSrc").value =
-        content.videoSection?.videoSrc || "/vua-intro.mp4";
-      document.getElementById("videoBgColor").value =
-        content.videoSection?.backgroundColor || "#EEF0FF";
     }
+
 
     // About Text Lines Management
     function populateAboutTextLines(lines) {
@@ -1124,10 +903,8 @@
         .getElementById("saveBtn")
         .addEventListener("click", saveContent);
       document.getElementById("logoutBtn").addEventListener("click", logout);
-      document
-        .getElementById("addServiceCardBtn")
-        .addEventListener("click", addServiceCard);
     }
+
 
     function addServiceCard() {
       const cards = getServiceCards();
@@ -1158,35 +935,24 @@
 
       try {
         const contentData = {
-          heroSection: {
-            mainTitle: document.getElementById("heroMainTitle").value,
-            rotatingTexts: getRotatingTexts(),
-            backgroundVideo: document.getElementById("heroVideoSrc").value,
-            heroImages: getHeroImages(),
-          },
+          // Preserve hidden sections from currentContent
+          heroSection: currentContent?.heroSection || {},
+          parallaxSection: currentContent?.parallaxSection || {},
+          servicesSection: currentContent?.servicesSection || {},
+          videoSection: currentContent?.videoSection || {},
+
+          // Update editable sections
           aboutTitle: document.getElementById("aboutTitle").value,
           aboutTextLines: getAboutTextLines(),
-          parallaxSection: {
-            title: document.getElementById("parallaxTitle").value,
-            backgroundImage: document.getElementById("parallaxBgImage").value,
-          },
-          servicesSection: {
-            title: document.getElementById("servicesTitle").value,
-            backgroundImage: document.getElementById("servicesBgImage").value,
-            cards: getServiceCards(),
-          },
           foundationSection: {
             title: document.getElementById("foundationTitle").value,
             backgroundColor:
               document.getElementById("foundationBgColor").value,
             foundations: getFoundations(),
           },
-          videoSection: {
-            videoSrc: document.getElementById("videoSrc").value,
-            backgroundColor: document.getElementById("videoBgColor").value,
-          },
           lastUpdatedBy: "Admin",
         };
+
 
         const response = await fetch("/api/about-content", {
           method: "POST",
