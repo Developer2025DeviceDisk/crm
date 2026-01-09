@@ -67,6 +67,7 @@ app.use('/api/images', imageUploadRoutes);
 app.use('/api/videos', videoUploadRoutes);
 app.use('/api/our-work-content', ourWorkContentRoutes);
 app.use('/api/client-content', clientContentRoutes);
+app.use('/api/instagram', require('./routes/instagram'));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

@@ -50,6 +50,28 @@
             margin-bottom: 1rem;
             background-color: #f9fafb;
         }
+
+        .filter-tag {
+            background-color: #E0DAFF;
+            color: #6210FF;
+            border: 1px solid #6210FF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-tag button {
+            margin-left: 0.5rem;
+            color: #6210FF;
+        }
+
+        .filter-tag button:hover {
+            color: #dc2626;
+        }
     </style>
 </head>
 
@@ -69,7 +91,6 @@
                 <i class="fas fa-bars text-lg"></i>
             </button>
 
-            <!-- Sidebar -->
             <!-- Sidebar -->
             <div id="sidebar"
                 class="w-64 bg-gray-800 text-white fixed md:relative h-full z-20 sidebar-mobile md:transform-none">
@@ -95,11 +116,9 @@
                         <i class="fas fa-cog"></i> Services Content
                     </a>
                     <a href="/admin/our-work-content.html" class="btn-action bg-gray-700">
-                        <i class="fas fa-briefcase"></i> Our Work (Home)
+                        <i class="fas fa-briefcase"></i> Our Work (Full)
                     </a>
-                    <a href="/admin/work-page-content.html" class="btn-action hover:bg-gray-600">
-                        <i class="fas fa-file-alt"></i> Our Work Detail
-                    </a>
+                    <!-- Removed work-page-content link as it's now merged -->
                     <a href="/admin/work-detail-content.html" class="btn-action hover:bg-gray-600">
                         <i class="fas fa-file-invoice"></i> Work Page Detail Items
                     </a>
@@ -132,10 +151,10 @@
 
                 <main class="p-4">
                     <form id="ourWorkForm" class="space-y-6">
-                        <!-- Header Section -->
+                        <!-- Header Section (Home) -->
                         <div class="bg-white rounded-lg shadow p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                <i class="fas fa-heading mr-2 text-blue-600"></i>Header Section
+                                <i class="fas fa-home mr-2 text-blue-600"></i>Home Section
                             </h3>
 
                             <div class="mb-4">
@@ -159,6 +178,87 @@
                                     value="#007BFF" />
                             </div>
                         </div>
+
+                        <!-- Work Page Detail Section (Merged) -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-file-alt mr-2 text-blue-600"></i>Work Page Details
+                            </h3>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Banner Background
+                                    Image</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="bannerImage"
+                                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="/serviceVector.png" />
+                                    <button type="button" onclick="openImageSelector('bannerImage')"
+                                        class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">
+                                        <i class="fas fa-images"></i>
+                                    </button>
+                                </div>
+                                <img id="bannerPreview" class="mt-2 w-full h-32 object-cover rounded border hidden" />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Main Title</label>
+                                <textarea id="mainTitle" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="From Brief &#10; To Brilliance"></textarea>
+                                <p class="text-xs text-gray-500 mt-1">Use new line for line break</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Center Description
+                                    Text</label>
+                                <textarea id="pageDescription" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter page description..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Filters Section (Merged) -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-tags mr-2 text-blue-600"></i>Filter Tags
+                            </h3>
+
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="newFilterInput"
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Add new filter tag (e.g. AI Videos)" />
+                                <button type="button" onclick="addFilter()"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+
+                            <div id="filtersContainer"
+                                class="flex flex-wrap p-4 bg-gray-50 rounded-md border border-gray-200 min-h-[50px]">
+                                <!-- Filter tags will appear here -->
+                            </div>
+                        </div>
+
+
+                        <!-- Gallery Images Section (Merged) -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-images mr-2 text-blue-600"></i>Gallery Images (Max 10)
+                                </h3>
+                                <button type="button" onclick="openImageSelector('gallery')"
+                                    class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                                    <i class="fas fa-plus mr-1"></i> Add Image
+                                </button>
+                            </div>
+
+                            <div id="galleryContainer"
+                                class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[100px]">
+                                <p id="noImagesText" class="col-span-full text-center text-gray-400 py-8">No images
+                                    added yet</p>
+                            </div>
+                        </div>
+
 
                         <!-- Portfolio Items Section -->
                         <div class="bg-white rounded-lg shadow p-6">
@@ -205,6 +305,22 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
+            <!-- Upload Section -->
+            <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                <h4 class="text-sm font-semibold mb-2">Upload New Image</h4>
+                <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                    <input type="file" id="imageUploadInput" accept="image/*"
+                        class="text-sm p-1 border border-gray-300 rounded bg-white" />
+                    <button onclick="uploadImage()"
+                        class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-sm flex items-center">
+                        <i class="fas fa-upload mr-1"></i> Upload
+                    </button>
+                </div>
+                <div id="uploadProgress" class="hidden mt-2 text-sm text-blue-600">
+                    <i class="fas fa-spinner fa-spin mr-1"></i> Uploading...
+                </div>
+            </div>
+
             <div id="imageGrid" class="grid grid-cols-3 gap-4">
                 <!-- Images will be loaded here -->
             </div>
@@ -214,6 +330,8 @@
     <script>
         let currentContent = null;
         let currentImageInputId = null;
+        let filters = [];
+        let galleryImages = [];
 
         // Initialize
         async function initializeOurWorkContent() {
@@ -268,6 +386,21 @@
             document.getElementById("headerDescription").value = content.headerSection?.description || "Lorem Ipsum Dolor Sit Amet, Consectetuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Magna Aliquam Erat Volutpat.";
             document.getElementById("underlineColor").value = content.headerSection?.underlineColor || "#007BFF";
 
+            // Work Page Section (Merged from work-page-content)
+            const workPage = content.workPageSection || {};
+            document.getElementById("bannerImage").value = workPage.bannerImage || "";
+            updateImagePreview("bannerImage", workPage.bannerImage);
+            document.getElementById("mainTitle").value = workPage.mainTitle || "";
+            document.getElementById("pageDescription").value = workPage.description || "";
+
+            // Filters
+            filters = workPage.filters || ["All", "Branding & Design", "Strategy", "Content & Production", "AI Videos", "UI Design"];
+            renderFilters();
+
+            // Gallery
+            galleryImages = workPage.galleryImages || [];
+            renderGallery();
+
             // Portfolio Items
             populatePortfolioItems(content.portfolioItems || []);
 
@@ -275,7 +408,7 @@
             document.getElementById("footerButtonText").value = content.footerSection?.buttonText || "See All Work";
         }
 
-        // Portfolio Items Management
+        // Populate Portfolio Items
         function populatePortfolioItems(items) {
             const container = document.getElementById("portfolioItemsContainer");
             container.innerHTML = "";
@@ -291,6 +424,78 @@
             });
         }
 
+        // --- Filter Management ---
+        function renderFilters() {
+            const container = document.getElementById("filtersContainer");
+            container.innerHTML = "";
+            filters.forEach((filter, index) => {
+                const tag = document.createElement("span");
+                tag.className = "filter-tag";
+                tag.innerHTML = `${filter} <button onclick="removeFilter(${index})"><i class="fas fa-times"></i></button>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function addFilter() {
+            const input = document.getElementById("newFilterInput");
+            const val = input.value.trim();
+            if (val && !filters.includes(val)) {
+                filters.push(val);
+                renderFilters();
+                input.value = "";
+            }
+        }
+
+        function removeFilter(index) {
+            filters.splice(index, 1);
+            renderFilters();
+        }
+
+        // --- Gallery Management ---
+        function renderGallery() {
+            const container = document.getElementById("galleryContainer");
+            if (galleryImages.length === 0) {
+                container.innerHTML = '<p id="noImagesText" class="col-span-full text-center text-gray-400 py-8">No images added yet</p>';
+                return;
+            }
+
+            container.innerHTML = galleryImages.map((img, index) => `
+                <div class="relative group h-32 w-full rounded-md overflow-hidden border border-gray-200">
+                    <img src="${img}" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <button onclick="removeGalleryImage(${index})" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors" title="Remove Image">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function addGalleryImage(url) {
+            if (galleryImages.length >= 10) {
+                showToast("Maximum 10 images allowed", "error");
+                return;
+            }
+            galleryImages.push(url);
+            renderGallery();
+        }
+
+        function removeGalleryImage(index) {
+            galleryImages.splice(index, 1);
+            renderGallery();
+        }
+
+        // --- General Image Helper ---
+        function updateImagePreview(inputId, url) {
+            const preview = document.getElementById(inputId === 'bannerImage' ? 'bannerPreview' : '');
+            if (preview && url) {
+                preview.src = url;
+                preview.classList.remove('hidden');
+            }
+        }
+
+
+        // Portfolio Helper Functions
         function addPortfolioItem() {
             const container = document.getElementById("portfolioItemsContainer");
             const existingItems = container.querySelectorAll(".portfolio-item").length;
@@ -346,6 +551,9 @@
             <button type="button" onclick="this.previousElementSibling.click()" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
                 <i class="fas fa-upload mr-1"></i>Upload
             </button>
+            <button type="button" onclick="openImageSelectorForPortfolio(this)" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 text-sm">
+                <i class="fas fa-images"></i>
+            </button>
           </div>
           ${item.image ? `<img src="${item.image}" class="mt-2 w-32 h-20 object-cover rounded border" />` : ''}
         </div>
@@ -380,28 +588,43 @@
             })).filter(item => item.name && item.image);
         }
 
-        // Image Selector
-        function openImageSelectorForPortfolio(button) {
-            currentImageInputId = button.previousElementSibling;
-            openImageSelector();
+        // --- Image Selector & Upload Logic ---
+
+        function openImageSelector(inputId) {
+            currentImageInputId = inputId; // can be 'bannerImage', 'gallery', or a DOM element
+            fetchImages();
+            document.getElementById("imageSelectorModal").classList.remove("hidden");
+            document.getElementById("imageSelectorModal").classList.add("flex");
         }
 
-        async function openImageSelector() {
+        function openImageSelectorForPortfolio(button) {
+            // Locate the text input previous sibling of the file input (sibling of button)
+            // Button is 2nd to last, File is 3rd, Text Indput is 1st in div
+            const textInput = button.parentElement.querySelector('.portfolio-image');
+            currentImageInputId = textInput;
+            fetchImages();
+            document.getElementById("imageSelectorModal").classList.remove("hidden");
+            document.getElementById("imageSelectorModal").classList.add("flex");
+        }
+
+
+        async function fetchImages() {
             try {
                 const response = await fetch("/api/images/list");
                 const result = await response.json();
-
                 if (result.success) {
-                    const imageGrid = document.getElementById("imageGrid");
-                    imageGrid.innerHTML = result.images.map(img => `
-            <div class="cursor-pointer hover:opacity-75 transition-opacity" onclick="selectImage('${img.url}')">
-              <img src="${img.url}" class="w-full h-32 object-cover rounded border" />
-              <p class="text-xs text-gray-600 mt-1 truncate">${img.filename}</p>
-            </div>
-          `).join("");
-
-                    document.getElementById("imageSelectorModal").classList.remove("hidden");
-                    document.getElementById("imageSelectorModal").classList.add("flex");
+                    const grid = document.getElementById("imageGrid");
+                    if (result.images.length === 0) {
+                        grid.innerHTML = '<p class="col-span-3 text-center text-gray-500 py-4">No images uploaded yet.</p>';
+                    } else {
+                        grid.innerHTML = result.images.map(img => `
+                        <div class="cursor-pointer hover:opacity-75 relative group" onclick="selectImage('${img.url}')">
+                            <img src="${img.url}" class="w-full h-32 object-cover rounded border border-gray-200" />
+                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all"></div>
+                            <p class="text-xs mt-1 truncate text-gray-600">${img.filename}</p>
+                        </div>
+                    `).join("");
+                    }
                 }
             } catch (error) {
                 console.error("Error loading images:", error);
@@ -409,17 +632,57 @@
             }
         }
 
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageUploadInput');
+            const file = fileInput.files[0];
+            if (!file) return showToast('Please select a file to upload', 'error');
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                document.getElementById('uploadProgress').classList.remove('hidden');
+                const response = await fetch('/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('Image uploaded successfully', 'success');
+                    fileInput.value = '';
+                    fetchImages();
+                } else {
+                    showToast(result.message || 'Upload failed', 'error');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('Error uploading image', 'error');
+            } finally {
+                document.getElementById('uploadProgress').classList.add('hidden');
+            }
+        }
+
+
         function selectImage(url) {
-            if (currentImageInputId) {
+            if (currentImageInputId === 'gallery') {
+                addGalleryImage(url);
+            } else if (currentImageInputId === 'bannerImage') {
+                document.getElementById('bannerImage').value = url;
+                updateImagePreview('bannerImage', url);
+            } else if (currentImageInputId && currentImageInputId.classList && currentImageInputId.classList.contains('portfolio-image')) {
+                // It's a portfolio item input
                 currentImageInputId.value = url;
-                const preview = currentImageInputId.parentElement.nextElementSibling;
-                if (preview && preview.tagName === 'IMG') {
+                // Update preview sibilng
+                const container = currentImageInputId.closest('.mb-3');
+                let preview = container.querySelector('img');
+                if (preview) {
                     preview.src = url;
                 } else {
                     const newPreview = document.createElement('img');
                     newPreview.src = url;
                     newPreview.className = 'mt-2 w-32 h-20 object-cover rounded border';
-                    currentImageInputId.parentElement.insertAdjacentElement('afterend', newPreview);
+                    container.appendChild(newPreview);
                 }
             }
             closeImageSelector();
@@ -428,15 +691,12 @@
         function closeImageSelector() {
             document.getElementById("imageSelectorModal").classList.add("hidden");
             document.getElementById("imageSelectorModal").classList.remove("flex");
-            currentImageInputId = null;
         }
 
-        // Image Upload from Local Computer
+        // Portfolio Image Upload (Local)
         async function uploadPortfolioImage(input) {
             const file = input.files[0];
             if (!file) return;
-
-            // Show loading state
             const uploadButton = input.nextElementSibling;
             const originalText = uploadButton.innerHTML;
             uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Uploading...';
@@ -445,33 +705,21 @@
             try {
                 const formData = new FormData();
                 formData.append('image', file);
-
-                const response = await fetch('/api/images/upload', {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include'
-                });
-
+                const response = await fetch('/api/images/upload', { method: 'POST', body: formData, credentials: 'include' });
                 const result = await response.json();
 
                 if (result.success) {
-                    // Get the text input field (sibling of file input)
                     const imageInput = input.parentElement.querySelector('.portfolio-image');
                     imageInput.value = result.data.url;
-
-                    // Update or create preview image
                     const container = input.closest('.mb-3');
                     let preview = container.querySelector('img');
-
-                    if (preview) {
-                        preview.src = result.data.url;
-                    } else {
+                    if (preview) { preview.src = result.data.url; }
+                    else {
                         const newPreview = document.createElement('img');
                         newPreview.src = result.data.url;
                         newPreview.className = 'mt-2 w-32 h-20 object-cover rounded border';
                         container.appendChild(newPreview);
                     }
-
                     showToast('Image uploaded successfully!', 'success');
                 } else {
                     showToast('Error uploading image: ' + result.message, 'error');
@@ -480,24 +728,34 @@
                 console.error('Upload error:', error);
                 showToast('Error uploading image', 'error');
             } finally {
-                // Restore button state
                 uploadButton.innerHTML = originalText;
                 uploadButton.disabled = false;
-                // Clear file input
                 input.value = '';
             }
         }
+
 
         // Save Content
         async function saveContent() {
             try {
                 const contentData = {
+                    // Header (Home)
                     headerSection: {
                         title: document.getElementById("headerTitle").value,
                         description: document.getElementById("headerDescription").value,
                         underlineColor: document.getElementById("underlineColor").value
                     },
+                    // Work Page Details (Merged)
+                    workPageSection: {
+                        bannerImage: document.getElementById("bannerImage").value,
+                        mainTitle: document.getElementById("mainTitle").value,
+                        description: document.getElementById("pageDescription").value,
+                        filters: filters,
+                        galleryImages: galleryImages
+                    },
+                    // Portfolio Items
                     portfolioItems: getPortfolioItems(),
+                    // Footer
                     footerSection: {
                         buttonText: document.getElementById("footerButtonText").value
                     },
