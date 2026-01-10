@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-// Environment variables (placeholder for now)
-const INSTAGRAM_ACCESS_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
-const FACEBOOK_APP_ID = '24900594382952740';
-const FACEBOOK_APP_SECRET = 'd10d9195be2b06de4818f28c7a76aaae';
+// Environment variables
+const INSTAGRAM_ACCESS_TOKEN = 'IGAAMEcLOBNiNBZAGF0YnF1NVFFbTB1MGIzc183aTVpWlctSEhVa1BpN3dXcDZASSk9BLTVBLUMwMlZAYNkl6VHhtUUQ3QjROTWsyVWhzenVFZA1N1eVFSUk9RV25STnFtWTVsd2ZAjamdLeFJRNl9RMmc4dzFUVl8zNHl5NmcxTUUzRQZDZD';
+
+// Post fields we want to fetch
+const FIELDS = 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username';
 
 // Mock Data matching the reference image styles
 const MOCK_POSTS = [
@@ -47,12 +48,40 @@ const MOCK_POSTS = [
 // GET /api/instagram/posts
 router.get('/posts', async (req, res) => {
     try {
-        // If we had a valid token, we would fetch real data:
+        // If we have a valid token, fetch real data
         if (INSTAGRAM_ACCESS_TOKEN) {
-            // const response = await axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username&access_token=${INSTAGRAM_ACCESS_TOKEN}&limit=3`);
-            // return res.json({ success: true, data: response.data.data });
+            try {
+                const response = await axios.get(`https://graph.instagram.com/me/media?fields=${FIELDS}&access_token=${INSTAGRAM_ACCESS_TOKEN}&limit=3`);
+
+                // Process the data to match frontend expectations
+                const posts = response.data.data.map(post => ({
+                    id: post.id,
+                    caption: post.caption || '',
+                    // For VIDEO, media_url is the video file, thumbnail_url is the poster
+                    // For IMAGE/CAROUSEL_ALBUM, media_url is the image
+                    media_url: post.media_url,
+                    thumbnail_url: post.thumbnail_url,
+                    media_type: post.media_type,
+                    timestamp: post.timestamp,
+                    username: post.username,
+                    permalink: post.permalink,
+                    // Basic Display API doesn't return these, so we mock them or leave undefined
+                    like_count: 0,
+                    comments_count: 0
+                }));
+
+                return res.json({
+                    success: true,
+                    data: posts
+                });
+            } catch (apiError) {
+                console.error('Instagram API Error:', apiError.response?.data || apiError.message);
+                // If API fails (e.g. token expired), fall through to mock data? 
+                // Or return error? Let's return mock data as fallback for robustness but log valid error
+            }
         }
 
+        console.log('Using mock data for Instagram feed (Token missing or API failed)');
         // Return mock data for now
         res.json({
             success: true,
