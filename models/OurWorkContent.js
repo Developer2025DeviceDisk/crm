@@ -30,7 +30,8 @@ const ourWorkContentSchema = new mongoose.Schema({
             detailDescription: { type: String },
             tags: [String],
             galleryImages: [String],
-            clientLogo: { type: String }
+            clientLogo: { type: String },
+            bannerImage: { type: String }
         }],
         default: [
             {
