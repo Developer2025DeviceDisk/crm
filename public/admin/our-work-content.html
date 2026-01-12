@@ -519,6 +519,7 @@
             const itemDiv = document.createElement("div");
             itemDiv.className = "portfolio-item";
             itemDiv.innerHTML = `
+        <input type="hidden" class="portfolio-id" value="${item._id || ''}" />
         <div class="flex justify-between items-center mb-3">
           <h4 class="text-md font-medium text-gray-800">Item ${index + 1}</h4>
           <button type="button" onclick="removePortfolioItem(this)" class="text-red-500 hover:text-red-700">
@@ -581,13 +582,27 @@
 
         function getPortfolioItems() {
             const items = document.querySelectorAll("#portfolioItemsContainer .portfolio-item");
-            return Array.from(items).map((item, index) => ({
-                name: item.querySelector(".portfolio-name").value,
-                category: item.querySelector(".portfolio-category").value,
-                year: item.querySelector(".portfolio-year").value,
-                image: item.querySelector(".portfolio-image").value,
-                order: parseInt(item.querySelector(".portfolio-order").value) || (index + 1)
-            })).filter(item => item.name && item.image);
+            return Array.from(items).map((item, index) => {
+                const id = item.querySelector(".portfolio-id").value;
+
+                // Find original item to preserve detail fields
+                let originalItem = {};
+                if (currentContent && currentContent.portfolioItems) {
+                    originalItem = currentContent.portfolioItems.find(p => p._id === id) || {};
+                }
+
+                const data = {
+                    ...originalItem, // Preserve existing fields (detailTitle, bannerImage, etc.)
+                    name: item.querySelector(".portfolio-name").value,
+                    category: item.querySelector(".portfolio-category").value,
+                    year: item.querySelector(".portfolio-year").value,
+                    image: item.querySelector(".portfolio-image").value,
+                    order: parseInt(item.querySelector(".portfolio-order").value) || (index + 1)
+                };
+
+                if (id) data._id = id;
+                return data;
+            }).filter(item => item.name && item.image);
         }
 
         // --- Image Selector & Upload Logic ---
