@@ -23,6 +23,7 @@ const ourWorkContentSchema = new mongoose.Schema({
             name: { type: String, required: true },
             category: { type: String, required: true },
             year: { type: String, required: true },
+            description: { type: String }, // New Description Field
             image: { type: String, required: true },
             order: { type: Number, required: true },
             // Detail Page Fields

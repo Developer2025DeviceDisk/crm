@@ -506,6 +506,7 @@
                 name: "",
                 category: "",
                 year: new Date().getFullYear().toString(),
+                description: "",
                 image: "",
                 order: existingItems + 1
             };
@@ -535,6 +536,10 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <input type="text" value="${item.category}" class="portfolio-category w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Category" />
           </div>
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea class="portfolio-description w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter description...">${item.description || ''}</textarea>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-3">
           <div>
@@ -596,6 +601,7 @@
                     name: item.querySelector(".portfolio-name").value,
                     category: item.querySelector(".portfolio-category").value,
                     year: item.querySelector(".portfolio-year").value,
+                    description: item.querySelector(".portfolio-description").value,
                     image: item.querySelector(".portfolio-image").value,
                     order: parseInt(item.querySelector(".portfolio-order").value) || (index + 1)
                 };
