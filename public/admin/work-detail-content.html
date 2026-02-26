@@ -213,9 +213,9 @@
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-semibold text-gray-800"><i
                                         class="fas fa-images mr-2 text-blue-600"></i>Data Gallery</h3>
-                                <button type="button" onclick="openImageSelector('gallery')"
+                                <button type="button" onclick="openMediaSelector('gallery')"
                                     class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"><i
-                                        class="fas fa-plus mr-1"></i> Add Image</button>
+                                        class="fas fa-plus mr-1"></i> Add Image / Video</button>
                             </div>
                             <div id="galleryContainer"
                                 class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded min-h-[100px]">
@@ -232,27 +232,60 @@
         </div>
     </div>
 
-    <!-- Reused Image Selector Modal -->
+    <!-- Media Selector Modal (Images & Videos) -->
     <div id="imageSelectorModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold">Select Image</h2>
+                <h2 class="text-lg font-semibold">Select Image or Video</h2>
                 <button onclick="closeImageSelector()" class="text-gray-500 hover:text-gray-700"><i
                         class="fas fa-times text-xl"></i></button>
             </div>
-            <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
-                <h4 class="text-sm font-semibold mb-2">Upload New Image</h4>
-                <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
-                    <input type="file" id="imageUploadInput" accept="image/*"
-                        class="text-sm p-1 border border-gray-300 rounded bg-white" />
-                    <button onclick="uploadImage()"
-                        class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-sm flex items-center"><i
-                            class="fas fa-upload mr-1"></i> Upload</button>
-                </div>
-                <div id="uploadProgress" class="hidden mt-2 text-sm text-blue-600"><i
-                        class="fas fa-spinner fa-spin mr-1"></i> Uploading...</div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 mb-4">
+                <button id="tabImages" onclick="switchMediaTab('images')"
+                    class="px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600 focus:outline-none">
+                    <i class="fas fa-image mr-1"></i> Images
+                </button>
+                <button id="tabVideos" onclick="switchMediaTab('videos')"
+                    class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fas fa-video mr-1"></i> Videos
+                </button>
             </div>
-            <div id="imageGrid" class="grid grid-cols-3 gap-4"></div>
+
+            <!-- Image Panel -->
+            <div id="panelImages">
+                <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                    <h4 class="text-sm font-semibold mb-2">Upload New Image</h4>
+                    <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                        <input type="file" id="imageUploadInput" accept="image/*"
+                            class="text-sm p-1 border border-gray-300 rounded bg-white" />
+                        <button onclick="uploadImage()"
+                            class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-sm flex items-center"><i
+                                class="fas fa-upload mr-1"></i> Upload</button>
+                    </div>
+                    <div id="uploadProgress" class="hidden mt-2 text-sm text-blue-600"><i
+                            class="fas fa-spinner fa-spin mr-1"></i> Uploading...</div>
+                </div>
+                <div id="imageGrid" class="grid grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Video Panel -->
+            <div id="panelVideos" class="hidden">
+                <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                    <h4 class="text-sm font-semibold mb-2">Upload New Video</h4>
+                    <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                        <input type="file" id="videoUploadInput" accept="video/*"
+                            class="text-sm p-1 border border-gray-300 rounded bg-white" />
+                        <button onclick="uploadVideo()"
+                            class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-sm flex items-center"><i
+                                class="fas fa-upload mr-1"></i> Upload</button>
+                    </div>
+                    <div id="videoUploadProgress" class="hidden mt-2 text-sm text-blue-600"><i
+                            class="fas fa-spinner fa-spin mr-1"></i> Uploading...</div>
+                </div>
+                <div id="videoGrid" class="grid grid-cols-3 gap-4"></div>
+            </div>
         </div>
     </div>
 
@@ -367,18 +400,31 @@
         function removeTag(idx) { pTags.splice(idx, 1); renderTags(); }
 
         // --- GALLERY ---
+        function isVideoUrl(url) {
+            return /\.(mp4|mov|avi|mkv|webm|ogv|3gp|flv)(\?.*)?$/i.test(url);
+        }
+
         function renderGallery() {
             const container = document.getElementById("galleryContainer");
             if (pGallery.length === 0) {
-                container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-4">No gallery images.</p>';
+                container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-4">No gallery media.</p>';
                 return;
             }
-            container.innerHTML = pGallery.map((img, i) => `
+            container.innerHTML = pGallery.map((url, i) => {
+                const isVideo = isVideoUrl(url);
+                const mediaEl = isVideo
+                    ? `<video src="${url}" class="w-full h-full object-cover" muted playsinline preload="metadata"></video>`
+                    : `<img src="${url}" class="w-full h-full object-cover">`;
+                const badge = isVideo
+                    ? `<span class="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-1.5 py-0.5 rounded"><i class="fas fa-video mr-1"></i>Video</span>`
+                    : '';
+                return `
                 <div class="relative group aspect-square rounded overflow-hidden border">
-                    <img src="${img}" class="w-full h-full object-cover">
+                    ${mediaEl}
+                    ${badge}
                     <button onclick="removeGallery(${i})" type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join("");
+                </div>`;
+            }).join("");
         }
 
         function addGallery(url) {
@@ -387,10 +433,13 @@
         }
         function removeGallery(idx) { pGallery.splice(idx, 1); renderGallery(); }
 
-        // --- IMAGE SELECTOR & UPLOAD (Reused) ---
-        function openImageSelector(target) {
+        // --- MEDIA SELECTOR & UPLOAD ---
+        let currentMediaTab = 'images';
+
+        function openImageSelector(target) { openMediaSelector(target); }
+        function openMediaSelector(target) {
             currentImageInputId = target;
-            fetchImages();
+            switchMediaTab('images');
             document.getElementById("imageSelectorModal").classList.remove("hidden");
             document.getElementById("imageSelectorModal").classList.add("flex");
         }
@@ -398,6 +447,33 @@
             document.getElementById("imageSelectorModal").classList.add("hidden");
             document.getElementById("imageSelectorModal").classList.remove("flex");
         }
+
+        function switchMediaTab(tab) {
+            currentMediaTab = tab;
+            const imgPanel = document.getElementById('panelImages');
+            const vidPanel = document.getElementById('panelVideos');
+            const tabImg = document.getElementById('tabImages');
+            const tabVid = document.getElementById('tabVideos');
+
+            if (tab === 'images') {
+                imgPanel.classList.remove('hidden');
+                vidPanel.classList.add('hidden');
+                tabImg.classList.add('border-blue-600', 'text-blue-600');
+                tabImg.classList.remove('border-transparent', 'text-gray-500');
+                tabVid.classList.remove('border-blue-600', 'text-blue-600');
+                tabVid.classList.add('border-transparent', 'text-gray-500');
+                fetchImages();
+            } else {
+                vidPanel.classList.remove('hidden');
+                imgPanel.classList.add('hidden');
+                tabVid.classList.add('border-blue-600', 'text-blue-600');
+                tabVid.classList.remove('border-transparent', 'text-gray-500');
+                tabImg.classList.remove('border-blue-600', 'text-blue-600');
+                tabImg.classList.add('border-transparent', 'text-gray-500');
+                fetchVideos();
+            }
+        }
+
         async function fetchImages() {
             try {
                 const res = await fetch("/api/images/list");
@@ -405,7 +481,7 @@
                 if (result.success) {
                     const grid = document.getElementById("imageGrid");
                     grid.innerHTML = result.images.map(img => `
-                        <div class="cursor-pointer hover:opacity-75" onclick="selectImage('${img.url}')">
+                        <div class="cursor-pointer hover:opacity-75" onclick="selectMedia('${img.url}')">
                             <img src="${img.url}" class="w-full h-24 object-cover rounded border">
                             <p class="text-xs truncate text-gray-600">${img.filename}</p>
                         </div>
@@ -413,10 +489,29 @@
                 }
             } catch (e) { console.error(e); }
         }
+
+        async function fetchVideos() {
+            try {
+                const res = await fetch("/api/videos/list");
+                const result = await res.json();
+                const grid = document.getElementById("videoGrid");
+                if (result.success && result.data && result.data.length > 0) {
+                    grid.innerHTML = result.data.map(vid => `
+                        <div class="cursor-pointer hover:opacity-75" onclick="selectMedia('${vid.url}')">
+                            <video src="${vid.url}" class="w-full h-24 object-cover rounded border bg-black" muted preload="metadata"></video>
+                            <p class="text-xs truncate text-gray-600 mt-1">${vid.filename}</p>
+                        </div>
+                    `).join("");
+                } else {
+                    grid.innerHTML = '<p class="col-span-3 text-center text-gray-400 py-6">No videos uploaded yet.</p>';
+                }
+            } catch (e) { console.error(e); }
+        }
+
         async function uploadImage() {
             const input = document.getElementById('imageUploadInput');
             const file = input.files[0];
-            if (!file) return alert("Select file");
+            if (!file) return alert("Select a file first");
 
             const fd = new FormData();
             fd.append('image', file);
@@ -432,7 +527,28 @@
             } catch (e) { console.error(e); }
             finally { document.getElementById('uploadProgress').classList.add('hidden'); }
         }
-        function selectImage(url) {
+
+        async function uploadVideo() {
+            const input = document.getElementById('videoUploadInput');
+            const file = input.files[0];
+            if (!file) return alert("Select a video file first");
+
+            const fd = new FormData();
+            fd.append('video', file);
+            document.getElementById('videoUploadProgress').classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/videos/upload', { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.success) {
+                    fetchVideos();
+                    input.value = '';
+                } else alert(data.message || 'Upload failed');
+            } catch (e) { console.error(e); }
+            finally { document.getElementById('videoUploadProgress').classList.add('hidden'); }
+        }
+
+        function selectMedia(url) {
             if (currentImageInputId === 'gallery') {
                 addGallery(url);
             } else {
@@ -447,6 +563,7 @@
             }
             closeImageSelector();
         }
+        function selectImage(url) { selectMedia(url); }
 
         // --- SAVE ---
         async function saveDetails() {
