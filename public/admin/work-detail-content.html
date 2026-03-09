@@ -215,7 +215,7 @@
                                         class="fas fa-images mr-2 text-blue-600"></i>Data Gallery</h3>
                                 <button type="button" onclick="openMediaSelector('gallery')"
                                     class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"><i
-                                        class="fas fa-plus mr-1"></i> Add Image / Video</button>
+                                        class="fas fa-plus mr-1"></i> Add Media</button>
                             </div>
                             <div id="galleryContainer"
                                 class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded min-h-[100px]">
@@ -242,14 +242,18 @@
             </div>
 
             <!-- Tabs -->
-            <div class="flex border-b border-gray-200 mb-4">
+            <div class="flex border-b border-gray-200 mb-4 overflow-x-auto">
                 <button id="tabImages" onclick="switchMediaTab('images')"
-                    class="px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600 focus:outline-none">
+                    class="px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600 focus:outline-none whitespace-nowrap">
                     <i class="fas fa-image mr-1"></i> Images
                 </button>
                 <button id="tabVideos" onclick="switchMediaTab('videos')"
-                    class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none">
+                    class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none whitespace-nowrap">
                     <i class="fas fa-video mr-1"></i> Videos
+                </button>
+                <button id="tabYoutube" onclick="switchMediaTab('youtube')"
+                    class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none whitespace-nowrap">
+                    <i class="fab fa-youtube mr-1"></i> YouTube
                 </button>
             </div>
 
@@ -285,6 +289,20 @@
                             class="fas fa-spinner fa-spin mr-1"></i> Uploading...</div>
                 </div>
                 <div id="videoGrid" class="grid grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- YouTube Panel -->
+            <div id="panelYoutube" class="hidden">
+                <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                    <h4 class="text-sm font-semibold mb-2">Embed YouTube Video</h4>
+                    <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                        <input type="text" id="youtubeUrlInput" placeholder="https://www.youtube.com/watch?v=..."
+                            class="text-sm p-1.5 border border-gray-300 rounded bg-white flex-1" />
+                        <button onclick="addYoutubeLink()" type="button"
+                            class="bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 text-sm flex items-center whitespace-nowrap"><i
+                                class="fas fa-plus mr-1"></i> Add Link</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -404,6 +422,17 @@
             return /\.(mp4|mov|avi|mkv|webm|ogv|3gp|flv)(\?.*)?$/i.test(url);
         }
 
+        function isYoutubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+            return youtubeRegex.test(url);
+        }
+
+        function getYoutubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         function renderGallery() {
             const container = document.getElementById("galleryContainer");
             if (pGallery.length === 0) {
@@ -412,14 +441,24 @@
             }
             container.innerHTML = pGallery.map((url, i) => {
                 const isVideo = isVideoUrl(url);
-                const mediaEl = isVideo
-                    ? `<video src="${url}" class="w-full h-full object-cover" muted playsinline preload="metadata"></video>`
-                    : `<img src="${url}" class="w-full h-full object-cover">`;
-                const badge = isVideo
-                    ? `<span class="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-1.5 py-0.5 rounded"><i class="fas fa-video mr-1"></i>Video</span>`
-                    : '';
+                const isYoutube = isYoutubeUrl(url);
+                
+                let mediaEl = '';
+                let badge = '';
+
+                if (isYoutube) {
+                    const ytId = getYoutubeId(url);
+                    mediaEl = `<img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" class="w-full h-full object-cover">`;
+                    badge = `<span class="absolute bottom-2 left-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded"><i class="fab fa-youtube mr-1"></i>YouTube</span>`;
+                } else if (isVideo) {
+                    mediaEl = `<video src="${url}" class="w-full h-full object-cover" muted playsinline preload="metadata"></video>`;
+                    badge = `<span class="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-1.5 py-0.5 rounded"><i class="fas fa-video mr-1"></i>Video</span>`;
+                } else {
+                    mediaEl = `<img src="${url}" class="w-full h-full object-cover">`;
+                }
+
                 return `
-                <div class="relative group aspect-square rounded overflow-hidden border">
+                <div class="relative group aspect-square rounded overflow-hidden border bg-black">
                     ${mediaEl}
                     ${badge}
                     <button onclick="removeGallery(${i})" type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
@@ -439,6 +478,14 @@
         function openImageSelector(target) { openMediaSelector(target); }
         function openMediaSelector(target) {
             currentImageInputId = target;
+            const tabYt = document.getElementById('tabYoutube');
+            if(tabYt) {
+                if(target === 'gallery') {
+                    tabYt.classList.remove('hidden');
+                } else {
+                    tabYt.classList.add('hidden');
+                }
+            }
             switchMediaTab('images');
             document.getElementById("imageSelectorModal").classList.remove("hidden");
             document.getElementById("imageSelectorModal").classList.add("flex");
@@ -452,25 +499,51 @@
             currentMediaTab = tab;
             const imgPanel = document.getElementById('panelImages');
             const vidPanel = document.getElementById('panelVideos');
+            const ytPanel = document.getElementById('panelYoutube');
             const tabImg = document.getElementById('tabImages');
             const tabVid = document.getElementById('tabVideos');
+            const tabYt = document.getElementById('tabYoutube');
+
+            imgPanel.classList.add('hidden');
+            vidPanel.classList.add('hidden');
+            if(ytPanel) ytPanel.classList.add('hidden');
+
+            tabImg.classList.remove('border-blue-600', 'text-blue-600');
+            tabImg.classList.add('border-transparent', 'text-gray-500');
+            tabVid.classList.remove('border-blue-600', 'text-blue-600');
+            tabVid.classList.add('border-transparent', 'text-gray-500');
+            if(tabYt) {
+                tabYt.classList.remove('border-red-600', 'text-red-600');
+                tabYt.classList.add('border-transparent', 'text-gray-500');
+            }
 
             if (tab === 'images') {
                 imgPanel.classList.remove('hidden');
-                vidPanel.classList.add('hidden');
                 tabImg.classList.add('border-blue-600', 'text-blue-600');
                 tabImg.classList.remove('border-transparent', 'text-gray-500');
-                tabVid.classList.remove('border-blue-600', 'text-blue-600');
-                tabVid.classList.add('border-transparent', 'text-gray-500');
                 fetchImages();
-            } else {
+            } else if (tab === 'videos') {
                 vidPanel.classList.remove('hidden');
-                imgPanel.classList.add('hidden');
                 tabVid.classList.add('border-blue-600', 'text-blue-600');
                 tabVid.classList.remove('border-transparent', 'text-gray-500');
-                tabImg.classList.remove('border-blue-600', 'text-blue-600');
-                tabImg.classList.add('border-transparent', 'text-gray-500');
                 fetchVideos();
+            } else if (tab === 'youtube') {
+                if(ytPanel) ytPanel.classList.remove('hidden');
+                if(tabYt) {
+                    tabYt.classList.add('border-red-600', 'text-red-600');
+                    tabYt.classList.remove('border-transparent', 'text-gray-500');
+                }
+            }
+        }
+
+        function addYoutubeLink() {
+            const input = document.getElementById("youtubeUrlInput");
+            const val = input.value.trim();
+            if (val && isYoutubeUrl(val)) {
+                selectMedia(val);
+                input.value = "";
+            } else {
+                alert("Please enter a valid YouTube URL (e.g. https://www.youtube.com/watch?v=...)");
             }
         }
 
