@@ -3,7 +3,10 @@ const router = express.Router();
 const axios = require('axios');
 
 // Environment variables
-const INSTAGRAM_ACCESS_TOKEN = 'IGAAMEcLOBNiNBZAGF0YnF1NVFFbTB1MGIzc183aTVpWlctSEhVa1BpN3dXcDZASSk9BLTVBLUMwMlZAYNkl6VHhtUUQ3QjROTWsyVWhzenVFZA1N1eVFSUk9RV25STnFtWTVsd2ZAjamdLeFJRNl9RMmc4dzFUVl8zNHl5NmcxTUUzRQZDZD';
+// Instagram credentials provided by the user
+// App ID: 849307024569891
+// App Secret: d10d9195be2b06de4818f28c7a76aaae
+const INSTAGRAM_ACCESS_TOKEN = 'IGAAMEcLOBNiNBZAFo3TGJMZAWxFamxrNGthdXBSaXpRVExvRFZAtbENCSTFzMV9iaDZAhbnBDR0ZA5NWtEYldSYnFWQXFhRHdqUDJ5S3NyZA3F0b3NnNDJ5aHdMd1U0bUl4VnBsUFJzUV9PM2hLT0JjVTJhT1FWVy1RM21ScDNtR1hjawZDZD';
 
 // Post fields we want to fetch
 const FIELDS = 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username';
